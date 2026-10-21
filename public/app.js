@@ -1,6 +1,6 @@
-import {messages,elementKeys} from './i18n.js';
-import {filterRecords,validateCatalog,safeUrl,slug,families,types} from './catalog-core.js';
-import {config} from './config.js';
+import {messages,elementKeys} from './i18n.js?v=20261021.2';
+import {filterRecords,validateCatalog,safeUrl,slug,families,types} from './catalog-core.js?v=20261021.2';
+import {config} from './config.js?v=20261021.2';
 
 const $=s=>document.querySelector(s);
 const escape=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));

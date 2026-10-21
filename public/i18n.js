@@ -1,4 +1,4 @@
-import {ru} from './i18n-ru.js';
+import {ru} from './i18n-ru.js?v=20261021.2';
 export const messages = {
   uk: {
     languageName:'Українська',nameRu:'Назва російською',reasonRu:'Пояснення російською',mechanicRu:'Механіка російською',obtainRu:'Де отримати — російською',titleRu:'Заголовок російською',bodyRu:'Текст російською',
