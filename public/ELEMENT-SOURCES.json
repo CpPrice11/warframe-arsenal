@@ -1,0 +1,62 @@
+{
+  "checkedAt": "2026-10-21",
+  "source": "https://wiki.warframe.com/w/Damage",
+  "assets": [
+    {
+      "key": "impact",
+      "file": "assets/elements/impact.png",
+      "source": "https://wiki.warframe.com/images/DmgImpactSmall64.png?27a4e",
+      "page": "https://wiki.warframe.com/w/Damage/Impact_Damage",
+      "color": "rgb(128, 196, 196)",
+      "rights": "Warframe game artwork © Digital Extremes; source: WARFRAME Wiki"
+    },
+    {
+      "key": "cold",
+      "file": "assets/elements/cold.png",
+      "source": "https://wiki.warframe.com/images/DmgColdSmall64.png?f2506",
+      "page": "https://wiki.warframe.com/w/Damage/Cold_Damage",
+      "color": "rgb(91, 188, 236)",
+      "rights": "Warframe game artwork © Digital Extremes; source: WARFRAME Wiki"
+    },
+    {
+      "key": "electric",
+      "file": "assets/elements/electric.png",
+      "source": "https://wiki.warframe.com/images/DmgElectricitySmall64.png?c23d9",
+      "page": "https://wiki.warframe.com/w/Damage/Electricity_Damage",
+      "color": "rgb(179, 127, 231)",
+      "rights": "Warframe game artwork © Digital Extremes; source: WARFRAME Wiki"
+    },
+    {
+      "key": "heat",
+      "file": "assets/elements/heat.png",
+      "source": "https://wiki.warframe.com/images/DmgHeatSmall64.png?60ae0",
+      "page": "https://wiki.warframe.com/w/Damage/Heat_Damage",
+      "color": "rgb(251, 151, 51)",
+      "rights": "Warframe game artwork © Digital Extremes; source: WARFRAME Wiki"
+    },
+    {
+      "key": "toxin",
+      "file": "assets/elements/toxin.png",
+      "source": "https://wiki.warframe.com/images/DmgToxinSmall64.png?8dc5f",
+      "page": "https://wiki.warframe.com/w/Damage/Toxin_Damage",
+      "color": "rgb(0, 204, 34)",
+      "rights": "Warframe game artwork © Digital Extremes; source: WARFRAME Wiki"
+    },
+    {
+      "key": "magnetic",
+      "file": "assets/elements/magnetic.png",
+      "source": "https://wiki.warframe.com/images/DmgMagneticSmall64.png?80be3",
+      "page": "https://wiki.warframe.com/w/Damage/Magnetic_Damage",
+      "color": "rgb(151, 151, 230)",
+      "rights": "Warframe game artwork © Digital Extremes; source: WARFRAME Wiki"
+    },
+    {
+      "key": "radiation",
+      "file": "assets/elements/radiation.png",
+      "source": "https://wiki.warframe.com/images/DmgRadiationSmall64.png?91a72",
+      "page": "https://wiki.warframe.com/w/Damage/Radiation_Damage",
+      "color": "rgb(206, 172, 73)",
+      "rights": "Warframe game artwork © Digital Extremes; source: WARFRAME Wiki"
+    }
+  ]
+}

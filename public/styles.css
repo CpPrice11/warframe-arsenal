@@ -1,4 +1,11 @@
 :root{
+  --element-impact:rgb(128, 196, 196);
+  --element-cold:rgb(91, 188, 236);
+  --element-electric:rgb(179, 127, 231);
+  --element-heat:rgb(251, 151, 51);
+  --element-toxin:rgb(0, 204, 34);
+  --element-magnetic:rgb(151, 151, 230);
+  --element-radiation:rgb(206, 172, 73);
   color-scheme:dark;
   --ctp-rosewater:#f5e0dc;
   --ctp-flamingo:#f2cdcd;
@@ -103,35 +110,34 @@ h1{font-size:24px;line-height:1.3;font-weight:600;letter-spacing:-.025em;margin:
 .sort-control{margin-left:0}
 .weapon-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:18px 16px;align-items:stretch}
 .weapon-card{display:flex;flex-direction:column;width:100%;min-width:0;background:transparent;color:var(--text);border:0;text-align:left;padding:0;border-radius:8px}
-.weapon-art{width:100%;flex-shrink:0;height:112px;border:1px solid var(--ctp-surface1);border-radius:8px;display:flex;justify-content:center;align-items:center;position:relative;background:var(--panel);overflow:hidden}
-.weapon-card:hover .weapon-art{background:var(--raised);border-color:var(--ctp-overlay1)}
+.weapon-art{width:100%;flex-shrink:0;height:144px;border:1px solid var(--ctp-surface1);border-radius:8px;display:flex;justify-content:center;align-items:center;position:relative;background:color-mix(in srgb,var(--ctp-surface0) 35%,var(--bg));overflow:hidden}
+.weapon-card:hover .weapon-art{background:color-mix(in srgb,var(--ctp-surface0) 55%,var(--bg));border-color:var(--ctp-overlay1)}
 .weapon-card[aria-pressed=true] .weapon-art{border:2px solid var(--blue);background:var(--blue-soft)}
-.weapon-card[aria-pressed=true] .weapon-art:after{content:"";position:absolute;right:8px;top:8px;width:6px;height:6px;background:var(--ctp-blue);border-radius:50%}
-.weapon-art img{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 9px 7px color-mix(in srgb, var(--ctp-crust) 27%, transparent));padding:12px}
+.weapon-card[aria-pressed=true] .weapon-art:after{content:"";position:absolute;left:10px;bottom:12px;width:6px;height:6px;background:var(--ctp-blue);border-radius:50%}
+.weapon-art>img{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 9px 7px color-mix(in srgb, var(--ctp-crust) 27%, transparent));padding:26px 8px 32px}
 .weapon-art .fallback-image{color:var(--ctp-subtext0);display:grid;place-items:center;text-align:center;padding:14px;font-size:13px}
 .weapon-art .fallback-image svg.lucide{width:40px;height:40px;stroke-width:1}
-.weapon-art .family-tag{position:absolute;left:7px;bottom:7px;background:color-mix(in srgb, var(--ctp-base) 90%, transparent);color:var(--ctp-text);padding:2px 5px;border-radius:3px;font-size:11px;line-height:1.3}
+.weapon-art .family-tag{position:absolute;left:7px;top:7px;background:color-mix(in srgb, var(--ctp-base) 90%, transparent);color:var(--ctp-text);padding:2px 5px;border-radius:3px;font-size:11px;line-height:1.3}
 .card-name{display:block;font-size:15px;font-weight:600;line-height:1.4;margin:9px 0 3px;overflow-wrap:anywhere}
 .card-subtitle{font-size:12px;color:var(--muted);display:block;line-height:1.4;min-height:17px;overflow-wrap:anywhere}
-.card-meta{display:flex;flex-direction:column;align-items:flex-start;gap:6px;margin-top:auto;padding-top:8px}
-.card-class{font-size:12px;color:var(--muted)}
+.card-meta{display:contents}
+.card-class{position:absolute;top:7px;right:7px;max-width:calc(100% - 64px);padding:2px 5px;border-radius:3px;font-size:11px;line-height:1.3;text-align:right;color:var(--ctp-subtext1);background:var(--ctp-crust)}
 .element-chip{display:inline-flex;align-items:center;gap:5px;white-space:nowrap;border-radius:4px;padding:3px 6px;background:var(--panel);color:var(--text);font-size:12px;font-weight:500;line-height:1.5}
-.element-chip svg.lucide{width:12px;height:12px}
-.element-chip.toxin{background:color-mix(in srgb,var(--ctp-green) 16%,var(--bg));color:var(--ctp-green)}
-.element-chip.magnetic{background:color-mix(in srgb,var(--ctp-sky) 16%,var(--bg));color:var(--ctp-sky)}
-.element-chip.cold{background:color-mix(in srgb,var(--ctp-blue) 16%,var(--bg));color:var(--ctp-blue)}
-.element-chip.electric{background:color-mix(in srgb,var(--ctp-yellow) 16%,var(--bg));color:var(--ctp-yellow)}
-.element-chip.heat{background:color-mix(in srgb,var(--ctp-peach) 16%,var(--bg));color:var(--ctp-peach)}
-.element-chip.impact{background:color-mix(in srgb,var(--ctp-subtext1) 16%,var(--bg));color:var(--ctp-subtext1)}
-.element-chip.radiation{background:color-mix(in srgb,var(--ctp-mauve) 16%,var(--bg));color:var(--ctp-mauve)}
+.element-chip.toxin{background:var(--ctp-crust);color:var(--element-toxin)}
+.element-chip.magnetic{background:var(--ctp-crust);color:var(--element-magnetic)}
+.element-chip.cold{background:var(--ctp-crust);color:var(--element-cold)}
+.element-chip.electric{background:var(--ctp-crust);color:var(--element-electric)}
+.element-chip.heat{background:var(--ctp-crust);color:var(--element-heat)}
+.element-chip.impact{background:var(--ctp-crust);color:var(--element-impact)}
+.element-chip.radiation{background:var(--ctp-crust);color:var(--element-radiation)}
 .weapon-grid.list-view{display:flex;flex-direction:column;gap:0}
 .list-view .weapon-card{display:grid;grid-template-columns:60px minmax(0,1fr) 155px;gap:13px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line);border-radius:0}
 .list-view .weapon-art{height:50px;border-radius:5px}
 .list-view .family-tag{display:none}
-.list-view .weapon-art img{padding:3px}
+.list-view .weapon-art>img{padding:3px}
 .list-view .card-name{margin:0 0 3px;min-height:0}
-.list-view .card-meta{margin:0;padding-top:0;align-items:flex-end}
-.list-view .card-class{display:none}
+.list-view .card-meta{display:flex;flex-direction:column;gap:5px;margin:0;padding:0;align-items:flex-end}
+.list-view .card-class{position:static;max-width:none;display:block;background:transparent;padding:0}
 .inspector{background:var(--ctp-mantle);border-left:1px solid var(--line);overflow-y:auto;min-width:0}
 .inspector-head{display:flex;align-items:center;justify-content:space-between;min-height:52px;padding:12px 20px;color:var(--muted);font-size:12px;border-bottom:1px solid var(--line)}
 .inspector-hero{height:76px;width:76px;display:grid;place-items:center;background:var(--panel);position:relative;border-radius:8px}
@@ -200,7 +206,6 @@ h1{font-size:24px;line-height:1.3;font-weight:600;letter-spacing:-.025em;margin:
 .nav-shade{display:none}
 
 @media(min-width:1450px){.weapon-grid{grid-template-columns:repeat(auto-fill,minmax(190px,1fr))}
-.weapon-art{height:120px}
 .workspace-body{grid-template-columns:minmax(0,1fr) 360px}
 }
 
@@ -211,7 +216,6 @@ h1{font-size:24px;line-height:1.3;font-weight:600;letter-spacing:-.025em;margin:
 .topbar{padding:0 18px;gap:12px}
 .breadcrumb>span,.breadcrumb>svg{display:none}
 .weapon-grid{grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:17px 11px}
-.weapon-art{height:120px}
 .sort-control{margin-left:0}
 }
 
@@ -219,7 +223,6 @@ h1{font-size:24px;line-height:1.3;font-weight:600;letter-spacing:-.025em;margin:
 .inspector{display:none}
 .search{max-width:340px}
 .weapon-grid{grid-template-columns:repeat(auto-fill,minmax(155px,1fr))}
-.weapon-art{height:112px}
 .mobile-close{display:inline-flex}
 .detail-dialog .inspector-head{position:sticky;top:0;background:var(--ctp-mantle);z-index:1}
 .catalog-pane{padding-bottom:20px}
@@ -245,12 +248,10 @@ h1{font-size:23px}
 .filters select{font-size:12px;max-width:145px;min-height:30px}
 .filters .sort-control{margin-left:auto}
 .weapon-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:20px 12px}
-.weapon-art{height:112px}
 .card-name{font-size:14px}
 .card-subtitle{font-size:11px}
 .element-chip{font-size:11px}
 .card-class{font-size:11px}
-.card-meta{align-items:flex-start;flex-direction:column;gap:6px}
 .list-view .weapon-card{grid-template-columns:52px minmax(0,1fr) 100px;gap:8px}
 .list-view .card-meta{align-items:flex-end}
 .connection-status{padding:8px 15px;line-height:1.5}
@@ -269,7 +270,6 @@ h1{font-size:23px}
 }
 
 @media(max-width:359px){.filters .sort-control{margin-left:0}
-.weapon-art{height:116px}
 .weapon-grid{gap:18px 9px}
 .card-name{font-size:14px}
 .list-view .weapon-card{grid-template-columns:45px minmax(0,1fr)}
@@ -293,8 +293,7 @@ h1{font-size:23px}
 
 .detail-summary{display:grid;grid-template-columns:minmax(0,1fr) 76px;align-items:start;gap:12px}
 .card-text{display:block;min-width:0}
-.card-bonus{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
-.bonus-label{font-size:11px;color:var(--muted)}
+.card-bonus{position:absolute;right:7px;bottom:7px;display:flex;align-items:center}
 .filter-status{font-size:12px;color:var(--ctp-subtext1)}
 .filters label.active{border-color:var(--blue);background:var(--blue-soft)}
 .filters .secondary-button{font-size:12px;min-height:40px}
@@ -302,5 +301,14 @@ h1{font-size:23px}
 .detail-dialog .detail-actions{top:52px}
 .breadcrumb svg.lucide{width:17px;height:17px}
 .guide-item>a{display:inline-flex;align-items:center;gap:5px}
-@media(max-width:600px){.breadcrumb>span,.breadcrumb>svg{display:inline}.list-view .bonus-label{display:none}.list-view .card-bonus{justify-content:flex-end}.detail-summary{gap:10px}}
+@media(max-width:600px){.breadcrumb>span,.breadcrumb>svg{display:inline}.list-view .list-view .card-bonus{position:static;justify-content:flex-end}.detail-summary{gap:10px}}
 @media(max-width:359px){.detail-actions a{flex:1 1 100%}}
+
+.element-chip .element-icon{display:inline-block;width:16px;height:16px;object-fit:contain;flex-shrink:0}
+.weapon-art .element-chip{font-size:11px}
+.catalog-controls{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.inspector-toggle{min-width:40px;min-height:40px;border:1px solid var(--line)}
+.inspector>.detail-head{display:none}
+@media(min-width:1051px){.workspace-body.inspector-collapsed{grid-template-columns:minmax(0,1fr)}.inspector-collapsed>.inspector{display:none}}
+@media(max-width:1050px){.inspector-toggle{display:none}}
+@media(max-width:600px){.weapon-art{height:152px}}

@@ -1,16 +1,15 @@
-import {messages,elementKeys} from './i18n.js?v=20261021.3';
-import {filterRecords,validateCatalog,safeUrl,slug,families,types} from './catalog-core.js?v=20261021.3';
-import {config} from './config.js?v=20261021.3';
+import {messages,elementKeys} from './i18n.js?v=20261021.4';
+import {filterRecords,validateCatalog,safeUrl,slug,families,types} from './catalog-core.js?v=20261021.4';
+import {config} from './config.js?v=20261021.4';
 
 const $=s=>document.querySelector(s);
 const escape=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const icon=name=>`<i data-lucide="${name}" aria-hidden="true"></i>`;
-const icons={impact:'hammer',heat:'flame',cold:'snowflake',electric:'zap',toxin:'biohazard',magnetic:'magnet',radiation:'radiation'};
 function readStorage(key,fallback=''){try{return sessionStorage.getItem(key)||fallback;}catch{return fallback;}}
 function writeStorage(key,value){try{if(value)sessionStorage.setItem(key,value);else sessionStorage.removeItem(key);}catch{}}
 let lang=(()=>{try{const saved=localStorage.getItem('warframe-language');return Object.hasOwn(messages,saved)?saved:'uk';}catch{return 'uk';}})();
 let catalog,version=0,owner=false,connected=false,preview=false,token=readStorage('warframe-session'),section='all',selected='',view='grid',detailTab='overview',editing=false,dirty=false,saving=false;
-let toastTimer;
+let toastTimer,inspectorCollapsed=false;
 let auditRunning=false,auditResults=[];
 const state={search:'',type:'',element:'',sort:'original'};
 const t=(key,vars={})=>Object.entries(vars).reduce((s,[k,v])=>s.replaceAll('{'+k+'}',v),messages[lang][key]||key);
@@ -19,7 +18,7 @@ const note=(r,key)=>r[key+'_'+lang]||r[key+'_uk']||'';
 const date=s=>new Intl.DateTimeFormat(lang==='en'?'en-GB':lang,{dateStyle:'medium'}).format(new Date(s));
 const dateTime=s=>new Intl.DateTimeFormat(lang==='en'?'en-GB':lang,{dateStyle:'short',timeStyle:'short'}).format(new Date(s));
 const url=path=>(config.apiBase||location.origin).replace(/\/$/,'')+path;
-const chip=e=>e?`<span class="element-chip ${e}">${icon(icons[e])}${escape(t(e))}</span>`:'';
+const chip=e=>e?`<span class="element-chip ${e}"><img class="element-icon" src="./assets/elements/${e}.png" width="16" height="16" alt="" aria-hidden="true">${escape(t(e))}</span>`:'';
 const httpStatus=status=>status?'HTTP '+status+([403,429].includes(status)?' · '+t('checkBlocked'):''):t('checkUnknown');
 const activeCollection=()=>section==='progenitors'?'progenitors':section==='guides'?'tips':'weapons';
 const findRecord=id=>[...catalog.weapons,...catalog.progenitors,...catalog.tips].find(r=>r.id===id);
@@ -53,6 +52,7 @@ function localize(){
   $('#type-filter').innerHTML=options([['',t('allTypes')],...types.map(x=>[x,t(x)])],state.type);
   $('#element-filter').innerHTML=options([['',t('allElements')],...elementKeys.map(x=>[x,t(x)])],state.element);
   $('#sort').innerHTML=options([['original',t('originalOrder')],['name',t('nameAsc')]],state.sort);
+  updateInspectorToggle();
   if(catalog)$('#snapshot-date').textContent=t('imported',{date:date(catalog.importedAt)});
   if(!connected&&catalog)status(config.apiBase?'unavailable':'fallback');else if(preview)status('draftPreview');
   refreshIcons();
@@ -63,12 +63,21 @@ function renderNavigation(){
   $('#navigation').innerHTML=button('all',t('allWeapons'),icon('library'),count('all'))+families.map(f=>button(f,t(f),`<span class="family-icon ${f}" aria-hidden="true">${f[0]}</span>`,count(f))).join('')+'<div class="nav-separator"></div>'+button('progenitors',t('progenitors'),icon('users-round'),catalog.progenitors.filter(r=>!r.archived).length)+button('guides',t('guides'),icon('book-open'))+(owner?'<div class="nav-separator"></div>'+button('tools',t('tools'),icon('wrench')):'');
 }
 function image(r,large=false){return r.image?`<img src="${escape(r.image)}" alt="" ${large?'':'loading="lazy"'} decoding="async" width="256" height="256">`:`<span class="fallback-image" aria-label="${escape(t('noImage'))}">${icon(r.kind==='progenitor'?'user-round':'crosshair')}</span>`;}
-function card(r){return `<button type="button" class="weapon-card" data-id="${r.id}" aria-pressed="${selected===r.id}"><span class="weapon-art">${image(r)}${r.family?`<span class="family-tag">${escape(t(r.family))}</span>`:''}</span><span class="card-text"><span class="card-name">${escape(title(r))}</span><span class="card-subtitle">${escape(lang!=='en'?r.name_en:r.kind==='weapon'?t(r.type):t('progenitors'))}</span></span><span class="card-meta"><span class="card-bonus"><span class="bonus-label">${t('bonusShort')}</span>${chip(r.recommended||r.element)}</span>${r.type?`<span class="card-class">${t(r.type)}</span>`:''}</span></button>`;}
+function card(r){
+  const meta=`<span class="card-meta">${r.type?`<span class="card-class">${t(r.type)}</span>`:''}<span class="card-bonus"><span class="sr-only">${t('bonus')}</span>${chip(r.recommended||r.element)}</span></span>`;
+  return `<button type="button" class="weapon-card" data-id="${r.id}" aria-pressed="${selected===r.id}"><span class="weapon-art">${image(r)}${r.family?`<span class="family-tag">${escape(t(r.family))}</span>`:''}${view==='grid'?meta:''}</span><span class="card-text"><span class="card-name">${escape(title(r))}</span><span class="card-subtitle">${escape(lang!=='en'?r.name_en:r.name_uk)}</span></span>${view==='list'?meta:''}</button>`;
+}
+function updateInspectorToggle(){
+  const button=$('#inspector-toggle'),label=t(inspectorCollapsed?'showDetails':'hideDetails');
+  button.innerHTML=icon(inspectorCollapsed?'panel-right-open':'panel-right-close');button.setAttribute('aria-label',label);button.title=label;button.setAttribute('aria-expanded',String(!inspectorCollapsed));
+  $('.workspace-body').classList.toggle('inspector-collapsed',inspectorCollapsed);
+}
 function render(){
   if(!catalog)return;
   renderNavigation();
   const name=t(section==='all'?'allWeapons':section);$('#catalog-heading').textContent=name;
   $('#add-record').hidden=!owner||section==='tools';$('#filters').hidden=section==='guides'||section==='tools';$('#type-filter').closest('label').hidden=section==='progenitors';$('.view-controls').hidden=section==='guides'||section==='tools';
+  $('#inspector-toggle').hidden=section==='guides'||section==='tools';updateInspectorToggle();
   const list=filterRecords(catalog,{section,...state,lang});
   const activeCount=[state.search.trim(),state.type,state.element,state.sort!=='original'].filter(Boolean).length;
   $('#reset-filters').hidden=activeCount===0;$('#active-filters').hidden=activeCount===0;
@@ -88,7 +97,7 @@ function render(){
   renderInspector();refreshIcons();
 }
 function detail(r){
-  const header=`<div class="inspector-head"><span>${t('details')}</span><button type="button" class="icon-button mobile-close" data-action="close-detail" aria-label="${t('close')}">${icon('x')}</button></div>`;
+  const header=`<div class="inspector-head detail-head"><span>${t('details')}</span><button type="button" class="icon-button mobile-close" data-action="close-detail" aria-label="${t('close')}">${icon('x')}</button></div>`;
   if(!r||section==='guides'||section==='tools')return header+`<div class="empty-state">${icon('panel-right')}<h2>${t('selectRecord')}</h2><p>${t('selectRecordHelp')}</p></div>`;
   const sectionNote=(key,label)=>note(r,key)?`<section class="detail-section"><h3>${t(label)}</h3><p ${lang!=='uk'&&!r[key+'_'+lang]?'lang="uk"':''}>${escape(note(r,key))}</p></section>`:'';
   const bonuses=r.kind==='weapon'?`<div class="bonus-pair"><div><span class="field-label">${t('recommendedBonus')}</span>${chip(r.recommended)}</div><div><span class="field-label">${t('alternative')}</span>${chip(r.alternative)}</div></div>`:`<div class="detail-section"><span class="field-label">${t('bonus')}</span>${chip(r.element)}</div>`;
@@ -116,7 +125,7 @@ function editor(r,isNew=false){
   }else fields=formField('title_uk','titleUk',r.title_uk,false,true)+formField('title_en','titleEn',r.title_en)+formField('title_ru','titleRu',r.title_ru)+formField('body_uk','bodyUk',r.body_uk,true,true)+formField('body_en','bodyEn',r.body_en,true)+formField('body_ru','bodyRu',r.body_ru,true)+formField('url','sourceUrl',r.url);
   return `<div class="inspector-head"><span>${t(isNew?'newRecord':'editRecord')}</span><button type="button" class="icon-button" data-action="cancel-edit" aria-label="${t('cancel')}">${icon('x')}</button></div><form class="editor" id="editor-form" data-record="${r.id||''}" data-kind="${r.kind||'tip'}" data-new="${isNew}" data-matrix-lang="${lang==='ru'?'ru':'uk'}"><h2>${escape(isNew?t('newRecord'):title(r))}</h2>${fields}<p id="form-error" class="form-error" role="alert" hidden></p><div class="editor-buttons"><button type="submit" class="primary-button">${icon('check')}${t('save')}</button><button type="button" class="secondary-button" data-action="cancel-edit">${icon('x')}${t('cancel')}</button></div>${!isNew?`<button type="button" class="danger-button" data-archive="${r.id}">${icon('archive')}${t('archive')}</button>`:''}</form>`;
 }
-function showEditor(r,isNew=false){editing=true;dirty=false;$('#inspector').innerHTML=editor(r,isNew);openMobileDetail();refreshIcons();const container=$('#detail-dialog').open?$('#mobile-inspector'):$('#inspector');container.querySelector('input,textarea')?.focus();}
+function showEditor(r,isNew=false){inspectorCollapsed=false;updateInspectorToggle();editing=true;dirty=false;$('#inspector').innerHTML=editor(r,isNew);openMobileDetail();refreshIcons();const container=$('#detail-dialog').open?$('#mobile-inspector'):$('#inspector');container.querySelector('input,textarea')?.focus();}
 async function commit(next){validateCatalog(next);const response=await request('/api/admin/catalog',{method:'PUT',headers:{'Content-Type':'application/json','If-Match':String(version)},body:JSON.stringify(next)});const result=await response.json();catalog=next;version=result.version;}
 async function submitEditor(form){
   if(saving||!owner)return;const values=Object.fromEntries(new FormData(form));const kind=form.dataset.kind;const collection=kind==='weapon'?'weapons':kind==='progenitor'?'progenitors':'tips';const next=structuredClone(catalog);
@@ -186,7 +195,8 @@ document.addEventListener('click',async event=>{
   if(b.id==='owner-link'){event.preventDefault();if(owner){if(!await leaveEditor())return;section='tools';render();}else await startLogin();closeNavigation();return;}
   if(!catalog)return;
   if(b.dataset.section){if(!await leaveEditor())return;section=b.dataset.section;state.type='';state.element='';state.search='';$('#search').value='';selected='';detailTab='overview';closeNavigation();localize();render();}
-  if(b.dataset.id){if(!await leaveEditor())return;selected=b.dataset.id;detailTab='overview';document.querySelectorAll('.weapon-card').forEach(card=>card.setAttribute('aria-pressed',String(card.dataset.id===selected)));renderInspector();$('#inspector').scrollTop=0;refreshIcons();openMobileDetail();}
+  if(b.dataset.id){if(!await leaveEditor())return;selected=b.dataset.id;detailTab='overview';inspectorCollapsed=false;updateInspectorToggle();document.querySelectorAll('.weapon-card').forEach(card=>card.setAttribute('aria-pressed',String(card.dataset.id===selected)));renderInspector();$('#inspector').scrollTop=0;refreshIcons();openMobileDetail();}
+  if(b.id==='inspector-toggle'){if(!await leaveEditor())return;inspectorCollapsed=!inspectorCollapsed;updateInspectorToggle();renderInspector();refreshIcons();}
   if(b.dataset.tab){detailTab=b.dataset.tab;renderInspector();refreshIcons();const panel=$('#detail-dialog').open?$('#mobile-inspector'):$('#inspector');panel.querySelector(`[data-tab="${detailTab}"]`)?.focus({preventScroll:true});}
   if(b.dataset.edit&&owner){if(!await leaveEditor())return;selected=b.dataset.edit;showEditor(findRecord(selected));}
   if(b.id==='add-record'&&owner){if(!await leaveEditor())return;showEditor(section==='guides'?{title_uk:'',body_uk:''}:section==='progenitors'?{kind:'progenitor',element:'magnetic'}:{kind:'weapon',family:families.includes(section)?section:'Kuva',type:'primary',recommended:'toxin',alternative:'magnetic',matrix:{}},true);}

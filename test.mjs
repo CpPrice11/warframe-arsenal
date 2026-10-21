@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import {validateCatalog,filterRecords,safeUrl} from './public/catalog-core.js';
-import {messages} from './public/i18n.js';
+import {messages,elementKeys} from './public/i18n.js';
 import {localDatabase} from './local-db.mjs';
 import {handleRequest,digest,randomToken,scheduledBackup} from './worker.js';
 
@@ -20,6 +20,17 @@ test('live import, exact counts, all image files and locale parity',async()=>{
   }
   assert.deepEqual(['Kuva','Tenet','Coda'].map(f=>source.weapons.filter(w=>w.family===f).length),[21,16,14]);
   for(const r of [...source.weapons,...source.progenitors]){assert.ok(r.image);const bytes=await readFile(new URL('./public/'+r.image,import.meta.url));assert.equal(bytes.subarray(1,4).toString(),'PNG');}
+});
+test('all seven original Wiki element icons retain correct sources and 64px PNGs',async()=>{
+  const {assets}=JSON.parse(await readFile(new URL('./public/ELEMENT-SOURCES.json',import.meta.url),'utf8'));
+  assert.deepEqual(assets.map(a=>a.key).sort(),[...elementKeys].sort());
+  for(const asset of assets){
+    const wikiName=asset.key==='electric'?'Electricity':asset.key[0].toUpperCase()+asset.key.slice(1);
+    assert.equal(new URL(asset.source).origin,'https://wiki.warframe.com');
+    assert.equal(new URL(asset.source).pathname,'/images/Dmg'+wikiName+'Small64.png');
+    const bytes=await readFile(new URL('./public/'+asset.file,import.meta.url));
+    assert.equal(bytes.subarray(1,4).toString(),'PNG');assert.equal(bytes.readUInt32BE(16),64);assert.equal(bytes.readUInt32BE(20),64);
+  }
 });
 test('Russian catalog is complete, searchable and validates translated input',async()=>{
   for(const r of [...source.weapons,...source.progenitors])assert.ok(r.name_ru&&r.reason_ru,r.id);
