@@ -1,10 +1,11 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "warframe-arsenal-api",
+  "account_id": "c9586738c866087019ee07475f8c33b0",
   "main": "worker.js",
   "compatibility_date": "2026-10-21",
   "observability": { "enabled": true, "traces": { "enabled": true } },
-  "vars": { "FRONTEND_URL": "", "GITHUB_CLIENT_ID": "", "OWNER_GITHUB_ID": "117557975" },
-  "d1_databases": [{ "binding": "DB", "database_name": "warframe-arsenal", "database_id": "" }],
-  "triggers": { "crons": ["0 7 * * 0"] }
+  "vars": { "FRONTEND_URL": "https://cpprice11.github.io/warframe-arsenal/", "GITHUB_CLIENT_ID": "", "OWNER_GITHUB_ID": "117557975" },
+  "d1_databases": [{ "binding": "DB", "database_name": "warframe-arsenal", "database_id": "adc74aca-bdf0-42ee-aec0-4bd8e9b41be6" }],
+  "triggers": { "crons": ["0 7 * * SUN"] }
 }
