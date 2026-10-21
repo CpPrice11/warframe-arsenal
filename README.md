@@ -5,7 +5,7 @@
 ## Що працює
 
 - 51 зброя: 21 Kuva, 16 Tenet, 14 Coda; 66 родоначальників і 34 довідкові записи.
-- Сітка / список, пошук обома мовами, фільтри, сім типів шкоди, пояснення, джерела й білди.
+- Сітка / список, пошук трьома мовами, фільтри, сім типів шкоди, пояснення, джерела й білди.
 - Український, англійський і російський інтерфейс; мова вибирається списком і запам'ятовується. Російською перекладено 51 зброю, 66 родоначальників, 34 поради й матрицю стихій. Усі117 назв звірено з російською Warframe Wiki; посилання на сторінки є в `public/RUSSIAN-NAMES-SOURCES.json`. Англійські переклади авторських приміток можна додати в редакторі.
 - Редагування назв, стихій, матриці, описів, посилань і зображень; додавання, архівування, повернення.
 - Російські поля редагуються окремо. Матриця в російському режимі зберігається в `matrix_ru`, українська — у `matrix`. Українські та англійські дані не перезаписуються перекладом.
@@ -58,4 +58,5 @@ Google-таблиця й Apps Script v7.1 збережені окремо; са�
 - Візуальний референс: [Eagle](https://eagle.cool/), вибраний користувачем. Оригінальний код, без бренду Eagle.
 - Ігрові PNG: [WFCD/warframe-items](https://github.com/WFCD/warframe-items). Warframe та ігрові матеріали належать Digital Extremes. URL кожного зображення наведено в `ASSET-SOURCES.json` та метаданих PNG.
 - Іконки: [Lucide 0.468.0](https://github.com/lucide-icons/lucide/tree/0.468.0), ISC; локальна копія з ліцензійним коментарем. Повідомлення про ліцензії: `public/THIRD-PARTY-NOTICES.txt`.
+- Палітра: офіційна [Catppuccin Mocha](https://github.com/catppuccin/catppuccin#-palette), значення з [catppuccin/palette 1.8.0](https://github.com/catppuccin/palette). Кольори задано через токени CSS; фони стихій використовують суміші цих кольорів.
 - [Документація GitHub Pages](https://docs.github.com/en/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages), [Cloudflare D1](https://developers.cloudflare.com/d1/), [GitHub OAuth](https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/authorizing-oauth-apps).
