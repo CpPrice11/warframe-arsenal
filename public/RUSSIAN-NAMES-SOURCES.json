@@ -1,0 +1,595 @@
+{
+  "checkedAt": "2026-10-21",
+  "source": "https://ru.wiki.warframe.com/",
+  "indexPages": [
+    "https://ru.wiki.warframe.com/w/Оружие",
+    "https://ru.wiki.warframe.com/w/Варфреймы"
+  ],
+  "records": [
+    {
+      "id": "kuva-bramma",
+      "name_ru": "Брамма Кува",
+      "url": "https://ru.wiki.warframe.com/w/%D0%91%D1%80%D0%B0%D0%BC%D0%BC%D0%B0_%D0%9A%D1%83%D0%B2%D0%B0"
+    },
+    {
+      "id": "kuva-chakkhurr",
+      "name_ru": "Чаккхарр Кува",
+      "url": "https://ru.wiki.warframe.com/w/%D0%A7%D0%B0%D0%BA%D0%BA%D1%85%D0%B0%D1%80%D1%80_%D0%9A%D1%83%D0%B2%D0%B0"
+    },
+    {
+      "id": "kuva-ogris",
+      "name_ru": "Огрис Кува",
+      "url": "https://ru.wiki.warframe.com/w/%D0%9E%D0%B3%D1%80%D0%B8%D1%81_%D0%9A%D1%83%D0%B2%D0%B0"
+    },
+    {
+      "id": "kuva-tonkor",
+      "name_ru": "Тонкор Кува",
+      "url": "https://ru.wiki.warframe.com/w/%D0%A2%D0%BE%D0%BD%D0%BA%D0%BE%D1%80_%D0%9A%D1%83%D0%B2%D0%B0"
+    },
+    {
+      "id": "kuva-zarr",
+      "name_ru": "Зарр Кува",
+      "url": "https://ru.wiki.warframe.com/w/%D0%97%D0%B0%D1%80%D1%80_%D0%9A%D1%83%D0%B2%D0%B0"
+    },
+    {
+      "id": "kuva-hind",
+      "name_ru": "Лань Кува",
+      "url": "https://ru.wiki.warframe.com/w/%D0%9B%D0%B0%D0%BD%D1%8C_%D0%9A%D1%83%D0%B2%D0%B0"
+    },
+    {
+      "id": "kuva-karak",
+      "name_ru": "Карак Кува",
+      "url": "https://ru.wiki.warframe.com/w/%D0%9A%D0%B0%D1%80%D0%B0%D0%BA_%D0%9A%D1%83%D0%B2%D0%B0"
+    },
+    {
+      "id": "kuva-quartakk",
+      "name_ru": "Куартакк Кува",
+      "url": "https://ru.wiki.warframe.com/w/%D0%9A%D1%83%D0%B0%D1%80%D1%82%D0%B0%D0%BA%D0%BA_%D0%9A%D1%83%D0%B2%D0%B0"
+    },
+    {
+      "id": "kuva-drakgoon",
+      "name_ru": "Дракгун Кува",
+      "url": "https://ru.wiki.warframe.com/w/%D0%94%D1%80%D0%B0%D0%BA%D0%B3%D1%83%D0%BD_%D0%9A%D1%83%D0%B2%D0%B0"
+    },
+    {
+      "id": "kuva-hek",
+      "name_ru": "Хек Кува",
+      "url": "https://ru.wiki.warframe.com/w/%D0%A5%D0%B5%D0%BA_%D0%9A%D1%83%D0%B2%D0%B0"
+    },
+    {
+      "id": "kuva-kohm",
+      "name_ru": "Комм Кува",
+      "url": "https://ru.wiki.warframe.com/w/%D0%9A%D0%BE%D0%BC%D0%BC_%D0%9A%D1%83%D0%B2%D0%B0"
+    },
+    {
+      "id": "kuva-sobek",
+      "name_ru": "Собек Кува",
+      "url": "https://ru.wiki.warframe.com/w/%D0%A1%D0%BE%D0%B1%D0%B5%D0%BA_%D0%9A%D1%83%D0%B2%D0%B0"
+    },
+    {
+      "id": "kuva-brakk",
+      "name_ru": "Бракк Кува",
+      "url": "https://ru.wiki.warframe.com/w/%D0%91%D1%80%D0%B0%D0%BA%D0%BA_%D0%9A%D1%83%D0%B2%D0%B0"
+    },
+    {
+      "id": "kuva-kraken",
+      "name_ru": "Кракен Кува",
+      "url": "https://ru.wiki.warframe.com/w/%D0%9A%D1%80%D0%B0%D0%BA%D0%B5%D0%BD_%D0%9A%D1%83%D0%B2%D0%B0"
+    },
+    {
+      "id": "kuva-nukor",
+      "name_ru": "Нюкор Кува",
+      "url": "https://ru.wiki.warframe.com/w/%D0%9D%D1%8E%D0%BA%D0%BE%D1%80_%D0%9A%D1%83%D0%B2%D0%B0"
+    },
+    {
+      "id": "kuva-seer",
+      "name_ru": "Пророк Кува",
+      "url": "https://ru.wiki.warframe.com/w/%D0%9F%D1%80%D0%BE%D1%80%D0%BE%D0%BA_%D0%9A%D1%83%D0%B2%D0%B0"
+    },
+    {
+      "id": "kuva-twin-stubbas",
+      "name_ru": "Парные Стаббы Кува",
+      "url": "https://ru.wiki.warframe.com/w/%D0%9F%D0%B0%D1%80%D0%BD%D1%8B%D0%B5_%D0%A1%D1%82%D0%B0%D0%B1%D0%B1%D1%8B_%D0%9A%D1%83%D0%B2%D0%B0"
+    },
+    {
+      "id": "kuva-ghoulsaw",
+      "name_ru": "Пила Упыря Кува",
+      "url": "https://ru.wiki.warframe.com/w/%D0%9F%D0%B8%D0%BB%D0%B0_%D0%A3%D0%BF%D1%8B%D1%80%D1%8F_%D0%9A%D1%83%D0%B2%D0%B0"
+    },
+    {
+      "id": "kuva-shildeg",
+      "name_ru": "Шилдег Кува",
+      "url": "https://ru.wiki.warframe.com/w/%D0%A8%D0%B8%D0%BB%D0%B4%D0%B5%D0%B3_%D0%9A%D1%83%D0%B2%D0%B0"
+    },
+    {
+      "id": "kuva-ayanga",
+      "name_ru": "Аянга Кува",
+      "url": "https://ru.wiki.warframe.com/w/%D0%90%D1%8F%D0%BD%D0%B3%D0%B0_%D0%9A%D1%83%D0%B2%D0%B0"
+    },
+    {
+      "id": "kuva-grattler",
+      "name_ru": "Грэттлер Кува",
+      "url": "https://ru.wiki.warframe.com/w/%D0%93%D1%80%D1%8D%D1%82%D1%82%D0%BB%D0%B5%D1%80_%D0%9A%D1%83%D0%B2%D0%B0"
+    },
+    {
+      "id": "tenet-arca-plasmor",
+      "name_ru": "Арка Плазмор Догмат",
+      "url": "https://ru.wiki.warframe.com/w/%D0%90%D1%80%D0%BA%D0%B0_%D0%9F%D0%BB%D0%B0%D0%B7%D0%BC%D0%BE%D1%80_%D0%94%D0%BE%D0%B3%D0%BC%D0%B0%D1%82"
+    },
+    {
+      "id": "tenet-envoy",
+      "name_ru": "Посланник Догмат",
+      "url": "https://ru.wiki.warframe.com/w/%D0%9F%D0%BE%D1%81%D0%BB%D0%B0%D0%BD%D0%BD%D0%B8%D0%BA_%D0%94%D0%BE%D0%B3%D0%BC%D0%B0%D1%82"
+    },
+    {
+      "id": "tenet-flux-rifle",
+      "name_ru": "Потоковая Винтовка Догмат",
+      "url": "https://ru.wiki.warframe.com/w/%D0%9F%D0%BE%D1%82%D0%BE%D0%BA%D0%BE%D0%B2%D0%B0%D1%8F_%D0%92%D0%B8%D0%BD%D1%82%D0%BE%D0%B2%D0%BA%D0%B0_%D0%94%D0%BE%D0%B3%D0%BC%D0%B0%D1%82"
+    },
+    {
+      "id": "tenet-glaxion",
+      "name_ru": "Глаксион Догмат",
+      "url": "https://ru.wiki.warframe.com/w/%D0%93%D0%BB%D0%B0%D0%BA%D1%81%D0%B8%D0%BE%D0%BD_%D0%94%D0%BE%D0%B3%D0%BC%D0%B0%D1%82"
+    },
+    {
+      "id": "tenet-tetra",
+      "name_ru": "Тетра Догмат",
+      "url": "https://ru.wiki.warframe.com/w/%D0%A2%D0%B5%D1%82%D1%80%D0%B0_%D0%94%D0%BE%D0%B3%D0%BC%D0%B0%D1%82"
+    },
+    {
+      "id": "tenet-quanta",
+      "name_ru": "Кванта Догмат",
+      "url": "https://ru.wiki.warframe.com/w/%D0%9A%D0%B2%D0%B0%D0%BD%D1%82%D0%B0_%D0%94%D0%BE%D0%B3%D0%BC%D0%B0%D1%82"
+    },
+    {
+      "id": "tenet-ferrox",
+      "name_ru": "Феррокс Догмат",
+      "url": "https://ru.wiki.warframe.com/w/%D0%A4%D0%B5%D1%80%D1%80%D0%BE%D0%BA%D1%81_%D0%94%D0%BE%D0%B3%D0%BC%D0%B0%D1%82"
+    },
+    {
+      "id": "tenet-detron",
+      "name_ru": "Детрон Догмат",
+      "url": "https://ru.wiki.warframe.com/w/%D0%94%D0%B5%D1%82%D1%80%D0%BE%D0%BD_%D0%94%D0%BE%D0%B3%D0%BC%D0%B0%D1%82"
+    },
+    {
+      "id": "tenet-cycron",
+      "name_ru": "Сикрон Догмат",
+      "url": "https://ru.wiki.warframe.com/w/%D0%A1%D0%B8%D0%BA%D1%80%D0%BE%D0%BD_%D0%94%D0%BE%D0%B3%D0%BC%D0%B0%D1%82"
+    },
+    {
+      "id": "tenet-plinx",
+      "name_ru": "Плинкс Догмат",
+      "url": "https://ru.wiki.warframe.com/w/%D0%9F%D0%BB%D0%B8%D0%BD%D0%BA%D1%81_%D0%94%D0%BE%D0%B3%D0%BC%D0%B0%D1%82"
+    },
+    {
+      "id": "tenet-diplos",
+      "name_ru": "Диплос Догмат",
+      "url": "https://ru.wiki.warframe.com/w/%D0%94%D0%B8%D0%BF%D0%BB%D0%BE%D1%81_%D0%94%D0%BE%D0%B3%D0%BC%D0%B0%D1%82"
+    },
+    {
+      "id": "tenet-spirex",
+      "name_ru": "Спирекс Догмат",
+      "url": "https://ru.wiki.warframe.com/w/%D0%A1%D0%BF%D0%B8%D1%80%D0%B5%D0%BA%D1%81_%D0%94%D0%BE%D0%B3%D0%BC%D0%B0%D1%82"
+    },
+    {
+      "id": "tenet-agendus",
+      "name_ru": "Агендус Догмат",
+      "url": "https://ru.wiki.warframe.com/w/%D0%90%D0%B3%D0%B5%D0%BD%D0%B4%D1%83%D1%81_%D0%94%D0%BE%D0%B3%D0%BC%D0%B0%D1%82"
+    },
+    {
+      "id": "tenet-exec",
+      "name_ru": "Экзек Догмат",
+      "url": "https://ru.wiki.warframe.com/w/%D0%AD%D0%BA%D0%B7%D0%B5%D0%BA_%D0%94%D0%BE%D0%B3%D0%BC%D0%B0%D1%82"
+    },
+    {
+      "id": "tenet-livia",
+      "name_ru": "Ливиа Догмат",
+      "url": "https://ru.wiki.warframe.com/w/%D0%9B%D0%B8%D0%B2%D0%B8%D0%B0_%D0%94%D0%BE%D0%B3%D0%BC%D0%B0%D1%82"
+    },
+    {
+      "id": "tenet-grigori",
+      "name_ru": "Григори Догмат",
+      "url": "https://ru.wiki.warframe.com/w/%D0%93%D1%80%D0%B8%D0%B3%D0%BE%D1%80%D0%B8_%D0%94%D0%BE%D0%B3%D0%BC%D0%B0%D1%82"
+    },
+    {
+      "id": "coda-hema",
+      "name_ru": "Гема Кода",
+      "url": "https://ru.wiki.warframe.com/w/%D0%93%D0%B5%D0%BC%D0%B0_%D0%9A%D0%BE%D0%B4%D0%B0"
+    },
+    {
+      "id": "coda-sporothrix",
+      "name_ru": "Споротрикс Кода",
+      "url": "https://ru.wiki.warframe.com/w/%D0%A1%D0%BF%D0%BE%D1%80%D0%BE%D1%82%D1%80%D0%B8%D0%BA%D1%81_%D0%9A%D0%BE%D0%B4%D0%B0"
+    },
+    {
+      "id": "coda-bassocyst",
+      "name_ru": "Бассоцист Кода",
+      "url": "https://ru.wiki.warframe.com/w/%D0%91%D0%B0%D1%81%D1%81%D0%BE%D1%86%D0%B8%D1%81%D1%82_%D0%9A%D0%BE%D0%B4%D0%B0"
+    },
+    {
+      "id": "coda-bubonico",
+      "name_ru": "Бубонико Кода",
+      "url": "https://ru.wiki.warframe.com/w/%D0%91%D1%83%D0%B1%D0%BE%D0%BD%D0%B8%D0%BA%D0%BE_%D0%9A%D0%BE%D0%B4%D0%B0"
+    },
+    {
+      "id": "coda-synapse",
+      "name_ru": "Синапс Кода",
+      "url": "https://ru.wiki.warframe.com/w/%D0%A1%D0%B8%D0%BD%D0%B0%D0%BF%D1%81_%D0%9A%D0%BE%D0%B4%D0%B0"
+    },
+    {
+      "id": "coda-catabolyst",
+      "name_ru": "Катаболист Кода",
+      "url": "https://ru.wiki.warframe.com/w/%D0%9A%D0%B0%D1%82%D0%B0%D0%B1%D0%BE%D0%BB%D0%B8%D1%81%D1%82_%D0%9A%D0%BE%D0%B4%D0%B0"
+    },
+    {
+      "id": "dual-coda-torxica",
+      "name_ru": "Парные Торксики Кода",
+      "url": "https://ru.wiki.warframe.com/w/%D0%9F%D0%B0%D1%80%D0%BD%D1%8B%D0%B5_%D0%A2%D0%BE%D1%80%D0%BA%D1%81%D0%B8%D0%BA%D0%B8_%D0%9A%D0%BE%D0%B4%D0%B0"
+    },
+    {
+      "id": "coda-pox",
+      "name_ru": "Покс Кода",
+      "url": "https://ru.wiki.warframe.com/w/%D0%9F%D0%BE%D0%BA%D1%81_%D0%9A%D0%BE%D0%B4%D0%B0"
+    },
+    {
+      "id": "coda-tysis",
+      "name_ru": "Тайсис Кода",
+      "url": "https://ru.wiki.warframe.com/w/%D0%A2%D0%B0%D0%B9%D1%81%D0%B8%D1%81_%D0%9A%D0%BE%D0%B4%D0%B0"
+    },
+    {
+      "id": "coda-caustacyst",
+      "name_ru": "Костацист Кода",
+      "url": "https://ru.wiki.warframe.com/w/%D0%9A%D0%BE%D1%81%D1%82%D0%B0%D1%86%D0%B8%D1%81%D1%82_%D0%9A%D0%BE%D0%B4%D0%B0"
+    },
+    {
+      "id": "coda-hirudo",
+      "name_ru": "Хирудо Кода",
+      "url": "https://ru.wiki.warframe.com/w/%D0%A5%D0%B8%D1%80%D1%83%D0%B4%D0%BE_%D0%9A%D0%BE%D0%B4%D0%B0"
+    },
+    {
+      "id": "coda-mire",
+      "name_ru": "Майр Кода",
+      "url": "https://ru.wiki.warframe.com/w/%D0%9C%D0%B0%D0%B9%D1%80_%D0%9A%D0%BE%D0%B4%D0%B0"
+    },
+    {
+      "id": "coda-motovore",
+      "name_ru": "Мотовор Кода",
+      "url": "https://ru.wiki.warframe.com/w/%D0%9C%D0%BE%D1%82%D0%BE%D0%B2%D0%BE%D1%80_%D0%9A%D0%BE%D0%B4%D0%B0"
+    },
+    {
+      "id": "coda-pathocyst",
+      "name_ru": "Патоцист Кода",
+      "url": "https://ru.wiki.warframe.com/w/%D0%9F%D0%B0%D1%82%D0%BE%D1%86%D0%B8%D1%81%D1%82_%D0%9A%D0%BE%D0%B4%D0%B0"
+    },
+    {
+      "id": "progenitor-mag",
+      "name_ru": "Мэг",
+      "url": "https://ru.wiki.warframe.com/w/%D0%9C%D1%8D%D0%B3"
+    },
+    {
+      "id": "progenitor-mesa",
+      "name_ru": "Миса",
+      "url": "https://ru.wiki.warframe.com/w/%D0%9C%D0%B8%D1%81%D0%B0"
+    },
+    {
+      "id": "progenitor-yareli",
+      "name_ru": "Ярели",
+      "url": "https://ru.wiki.warframe.com/w/%D0%AF%D1%80%D0%B5%D0%BB%D0%B8"
+    },
+    {
+      "id": "progenitor-xaku",
+      "name_ru": "Заку",
+      "url": "https://ru.wiki.warframe.com/w/%D0%97%D0%B0%D0%BA%D1%83"
+    },
+    {
+      "id": "progenitor-lavos",
+      "name_ru": "Лавос",
+      "url": "https://ru.wiki.warframe.com/w/%D0%9B%D0%B0%D0%B2%D0%BE%D1%81"
+    },
+    {
+      "id": "progenitor-harrow",
+      "name_ru": "Харроу",
+      "url": "https://ru.wiki.warframe.com/w/%D0%A5%D0%B0%D1%80%D1%80%D0%BE%D1%83"
+    },
+    {
+      "id": "progenitor-hydroid",
+      "name_ru": "Гидроид",
+      "url": "https://ru.wiki.warframe.com/w/%D0%93%D0%B8%D0%B4%D1%80%D0%BE%D0%B8%D0%B4"
+    },
+    {
+      "id": "progenitor-citrine",
+      "name_ru": "Цитрина",
+      "url": "https://ru.wiki.warframe.com/w/%D0%A6%D0%B8%D1%82%D1%80%D0%B8%D0%BD%D0%B0"
+    },
+    {
+      "id": "progenitor-cyte-09",
+      "name_ru": "Цит-09",
+      "url": "https://ru.wiki.warframe.com/w/%D0%A6%D0%B8%D1%82-09"
+    },
+    {
+      "id": "progenitor-saryn",
+      "name_ru": "Сарина",
+      "url": "https://ru.wiki.warframe.com/w/%D0%A1%D0%B0%D1%80%D0%B8%D0%BD%D0%B0"
+    },
+    {
+      "id": "progenitor-nekros",
+      "name_ru": "Некрос",
+      "url": "https://ru.wiki.warframe.com/w/%D0%9D%D0%B5%D0%BA%D1%80%D0%BE%D1%81"
+    },
+    {
+      "id": "progenitor-khora",
+      "name_ru": "Кора",
+      "url": "https://ru.wiki.warframe.com/w/%D0%9A%D0%BE%D1%80%D0%B0"
+    },
+    {
+      "id": "progenitor-nidus",
+      "name_ru": "Нидус",
+      "url": "https://ru.wiki.warframe.com/w/%D0%9D%D0%B8%D0%B4%D1%83%D1%81"
+    },
+    {
+      "id": "progenitor-ivara",
+      "name_ru": "Ивара",
+      "url": "https://ru.wiki.warframe.com/w/%D0%98%D0%B2%D0%B0%D1%80%D0%B0"
+    },
+    {
+      "id": "progenitor-atlas",
+      "name_ru": "Атлас",
+      "url": "https://ru.wiki.warframe.com/w/%D0%90%D1%82%D0%BB%D0%B0%D1%81"
+    },
+    {
+      "id": "progenitor-oberon",
+      "name_ru": "Оберон",
+      "url": "https://ru.wiki.warframe.com/w/%D0%9E%D0%B1%D0%B5%D1%80%D0%BE%D0%BD"
+    },
+    {
+      "id": "progenitor-dagath",
+      "name_ru": "Дагас",
+      "url": "https://ru.wiki.warframe.com/w/%D0%94%D0%B0%D0%B3%D0%B0%D1%81"
+    },
+    {
+      "id": "progenitor-oraxia",
+      "name_ru": "Ораксия",
+      "url": "https://ru.wiki.warframe.com/w/%D0%9E%D1%80%D0%B0%D0%BA%D1%81%D0%B8%D1%8F"
+    },
+    {
+      "id": "progenitor-nokko",
+      "name_ru": "Нокко",
+      "url": "https://ru.wiki.warframe.com/w/%D0%9D%D0%BE%D0%BA%D0%BA%D0%BE"
+    },
+    {
+      "id": "progenitor-volt",
+      "name_ru": "Вольт",
+      "url": "https://ru.wiki.warframe.com/w/%D0%92%D0%BE%D0%BB%D1%8C%D1%82"
+    },
+    {
+      "id": "progenitor-excalibur",
+      "name_ru": "Экскалибур",
+      "url": "https://ru.wiki.warframe.com/w/%D0%AD%D0%BA%D1%81%D0%BA%D0%B0%D0%BB%D0%B8%D0%B1%D1%83%D1%80"
+    },
+    {
+      "id": "progenitor-gyre",
+      "name_ru": "Джайра",
+      "url": "https://ru.wiki.warframe.com/w/%D0%94%D0%B6%D0%B0%D0%B9%D1%80%D0%B0"
+    },
+    {
+      "id": "progenitor-nova",
+      "name_ru": "Нова",
+      "url": "https://ru.wiki.warframe.com/w/%D0%9D%D0%BE%D0%B2%D0%B0"
+    },
+    {
+      "id": "progenitor-banshee",
+      "name_ru": "Банши",
+      "url": "https://ru.wiki.warframe.com/w/%D0%91%D0%B0%D0%BD%D1%88%D0%B8"
+    },
+    {
+      "id": "progenitor-caliban",
+      "name_ru": "Калибан",
+      "url": "https://ru.wiki.warframe.com/w/%D0%9A%D0%B0%D0%BB%D0%B8%D0%B1%D0%B0%D0%BD"
+    },
+    {
+      "id": "progenitor-valkyr",
+      "name_ru": "Валькирия",
+      "url": "https://ru.wiki.warframe.com/w/%D0%92%D0%B0%D0%BB%D1%8C%D0%BA%D0%B8%D1%80%D0%B8%D1%8F"
+    },
+    {
+      "id": "progenitor-limbo",
+      "name_ru": "Лимбо",
+      "url": "https://ru.wiki.warframe.com/w/%D0%9B%D0%B8%D0%BC%D0%B1%D0%BE"
+    },
+    {
+      "id": "progenitor-follie",
+      "name_ru": "Фолли",
+      "url": "https://ru.wiki.warframe.com/w/%D0%A4%D0%BE%D0%BB%D0%BB%D0%B8"
+    },
+    {
+      "id": "progenitor-frost",
+      "name_ru": "Фрост",
+      "url": "https://ru.wiki.warframe.com/w/%D0%A4%D1%80%D0%BE%D1%81%D1%82"
+    },
+    {
+      "id": "progenitor-revenant",
+      "name_ru": "Ревенант",
+      "url": "https://ru.wiki.warframe.com/w/%D0%A0%D0%B5%D0%B2%D0%B5%D0%BD%D0%B0%D0%BD%D1%82"
+    },
+    {
+      "id": "progenitor-gara",
+      "name_ru": "Гара",
+      "url": "https://ru.wiki.warframe.com/w/%D0%93%D0%B0%D1%80%D0%B0"
+    },
+    {
+      "id": "progenitor-hildryn",
+      "name_ru": "Хильдрин",
+      "url": "https://ru.wiki.warframe.com/w/%D0%A5%D0%B8%D0%BB%D1%8C%D0%B4%D1%80%D0%B8%D0%BD"
+    },
+    {
+      "id": "progenitor-trinity",
+      "name_ru": "Тринити",
+      "url": "https://ru.wiki.warframe.com/w/%D0%A2%D1%80%D0%B8%D0%BD%D0%B8%D1%82%D0%B8"
+    },
+    {
+      "id": "progenitor-titania",
+      "name_ru": "Титания",
+      "url": "https://ru.wiki.warframe.com/w/%D0%A2%D0%B8%D1%82%D0%B0%D0%BD%D0%B8%D1%8F"
+    },
+    {
+      "id": "progenitor-styanax",
+      "name_ru": "Стинакс",
+      "url": "https://ru.wiki.warframe.com/w/%D0%A1%D1%82%D0%B8%D0%BD%D0%B0%D0%BA%D1%81"
+    },
+    {
+      "id": "progenitor-koumei",
+      "name_ru": "Комея",
+      "url": "https://ru.wiki.warframe.com/w/%D0%9A%D0%BE%D0%BC%D0%B5%D1%8F"
+    },
+    {
+      "id": "progenitor-narin",
+      "name_ru": "Нарин",
+      "url": "https://ru.wiki.warframe.com/w/%D0%9D%D0%B0%D1%80%D0%B8%D0%BD"
+    },
+    {
+      "id": "progenitor-ember",
+      "name_ru": "Эмбер",
+      "url": "https://ru.wiki.warframe.com/w/%D0%AD%D0%BC%D0%B1%D0%B5%D1%80"
+    },
+    {
+      "id": "progenitor-nezha",
+      "name_ru": "Нэчжа",
+      "url": "https://ru.wiki.warframe.com/w/%D0%9D%D1%8D%D1%87%D0%B6%D0%B0"
+    },
+    {
+      "id": "progenitor-protea",
+      "name_ru": "Протея",
+      "url": "https://ru.wiki.warframe.com/w/%D0%9F%D1%80%D0%BE%D1%82%D0%B5%D1%8F"
+    },
+    {
+      "id": "progenitor-wisp",
+      "name_ru": "Висп",
+      "url": "https://ru.wiki.warframe.com/w/%D0%92%D0%B8%D1%81%D0%BF"
+    },
+    {
+      "id": "progenitor-kullervo",
+      "name_ru": "Куллерво",
+      "url": "https://ru.wiki.warframe.com/w/%D0%9A%D1%83%D0%BB%D0%BB%D0%B5%D1%80%D0%B2%D0%BE"
+    },
+    {
+      "id": "progenitor-jade",
+      "name_ru": "Джейд",
+      "url": "https://ru.wiki.warframe.com/w/%D0%94%D0%B6%D0%B5%D0%B9%D0%B4"
+    },
+    {
+      "id": "progenitor-inaros",
+      "name_ru": "Инарос",
+      "url": "https://ru.wiki.warframe.com/w/%D0%98%D0%BD%D0%B0%D1%80%D0%BE%D1%81"
+    },
+    {
+      "id": "progenitor-uriel",
+      "name_ru": "Уриэль",
+      "url": "https://ru.wiki.warframe.com/w/%D0%A3%D1%80%D0%B8%D1%8D%D0%BB%D1%8C"
+    },
+    {
+      "id": "progenitor-chroma",
+      "name_ru": "Хрома",
+      "url": "https://ru.wiki.warframe.com/w/%D0%A5%D1%80%D0%BE%D0%BC%D0%B0"
+    },
+    {
+      "id": "progenitor-vauban",
+      "name_ru": "Вобан",
+      "url": "https://ru.wiki.warframe.com/w/%D0%92%D0%BE%D0%B1%D0%B0%D0%BD"
+    },
+    {
+      "id": "progenitor-temple",
+      "name_ru": "Темпл",
+      "url": "https://ru.wiki.warframe.com/w/%D0%A2%D0%B5%D0%BC%D0%BF%D0%BB"
+    },
+    {
+      "id": "progenitor-grendel",
+      "name_ru": "Грендель",
+      "url": "https://ru.wiki.warframe.com/w/%D0%93%D1%80%D0%B5%D0%BD%D0%B4%D0%B5%D0%BB%D1%8C"
+    },
+    {
+      "id": "progenitor-gauss",
+      "name_ru": "Гаусс",
+      "url": "https://ru.wiki.warframe.com/w/%D0%93%D0%B0%D1%83%D1%81%D1%81"
+    },
+    {
+      "id": "progenitor-dante",
+      "name_ru": "Данте",
+      "url": "https://ru.wiki.warframe.com/w/%D0%94%D0%B0%D0%BD%D1%82%D0%B5"
+    },
+    {
+      "id": "progenitor-zephyr",
+      "name_ru": "Зефир",
+      "url": "https://ru.wiki.warframe.com/w/%D0%97%D0%B5%D1%84%D0%B8%D1%80"
+    },
+    {
+      "id": "progenitor-baruuk",
+      "name_ru": "Баруук",
+      "url": "https://ru.wiki.warframe.com/w/%D0%91%D0%B0%D1%80%D1%83%D1%83%D0%BA"
+    },
+    {
+      "id": "progenitor-rhino",
+      "name_ru": "Рино",
+      "url": "https://ru.wiki.warframe.com/w/%D0%A0%D0%B8%D0%BD%D0%BE"
+    },
+    {
+      "id": "progenitor-sevagoth",
+      "name_ru": "Севагот",
+      "url": "https://ru.wiki.warframe.com/w/%D0%A1%D0%B5%D0%B2%D0%B0%D0%B3%D0%BE%D1%82"
+    },
+    {
+      "id": "progenitor-wukong",
+      "name_ru": "Вуконг",
+      "url": "https://ru.wiki.warframe.com/w/%D0%92%D1%83%D0%BA%D0%BE%D0%BD%D0%B3"
+    },
+    {
+      "id": "progenitor-sirius-orion",
+      "name_ru": "Сириус и Орион",
+      "url": "https://ru.wiki.warframe.com/w/%D0%A1%D0%B8%D1%80%D0%B8%D1%83%D1%81_%D0%B8_%D0%9E%D1%80%D0%B8%D0%BE%D0%BD"
+    },
+    {
+      "id": "progenitor-garuda",
+      "name_ru": "Гаруда",
+      "url": "https://ru.wiki.warframe.com/w/%D0%93%D0%B0%D1%80%D1%83%D0%B4%D0%B0"
+    },
+    {
+      "id": "progenitor-voruna",
+      "name_ru": "Воруна",
+      "url": "https://ru.wiki.warframe.com/w/%D0%92%D0%BE%D1%80%D1%83%D0%BD%D0%B0"
+    },
+    {
+      "id": "progenitor-equinox",
+      "name_ru": "Эквинокс",
+      "url": "https://ru.wiki.warframe.com/w/%D0%AD%D0%BA%D0%B2%D0%B8%D0%BD%D0%BE%D0%BA%D1%81"
+    },
+    {
+      "id": "progenitor-mirage",
+      "name_ru": "Мираж",
+      "url": "https://ru.wiki.warframe.com/w/%D0%9C%D0%B8%D1%80%D0%B0%D0%B6"
+    },
+    {
+      "id": "progenitor-ash",
+      "name_ru": "Эш",
+      "url": "https://ru.wiki.warframe.com/w/%D0%AD%D1%88"
+    },
+    {
+      "id": "progenitor-octavia",
+      "name_ru": "Октавия",
+      "url": "https://ru.wiki.warframe.com/w/%D0%9E%D0%BA%D1%82%D0%B0%D0%B2%D0%B8%D1%8F"
+    },
+    {
+      "id": "progenitor-nyx",
+      "name_ru": "Никс",
+      "url": "https://ru.wiki.warframe.com/w/%D0%9D%D0%B8%D0%BA%D1%81"
+    },
+    {
+      "id": "progenitor-qorvex",
+      "name_ru": "Корвекс",
+      "url": "https://ru.wiki.warframe.com/w/%D0%9A%D0%BE%D1%80%D0%B2%D0%B5%D0%BA%D1%81"
+    },
+    {
+      "id": "progenitor-loki",
+      "name_ru": "Локи",
+      "url": "https://ru.wiki.warframe.com/w/%D0%9B%D0%BE%D0%BA%D0%B8"
+    }
+  ]
+}

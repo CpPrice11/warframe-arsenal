@@ -31,6 +31,7 @@ const server=http.createServer(async(req,res)=>{
       res.writeHead(response.status,Object.fromEntries(response.headers));res.end(Buffer.from(await response.arrayBuffer()));return;
     }
     if(!['GET','HEAD'].includes(req.method)){res.writeHead(405);res.end();return;}
+    if(url.pathname==='/config.js'){res.writeHead(200,{'Content-Type':mime['.js'],'Cache-Control':'no-store'});res.end("export const config = { apiBase: '' };\n");return;}
     const relative=decodeURIComponent(url.pathname).replace(/^\/+/, '')||'index.html';
     const target=path.resolve(publicRoot,relative);
     if(!target.startsWith(publicRoot+path.sep)&&target!==path.join(publicRoot,'index.html')){res.writeHead(403);res.end();return;}

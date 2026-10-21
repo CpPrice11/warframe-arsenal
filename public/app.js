@@ -8,7 +8,7 @@ const icon=name=>`<i data-lucide="${name}" aria-hidden="true"></i>`;
 const icons={impact:'hammer',heat:'flame',cold:'snowflake',electric:'zap',toxin:'biohazard',magnetic:'magnet',radiation:'radiation'};
 function readStorage(key,fallback=''){try{return sessionStorage.getItem(key)||fallback;}catch{return fallback;}}
 function writeStorage(key,value){try{if(value)sessionStorage.setItem(key,value);else sessionStorage.removeItem(key);}catch{}}
-let lang=(()=>{try{return localStorage.getItem('warframe-language')==='en'?'en':'uk';}catch{return 'uk';}})();
+let lang=(()=>{try{const saved=localStorage.getItem('warframe-language');return Object.hasOwn(messages,saved)?saved:'uk';}catch{return 'uk';}})();
 let catalog,version=0,owner=false,connected=false,preview=false,token=readStorage('warframe-session'),section='all',selected='',view='grid',detailTab='overview',editing=false,dirty=false,saving=false;
 let toastTimer;
 let auditRunning=false,auditResults=[];
@@ -16,8 +16,8 @@ const state={search:'',type:'',element:'',sort:'original'};
 const t=(key,vars={})=>Object.entries(vars).reduce((s,[k,v])=>s.replaceAll('{'+k+'}',v),messages[lang][key]||key);
 const title=r=>r['name_'+lang]||r['title_'+lang]||r.name_en||r.title_uk;
 const note=(r,key)=>r[key+'_'+lang]||r[key+'_uk']||'';
-const date=s=>new Intl.DateTimeFormat(lang==='uk'?'uk-UA':'en-GB',{dateStyle:'medium'}).format(new Date(s));
-const dateTime=s=>new Intl.DateTimeFormat(lang==='uk'?'uk-UA':'en-GB',{dateStyle:'short',timeStyle:'short'}).format(new Date(s));
+const date=s=>new Intl.DateTimeFormat(lang==='en'?'en-GB':lang,{dateStyle:'medium'}).format(new Date(s));
+const dateTime=s=>new Intl.DateTimeFormat(lang==='en'?'en-GB':lang,{dateStyle:'short',timeStyle:'short'}).format(new Date(s));
 const url=path=>(config.apiBase||location.origin).replace(/\/$/,'')+path;
 const chip=e=>e?`<span class="element-chip ${e}">${icon(icons[e])}${escape(t(e))}</span>`:'';
 const httpStatus=status=>status?'HTTP '+status+([403,429].includes(status)?' · '+t('checkBlocked'):''):t('checkUnknown');
@@ -47,7 +47,7 @@ function localize(){
   $('#navigation').setAttribute('aria-label',t('navigation'));$('#inspector').setAttribute('aria-label',t('details'));
   $('#detail-dialog').setAttribute('aria-label',t('details'));
   $('#search').placeholder=t(section==='progenitors'?'searchProgenitors':section==='guides'?'searchGuides':'search');$('#search').setAttribute('aria-label',$('#search').placeholder);
-  $('#language').innerHTML=lang==='uk'?'Українська <span>EN</span>':'English <span>УКР</span>';$('#language').setAttribute('aria-label',t('language'));
+  $('#language').innerHTML=Object.entries(messages).map(([code,labels])=>`<option value="${code}" ${lang===code?'selected':''}>${labels.languageName}</option>`).join('');$('#language').setAttribute('aria-label',t('language'));
   $('#owner-link').innerHTML=icon(owner?'shield-check':'lock-keyhole')+`<span>${t(owner?'owner':preview?'loginPreview':'ownerLogin')}</span>`;
   const options=(list,current)=>list.map(([v,label])=>`<option value="${v}" ${v===current?'selected':''}>${escape(label)}</option>`).join('');
   $('#type-filter').innerHTML=options([['',t('allTypes')],...types.map(x=>[x,t(x)])],state.type);
@@ -63,7 +63,7 @@ function renderNavigation(){
   $('#navigation').innerHTML=button('all',t('allWeapons'),icon('library'),count('all'))+families.map(f=>button(f,t(f),`<span class="family-icon ${f}" aria-hidden="true">${f[0]}</span>`,count(f))).join('')+'<div class="nav-separator"></div>'+button('progenitors',t('progenitors'),icon('users-round'),catalog.progenitors.filter(r=>!r.archived).length)+button('guides',t('guides'),icon('book-open'))+(owner?'<div class="nav-separator"></div>'+button('tools',t('tools'),icon('wrench')):'');
 }
 function image(r,large=false){return r.image?`<img src="${escape(r.image)}" alt="" ${large?'':'loading="lazy"'} decoding="async" width="256" height="256">`:`<span class="fallback-image" aria-label="${escape(t('noImage'))}">${icon(r.kind==='progenitor'?'user-round':'crosshair')}</span>`;}
-function card(r){return `<button type="button" class="weapon-card" data-id="${r.id}" aria-pressed="${selected===r.id}"><span class="weapon-art">${image(r)}${r.family?`<span class="family-tag">${escape(t(r.family))}</span>`:''}</span><span><span class="card-name">${escape(title(r))}</span><span class="card-subtitle">${escape(lang==='uk'?r.name_en:r.kind==='weapon'?t(r.type):t('progenitors'))}</span></span><span class="card-meta">${chip(r.recommended||r.element)}${r.type?`<span class="card-class">${t(r.type)}</span>`:''}</span></button>`;}
+function card(r){return `<button type="button" class="weapon-card" data-id="${r.id}" aria-pressed="${selected===r.id}"><span class="weapon-art">${image(r)}${r.family?`<span class="family-tag">${escape(t(r.family))}</span>`:''}</span><span><span class="card-name">${escape(title(r))}</span><span class="card-subtitle">${escape(lang!=='en'?r.name_en:r.kind==='weapon'?t(r.type):t('progenitors'))}</span></span><span class="card-meta">${chip(r.recommended||r.element)}${r.type?`<span class="card-class">${t(r.type)}</span>`:''}</span></button>`;}
 function render(){
   if(!catalog)return;
   renderNavigation();
@@ -74,7 +74,7 @@ function render(){
   const panel=$('#catalog');panel.setAttribute('aria-busy','false');
   if(section==='tools'){panel.className='tool-list';renderTools();renderInspector();refreshIcons();return;}
   if(section==='guides'){
-    panel.className='guide-list';panel.innerHTML=list.map(r=>`<article class="guide-item">${owner?`<button class="secondary-button edit-guide" type="button" data-edit="${r.id}">${icon('pencil')}${t('edit')}</button>`:''}<h2>${escape(title(r))}</h2><p ${lang==='en'&&!r.body_en?'lang="uk"':''}>${escape(note(r,'body'))}</p>${r.url?`<a href="${escape(r.url)}" target="_blank" rel="noopener noreferrer">${t('source')} ↗</a>`:''}</article>`).join('');
+    panel.className='guide-list';panel.innerHTML=list.map(r=>`<article class="guide-item">${owner?`<button class="secondary-button edit-guide" type="button" data-edit="${r.id}">${icon('pencil')}${t('edit')}</button>`:''}<h2>${escape(title(r))}</h2><p ${lang!=='uk'&&!r['body_'+lang]?'lang="uk"':''}>${escape(note(r,'body'))}</p>${r.url?`<a href="${escape(r.url)}" target="_blank" rel="noopener noreferrer">${t('source')} ↗</a>`:''}</article>`).join('');
   }else{
     if(!list.some(r=>r.id===selected))selected=list[0]?.id||'';
     panel.className='weapon-grid'+(view==='list'?' list-view':'');panel.innerHTML=list.map(card).join('');
@@ -86,9 +86,9 @@ function render(){
 function detail(r){
   const header=`<div class="inspector-head"><span>${t('details')}</span><button type="button" class="icon-button mobile-close" data-action="close-detail" aria-label="${t('close')}">${icon('x')}</button></div>`;
   if(!r||section==='guides'||section==='tools')return header+`<div class="empty-state">${icon('panel-right')}<h2>${t('selectRecord')}</h2><p>${t('selectRecordHelp')}</p></div>`;
-  const sectionNote=(key,label)=>note(r,key)?`<section class="detail-section"><h3>${t(label)}</h3><p ${lang==='en'&&!r[key+'_en']?'lang="uk"':''}>${escape(note(r,key))}</p></section>`:'';
-  const content=r.kind==='weapon'?(detailTab==='matrix'?`<table class="matrix"><caption class="sr-only">${t('elementMatrix')}</caption><tbody>${elementKeys.map(e=>{const value=r.matrix?.[e]||'';const [grade,...rest]=value.split(' • ');return `<tr><th scope="row">${chip(e)}</th><td>${grade?`<span class="grade">${escape(grade)}</span><br><span lang="uk">${escape(rest.join(' • '))}</span>`:'—'}</td></tr>`;}).join('')}</tbody></table><p class="detail-note">${t('ratingHelp')}</p>`:`<div class="bonus-pair"><div><span class="field-label">${t('recommended')}</span>${chip(r.recommended)}</div><div><span class="field-label">${t('alternative')}</span>${chip(r.alternative)}</div></div>${lang==='en'&&!r.reason_en?`<div class="source-language">${t('notesLanguage')}</div>`:''}${sectionNote('reason','reason')}${sectionNote('mechanic','mechanic')}${sectionNote('obtain','obtain')}<div class="detail-actions">${r.build_url?`<a class="primary-button" href="${escape(r.build_url)}" target="_blank" rel="noopener noreferrer">${icon('external-link')}${t('build')}</a>`:`<span class="detail-note">${t('noBuild')}</span>`}${r.source_url?`<a class="secondary-button" href="${escape(r.source_url)}" target="_blank" rel="noopener noreferrer">${t('source')}${icon('arrow-up-right')}</a>`:''}</div>`):`<div class="detail-section"><span class="field-label">${t('bonus')}</span>${chip(r.element)}</div>${sectionNote('reason','reason')}`;
-  return header+`<div class="inspector-hero">${image(r,true)}</div><div class="inspector-content"><div class="inspector-family">${r.family?`<span class="family-icon ${r.family}">${r.family[0]}</span>${t(r.family)}<span> / </span>${t(r.type)}`:t('progenitors')}</div><h2>${escape(title(r))}</h2><p class="english-name">${escape(lang==='uk'?r.name_en:'Warframe')}</p>${r.kind==='weapon'?`<div class="detail-tabs"><button type="button" data-tab="overview" aria-pressed="${detailTab==='overview'}">${t('overview')}</button><button type="button" data-tab="matrix" aria-pressed="${detailTab==='matrix'}">${t('elementMatrix')}</button></div>`:''}${content}</div>${owner?`<div class="inspector-bottom"><button type="button" class="secondary-button" data-edit="${r.id}">${icon('pencil')}${t('edit')}</button>${r.build_url?`<button type="button" class="secondary-button" data-check="${r.id}">${icon('link')}${t('checkBuild')}</button>`:''}<p class="detail-note" id="check-result" role="status"></p></div>`:''}`;
+  const sectionNote=(key,label)=>note(r,key)?`<section class="detail-section"><h3>${t(label)}</h3><p ${lang!=='uk'&&!r[key+'_'+lang]?'lang="uk"':''}>${escape(note(r,key))}</p></section>`:'';
+  const content=r.kind==='weapon'?(detailTab==='matrix'?`<table class="matrix"><caption class="sr-only">${t('elementMatrix')}</caption><tbody>${elementKeys.map(e=>{const value=(lang==='ru'?r.matrix_ru?.[e]:undefined)||r.matrix?.[e]||'';const [grade,...rest]=value.split(' • ');return `<tr><th scope="row">${chip(e)}</th><td>${grade?`<span class="grade">${escape(grade)}</span><br><span lang="${lang==='ru'&&r.matrix_ru?.[e]?'ru':'uk'}">${escape(rest.join(' • '))}</span>`:'—'}</td></tr>`;}).join('')}</tbody></table><p class="detail-note">${t('ratingHelp')}</p>`:`<div class="bonus-pair"><div><span class="field-label">${t('recommended')}</span>${chip(r.recommended)}</div><div><span class="field-label">${t('alternative')}</span>${chip(r.alternative)}</div></div>${lang!=='uk'&&!r['reason_'+lang]?`<div class="source-language">${t('notesLanguage')}</div>`:''}${sectionNote('reason','reason')}${sectionNote('mechanic','mechanic')}${sectionNote('obtain','obtain')}<div class="detail-actions">${r.build_url?`<a class="primary-button" href="${escape(r.build_url)}" target="_blank" rel="noopener noreferrer">${icon('external-link')}${t('build')}</a>`:`<span class="detail-note">${t('noBuild')}</span>`}${r.source_url?`<a class="secondary-button" href="${escape(r.source_url)}" target="_blank" rel="noopener noreferrer">${t('source')}${icon('arrow-up-right')}</a>`:''}</div>`):`<div class="detail-section"><span class="field-label">${t('bonus')}</span>${chip(r.element)}</div>${sectionNote('reason','reason')}`;
+  return header+`<div class="inspector-hero">${image(r,true)}</div><div class="inspector-content"><div class="inspector-family">${r.family?`<span class="family-icon ${r.family}">${r.family[0]}</span>${t(r.family)}<span> / </span>${t(r.type)}`:t('progenitors')}</div><h2>${escape(title(r))}</h2><p class="english-name">${escape(lang!=='en'?r.name_en:'Warframe')}</p>${r.kind==='weapon'?`<div class="detail-tabs"><button type="button" data-tab="overview" aria-pressed="${detailTab==='overview'}">${t('overview')}</button><button type="button" data-tab="matrix" aria-pressed="${detailTab==='matrix'}">${t('elementMatrix')}</button></div>`:''}${content}</div>${owner?`<div class="inspector-bottom"><button type="button" class="secondary-button" data-edit="${r.id}">${icon('pencil')}${t('edit')}</button>${r.build_url?`<button type="button" class="secondary-button" data-check="${r.id}">${icon('link')}${t('checkBuild')}</button>`:''}<p class="detail-note" id="check-result" role="status"></p></div>`:''}`;
 }
 function renderInspector(){if(editing)return;const html=detail(findRecord(selected));if($('#detail-dialog').open){$('#mobile-inspector').innerHTML=html;$('#inspector').innerHTML='';}else $('#inspector').innerHTML=html;}
 function moveInspector(from,to){const focused=from.contains(document.activeElement)?document.activeElement:null;to.replaceChildren(...from.childNodes);return focused;}
@@ -100,15 +100,15 @@ function formSelect(key,label,values,value){return `<label for="field-${key}">${
 function editor(r,isNew=false){
   let fields;
   if(r.kind==='weapon'||r.kind==='progenitor'){
-    fields=formField('name_uk','nameUk',r.name_uk,false,true)+formField('name_en','nameEn',r.name_en,false,true);
+    fields=formField('name_uk','nameUk',r.name_uk,false,true)+formField('name_en','nameEn',r.name_en,false,true)+formField('name_ru','nameRu',r.name_ru);
     if(r.kind==='weapon')fields+=formSelect('family','family',families,r.family)+formSelect('type','weaponType',types,r.type)+formSelect('recommended','recommended',elementKeys,r.recommended)+formSelect('alternative','alternative',elementKeys,r.alternative);
     else fields+=formSelect('element','bonus',elementKeys,r.element);
-    fields+=formField('reason_uk','reasonUk',r.reason_uk,true)+formField('reason_en','reasonEn',r.reason_en,true);
-    if(r.kind==='weapon')fields+=formField('mechanic_uk','mechanicUk',r.mechanic_uk,true)+formField('mechanic_en','mechanicEn',r.mechanic_en,true)+formField('obtain_uk','obtainUk',r.obtain_uk,true)+formField('obtain_en','obtainEn',r.obtain_en,true)+formField('build_url','buildUrl',r.build_url)+formField('source_url','sourceUrl',r.source_url);
-    if(r.kind==='weapon')fields+=`<fieldset><legend>${t('elementMatrix')}</legend><p class="detail-note">${t('matrixEditHelp')}</p>${elementKeys.map(e=>formField('matrix_'+e,e,r.matrix?.[e]||'')).join('')}</fieldset>`;
+    fields+=formField('reason_uk','reasonUk',r.reason_uk,true)+formField('reason_en','reasonEn',r.reason_en,true)+formField('reason_ru','reasonRu',r.reason_ru,true);
+    if(r.kind==='weapon')fields+=formField('mechanic_uk','mechanicUk',r.mechanic_uk,true)+formField('mechanic_en','mechanicEn',r.mechanic_en,true)+formField('mechanic_ru','mechanicRu',r.mechanic_ru,true)+formField('obtain_uk','obtainUk',r.obtain_uk,true)+formField('obtain_en','obtainEn',r.obtain_en,true)+formField('obtain_ru','obtainRu',r.obtain_ru,true)+formField('build_url','buildUrl',r.build_url)+formField('source_url','sourceUrl',r.source_url);
+    if(r.kind==='weapon')fields+=`<fieldset><legend>${t('elementMatrix')}</legend><p class="detail-note">${t('matrixEditHelp')}</p>${elementKeys.map(e=>formField('matrix_'+e,e,(lang==='ru'?r.matrix_ru?.[e]:undefined)||r.matrix?.[e]||'')).join('')}</fieldset>`;
     fields+=formField('image','imageUrl',r.image);
-  }else fields=formField('title_uk','titleUk',r.title_uk,false,true)+formField('title_en','titleEn',r.title_en)+formField('body_uk','bodyUk',r.body_uk,true,true)+formField('body_en','bodyEn',r.body_en,true)+formField('url','sourceUrl',r.url);
-  return `<div class="inspector-head"><span>${t(isNew?'newRecord':'editRecord')}</span><button type="button" class="icon-button" data-action="cancel-edit" aria-label="${t('cancel')}">${icon('x')}</button></div><form class="editor" id="editor-form" data-record="${r.id||''}" data-kind="${r.kind||'tip'}" data-new="${isNew}"><h2>${escape(isNew?t('newRecord'):title(r))}</h2>${fields}<p id="form-error" class="form-error" role="alert" hidden></p><div class="editor-buttons"><button type="submit" class="primary-button">${icon('check')}${t('save')}</button><button type="button" class="secondary-button" data-action="cancel-edit">${t('cancel')}</button></div>${!isNew?`<button type="button" class="danger-button" data-archive="${r.id}">${t('archive')}</button>`:''}</form>`;
+  }else fields=formField('title_uk','titleUk',r.title_uk,false,true)+formField('title_en','titleEn',r.title_en)+formField('title_ru','titleRu',r.title_ru)+formField('body_uk','bodyUk',r.body_uk,true,true)+formField('body_en','bodyEn',r.body_en,true)+formField('body_ru','bodyRu',r.body_ru,true)+formField('url','sourceUrl',r.url);
+  return `<div class="inspector-head"><span>${t(isNew?'newRecord':'editRecord')}</span><button type="button" class="icon-button" data-action="cancel-edit" aria-label="${t('cancel')}">${icon('x')}</button></div><form class="editor" id="editor-form" data-record="${r.id||''}" data-kind="${r.kind||'tip'}" data-new="${isNew}" data-matrix-lang="${lang==='ru'?'ru':'uk'}"><h2>${escape(isNew?t('newRecord'):title(r))}</h2>${fields}<p id="form-error" class="form-error" role="alert" hidden></p><div class="editor-buttons"><button type="submit" class="primary-button">${icon('check')}${t('save')}</button><button type="button" class="secondary-button" data-action="cancel-edit">${t('cancel')}</button></div>${!isNew?`<button type="button" class="danger-button" data-archive="${r.id}">${t('archive')}</button>`:''}</form>`;
 }
 function showEditor(r,isNew=false){editing=true;dirty=false;$('#inspector').innerHTML=editor(r,isNew);openMobileDetail();refreshIcons();const container=$('#detail-dialog').open?$('#mobile-inspector'):$('#inspector');container.querySelector('input,textarea')?.focus();}
 async function commit(next){validateCatalog(next);const response=await request('/api/admin/catalog',{method:'PUT',headers:{'Content-Type':'application/json','If-Match':String(version)},body:JSON.stringify(next)});const result=await response.json();catalog=next;version=result.version;}
@@ -116,7 +116,7 @@ async function submitEditor(form){
   if(saving||!owner)return;const values=Object.fromEntries(new FormData(form));const kind=form.dataset.kind;const collection=kind==='weapon'?'weapons':kind==='progenitor'?'progenitors':'tips';const next=structuredClone(catalog);
   let item=form.dataset.new==='true'?{id:(kind==='progenitor'?'progenitor-':kind==='tip'?'tip-':'')+(slug(values.name_en||values.title_en)||crypto.randomUUID()),...(kind==='tip'?{}:{kind})}:next[collection].find(r=>r.id===form.dataset.record);
   if(!item)return;
-  if(kind==='weapon'){item.matrix={};for(const e of elementKeys){item.matrix[e]=values['matrix_'+e]||'';delete values['matrix_'+e];}}
+  if(kind==='weapon'){const key=form.dataset.matrixLang==='ru'?'matrix_ru':'matrix';item[key]={};for(const e of elementKeys){item[key][e]=values['matrix_'+e]||'';delete values['matrix_'+e];}}
   Object.assign(item,values);
   if(form.dataset.new==='true')next[collection].push(item);
   const error=form.querySelector('#form-error');
@@ -184,7 +184,6 @@ document.addEventListener('click',async event=>{
   if(b.dataset.tab){detailTab=b.dataset.tab;renderInspector();refreshIcons();const panel=$('#detail-dialog').open?$('#mobile-inspector'):$('#inspector');panel.querySelector(`[data-tab="${detailTab}"]`)?.focus({preventScroll:true});}
   if(b.dataset.edit&&owner){if(!await leaveEditor())return;selected=b.dataset.edit;showEditor(findRecord(selected));}
   if(b.id==='add-record'&&owner){if(!await leaveEditor())return;showEditor(section==='guides'?{title_uk:'',body_uk:''}:section==='progenitors'?{kind:'progenitor',element:'magnetic'}:{kind:'weapon',family:families.includes(section)?section:'Kuva',type:'primary',recommended:'toxin',alternative:'magnetic',matrix:{}},true);}
-  if(b.id==='language'){if(!await leaveEditor())return;lang=lang==='uk'?'en':'uk';try{localStorage.setItem('warframe-language',lang);}catch{}localize();render();}
   if(b.id==='grid-view'||b.id==='list-view'){view=b.id==='list-view'?'list':'grid';render();}
   if(b.id==='nav-toggle')toggleNavigation();
   if(b.dataset.action==='clear'){state.search='';state.type='';state.element='';$('#search').value='';localize();render();$('#search').focus();}
@@ -200,6 +199,7 @@ document.addEventListener('click',async event=>{
   if(b.dataset.check&&owner){b.disabled=true;const result=b.parentElement.querySelector('#check-result');result.textContent=t('checking');try{const r=await request('/api/admin/check-build',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:b.dataset.check})});const x=await r.json();result.textContent=(httpStatus(x.status)+' · '+dateTime(x.checkedAt))+' '+t('checkDisclaimer');}catch{result.textContent=t('checkUnknown');}finally{b.disabled=false;}}
   if(b.dataset.action==='logout'){try{await request('/api/admin/logout',{method:'POST'});}catch{}token='';owner=false;writeStorage('warframe-session','');section='all';render();localize();}
 });
+$('#language').addEventListener('change',async()=>{const next=$('#language').value;if(!await leaveEditor()){$('#language').value=lang;return;}lang=next;try{localStorage.setItem('warframe-language',lang);}catch{}localize();render();});
 $('#search').addEventListener('input',()=>{state.search=$('#search').value;render();});
 for(const [id,key]of [['type-filter','type'],['element-filter','element'],['sort','sort']])$('#'+id).addEventListener('change',()=>{state[key]=$('#'+id).value;render();});
 document.addEventListener('submit',e=>{if(e.target.id==='editor-form'){e.preventDefault();submitEditor(e.target);}});
@@ -208,7 +208,7 @@ document.addEventListener('change',e=>{if(e.target.closest('#editor-form'))dirty
 document.addEventListener('keydown',e=>{
   if($('#sidebar').classList.contains('open')){
     if(e.key==='Escape'){e.preventDefault();closeNavigation();return;}
-    if(e.key==='Tab'){const items=[...$('#sidebar').querySelectorAll('a,button')].filter(x=>!x.disabled&&x.getClientRects().length);const first=items[0],last=items.at(-1);if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus();}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();}}return;
+    if(e.key==='Tab'){const items=[...$('#sidebar').querySelectorAll('a,button,select')].filter(x=>!x.disabled&&x.getClientRects().length);const first=items[0],last=items.at(-1);if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus();}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();}}return;
   }
   if(e.key==='/'&&!/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)&&!$('#detail-dialog').open){e.preventDefault();$('#search').focus();}
 });

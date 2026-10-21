@@ -14,9 +14,30 @@ async function authenticate(env,user=env.OWNER_GITHUB_ID,expires=Math.floor(Date
 
 test('live import, exact counts, all image files and locale parity',async()=>{
   validateCatalog(source);assert.equal(source.weapons.length,51);assert.equal(source.progenitors.length,66);assert.equal(source.tips.length,34);
-  assert.deepEqual(Object.keys(messages.uk).sort(),Object.keys(messages.en).sort());
+  for(const locale of Object.values(messages)){
+    assert.deepEqual(Object.keys(messages.uk).sort(),Object.keys(locale).sort());
+    for(const key of Object.keys(messages.uk))assert.deepEqual(locale[key].match(/\{\w+\}/g)||[],messages.uk[key].match(/\{\w+\}/g)||[],key);
+  }
   assert.deepEqual(['Kuva','Tenet','Coda'].map(f=>source.weapons.filter(w=>w.family===f).length),[21,16,14]);
   for(const r of [...source.weapons,...source.progenitors]){assert.ok(r.image);const bytes=await readFile(new URL('./public/'+r.image,import.meta.url));assert.equal(bytes.subarray(1,4).toString(),'PNG');}
+});
+test('Russian catalog is complete, searchable and validates translated input',async()=>{
+  for(const r of [...source.weapons,...source.progenitors])assert.ok(r.name_ru&&r.reason_ru,r.id);
+  for(const r of source.weapons){
+    assert.ok(r.mechanic_ru&&r.obtain_ru,r.id);
+    for(const [element,value] of Object.entries(r.matrix)){
+      assert.ok(r.matrix_ru[element]);assert.equal(r.matrix_ru[element].split(' • ')[0],value.split(' • ')[0]);
+    }
+  }
+  for(const r of source.tips)assert.ok(r.title_ru&&r.body_ru,r.id);
+  const names=JSON.parse(await readFile(new URL('./public/RUSSIAN-NAMES-SOURCES.json',import.meta.url),'utf8'));
+  assert.equal(names.records.length,117);
+  for(const r of [...source.weapons,...source.progenitors])assert.equal(names.records.find(x=>x.id===r.id)?.name_ru,r.name_ru);
+  assert.equal(filterRecords(source,{search:'НЮКОР',lang:'ru'})[0].id,'kuva-nukor');
+  assert.equal(filterRecords(source,{section:'guides',search:'Валентное слияние',lang:'ru'}).length,2);
+  assert.deepEqual([1,2,5,21].map(n=>new Intl.PluralRules('ru').select(n)),['one','few','many','one']);
+  const changed=structuredClone(source);changed.weapons[0].reason_ru={text:'invalid'};assert.throws(()=>validateCatalog(changed));
+  changed.weapons[0].reason_ru='';changed.weapons[0].matrix_ru={electric:'x'.repeat(1001)};assert.throws(()=>validateCatalog(changed));
 });
 test('search, family, type and element filters compose correctly',()=>{
   assert.equal(filterRecords(source,{search:'NUKOR'}).length,1);
@@ -25,6 +46,19 @@ test('search, family, type and element filters compose correctly',()=>{
   assert.equal(filterRecords(source,{search:'no-such-weapon'}).length,0);
   assert.ok(filterRecords(source,{section:'Tenet',type:'secondary',element:'magnetic'}).every(w=>w.family==='Tenet'&&w.type==='secondary'&&w.recommended==='magnetic'));
   assert.equal(filterRecords(source,{section:'progenitors'}).length,66);
+});
+test('full multilingual seed fits D1 statement limits and preserves an existing catalog',async()=>{
+  const sql=await readFile(new URL('./seed.sql',import.meta.url),'utf8');
+  for(const statement of sql.trim().split('\n'))assert.ok(Buffer.byteLength(statement)<100000);
+  const DB=localDatabase();
+  try{
+    DB.sqlite.exec("DELETE FROM catalog_store;"+sql);
+    assert.deepEqual(JSON.parse(DB.prepare("SELECT document FROM catalog_store WHERE id='main'").first().document),source);
+    const changed=structuredClone(source);changed.weapons[0].reason_ru='Сохранённая правка';
+    DB.prepare("UPDATE catalog_store SET document=?,version=2 WHERE id='main'").bind(JSON.stringify(changed)).run();
+    DB.sqlite.exec(sql);
+    assert.deepEqual(JSON.parse(DB.prepare("SELECT document FROM catalog_store WHERE id='main'").first().document),changed);
+  }finally{DB.close();}
 });
 test('URL boundary and schema reject dangerous links and duplicate ids',()=>{
   for(const url of ['javascript:alert(1)','http://overframe.gg/build/123/test/','https://overframe.gg.evil.test/build/123/test/','https://overframe.gg:444/build/123/test/','https://me@overframe.gg/build/123/test/','https://127.0.0.1/build/123/test/'])assert.equal(safeUrl(url,{build:true}),false);
