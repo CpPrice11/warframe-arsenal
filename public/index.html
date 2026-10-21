@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="uk">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' https:; style-src 'self'; script-src 'self'; connect-src 'self' https:; object-src 'none'; base-uri 'self'; form-action 'self'">
+  <meta name="referrer" content="no-referrer">
+  <meta name="theme-color" content="#1b2029">
+  <meta name="description" content="Каталог зброї Кува, Догмат і Кода: бонусні стихії, родоначальники та білди Warframe.">
+  <title>Warframe — Арсенал недругів</title>
+  <link rel="icon" href="./favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="./styles.css">
+  <script src="./assets/lucide.min.js" defer></script>
+  <script type="module" src="./app.js"></script>
+</head>
+<body>
+<!-- THESIS: A working Warframe reference library, using the Eagle layout explicitly selected by the owner.
+OWN-WORLD: Charcoal blue surfaces, blue selection, restrained colored elemental labels, Segoe UI, real game artwork.
+STORY: Browse a family, select a weapon, compare elements; the verified owner edits in the same panel.
+FIRST VIEWPORT: 218px library sidebar, compact toolbar, image-led grid, 316px detail inspector. No marketing hero.
+FORM: Eagle library, user-pinned reference work/design-eagle.png, no random direction seed overrides user choice.
+FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, DESIGN.md, and every shipping raster carrying its provenance -->
+<a class="skip-link" href="#workspace" data-i18n="skip"></a>
+<div class="app-shell">
+  <aside class="sidebar" id="sidebar">
+    <a class="brand" href="./"><span class="brand-mark" aria-hidden="true"><i data-lucide="orbit"></i></span><span>Warframe<span class="brand-sub" data-i18n="arsenal"></span></span></a>
+    <div class="library-label" data-i18n="library"></div>
+    <nav id="navigation" aria-label="Навігація"></nav>
+    <div class="sidebar-bottom">
+      <a id="owner-link" class="sidebar-action" href="/manage/"><i data-lucide="lock-keyhole" aria-hidden="true"></i><span data-i18n="ownerLogin"></span></a>
+      <div class="side-note"><span class="status-dot"></span><span data-i18n="publicLibrary"></span></div>
+      <button id="language" class="language-button" type="button" aria-label="Switch to English">Українська <span>EN</span></button>
+    </div>
+  </aside>
+  <main id="workspace" class="workspace">
+    <header class="topbar">
+      <button id="nav-toggle" class="icon-button nav-toggle" aria-controls="sidebar" aria-expanded="false" type="button"><i data-lucide="panel-left" aria-hidden="true"></i><span class="sr-only" data-i18n="navigation"></span></button>
+      <div class="breadcrumb"><span data-i18n="library"></span><i data-lucide="chevron-right" aria-hidden="true"></i><strong id="section-name"></strong></div>
+      <label class="search"><i data-lucide="search" aria-hidden="true"></i><input id="search" type="search" autocomplete="off"><kbd>/</kbd></label>
+      <button id="add-record" class="primary-button" type="button" hidden><i data-lucide="plus" aria-hidden="true"></i><span data-i18n="add"></span></button>
+    </header>
+    <div id="connection-status" class="connection-status" role="status" hidden></div>
+    <div class="workspace-body">
+      <section class="catalog-pane" aria-labelledby="catalog-heading">
+        <div class="catalog-heading"><div><h1 id="catalog-heading"></h1><p id="result-count" aria-live="polite"></p></div><div class="view-controls"><button id="grid-view" class="icon-button" type="button" aria-pressed="true"><i data-lucide="grid-2x2" aria-hidden="true"></i><span class="sr-only" data-i18n="grid"></span></button><button id="list-view" class="icon-button" type="button" aria-pressed="false"><i data-lucide="list" aria-hidden="true"></i><span class="sr-only" data-i18n="list"></span></button></div></div>
+        <div class="filters" id="filters"><label><i data-lucide="sliders-horizontal" aria-hidden="true"></i><span class="sr-only" data-i18n="weaponType"></span><select id="type-filter"></select></label><label><span class="sr-only" data-i18n="element"></span><select id="element-filter"></select></label><label class="sort-control"><span class="sr-only" data-i18n="sort"></span><select id="sort"></select></label></div>
+        <div id="catalog" class="weapon-grid" aria-busy="true"><p class="loading" data-i18n="loading"></p></div>
+        <footer class="catalog-footer"><span id="snapshot-date"></span><a href="https://www.warframe.com/" target="_blank" rel="noopener noreferrer" data-i18n="fanProject"></a></footer>
+      </section>
+      <aside class="inspector" id="inspector" aria-label="Деталі"></aside>
+    </div>
+  </main>
+</div>
+<dialog id="detail-dialog" class="detail-dialog" aria-label="Деталі запису"><div id="mobile-inspector"></div></dialog>
+<dialog id="confirm-dialog" class="confirm-dialog" aria-labelledby="confirm-title" aria-describedby="confirm-text"><form method="dialog"><h2 id="confirm-title"></h2><p id="confirm-text"></p><div class="dialog-actions"><button value="cancel" class="secondary-button" data-i18n="cancel"></button><button id="confirm-action" value="confirm" class="primary-button" data-i18n="continue"></button></div></form></dialog>
+<div id="toast" class="toast" role="status" hidden></div>
+<noscript>Для пошуку й перегляду каталогу потрібен JavaScript. JavaScript is required to browse this catalog.</noscript>
+</body>
+</html>

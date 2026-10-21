@@ -1,0 +1,10 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "warframe-arsenal-api",
+  "main": "worker.js",
+  "compatibility_date": "2026-10-21",
+  "observability": { "enabled": true, "traces": { "enabled": true } },
+  "vars": { "FRONTEND_URL": "", "GITHUB_CLIENT_ID": "", "OWNER_GITHUB_ID": "117557975" },
+  "d1_databases": [{ "binding": "DB", "database_name": "warframe-arsenal", "database_id": "" }],
+  "triggers": { "crons": ["0 7 * * 0"] }
+}

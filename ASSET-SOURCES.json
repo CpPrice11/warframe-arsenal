@@ -1,0 +1,704 @@
+[
+  {
+    "file": "assets/weapons/kuva-bramma.png",
+    "url": "https://raw.githubusercontent.com/WFCD/warframe-items/master/data/img/KuvaGrnBow.png",
+    "source": "https://github.com/WFCD/warframe-items",
+    "rights": "Warframe artwork belongs to Digital Extremes; fan reference catalog."
+  },
+  {
+    "file": "assets/weapons/kuva-zarr.png",
+    "url": "https://raw.githubusercontent.com/WFCD/warframe-items/master/data/img/KuvaZarr.png",
+    "source": "https://github.com/WFCD/warframe-items",
+    "rights": "Warframe artwork belongs to Digital Extremes; fan reference catalog."
+  },
+  {
+    "file": "assets/weapons/kuva-ogris.png",
+    "url": "https://raw.githubusercontent.com/WFCD/warframe-items/master/data/img/KuvaLichOgrisSkin.png",
+    "source": "https://github.com/WFCD/warframe-items",
+    "rights": "Warframe artwork belongs to Digital Extremes; fan reference catalog."
+  },
+  {
+    "file": "assets/weapons/kuva-tonkor.png",
+    "url": "https://raw.githubusercontent.com/WFCD/warframe-items/master/data/img/KuvaLichTonkorSkin.png",
+    "source": "https://github.com/WFCD/warframe-items",
+    "rights": "Warframe artwork belongs to Digital Extremes; fan reference catalog."
+  },
+  {
+    "file": "assets/weapons/kuva-chakkhurr.png",
+    "url": "https://raw.githubusercontent.com/WFCD/warframe-items/master/data/img/GrnKuvaLichRifleWeapon.png",
+    "source": "https://github.com/WFCD/warframe-items",
+    "rights": "Warframe artwork belongs to Digital Extremes; fan reference catalog."
+  },
+  {
+    "file": "assets/weapons/kuva-hind.png",
+    "url": "https://raw.githubusercontent.com/WFCD/warframe-items/master/data/img/KuvaHind.png",
+    "source": "https://github.com/WFCD/warframe-items",
+    "rights": "Warframe artwork belongs to Digital Extremes; fan reference catalog."
+  },
+  {
+    "file": "assets/weapons/kuva-karak.png",
+    "url": "https://raw.githubusercontent.com/WFCD/warframe-items/master/data/img/KuvaLichKarakSkin.png",
+    "source": "https://github.com/WFCD/warframe-items",
+    "rights": "Warframe artwork belongs to Digital Extremes; fan reference catalog."
+  },
+  {
+    "file": "assets/weapons/kuva-quartakk.png",
+    "url": "https://raw.githubusercontent.com/WFCD/warframe-items/master/data/img/KuvaLichQuartakkSkin.png",
+    "source": "https://github.com/WFCD/warframe-items",
+    "rights": "Warframe artwork belongs to Digital Extremes; fan reference catalog."
+  },
+  {
+    "file": "assets/weapons/kuva-drakgoon.png",
+    "url": "https://raw.githubusercontent.com/WFCD/warframe-items/master/data/img/KuvaLichDrakgoonSkin.png",
+    "source": "https://github.com/WFCD/warframe-items",
+    "rights": "Warframe artwork belongs to Digital Extremes; fan reference catalog."
+  },
+  {
+    "file": "assets/weapons/kuva-hek.png",
+    "url": "https://raw.githubusercontent.com/WFCD/warframe-items/master/data/img/KuvaHek.png",
+    "source": "https://github.com/WFCD/warframe-items",
+    "rights": "Warframe artwork belongs to Digital Extremes; fan reference catalog."
+  },
+  {
+    "file": "assets/weapons/kuva-kohm.png",
+    "url": "https://raw.githubusercontent.com/WFCD/warframe-items/master/data/img/KuvaLichKohmSkin.png",
+    "source": "https://github.com/WFCD/warframe-items",
+    "rights": "Warframe artwork belongs to Digital Extremes; fan reference catalog."
+  },
+  {
+    "file": "assets/weapons/kuva-sobek.png",
+    "url": "https://raw.githubusercontent.com/WFCD/warframe-items/master/data/img/KuvaSobek.png",
+    "source": "https://github.com/WFCD/warframe-items",
+    "rights": "Warframe artwork belongs to Digital Extremes; fan reference catalog."
+  },
+  {
+    "file": "assets/weapons/kuva-nukor.png",
+    "url": "https://raw.githubusercontent.com/WFCD/warframe-items/master/data/img/KuvaNukor.png",
+    "source": "https://github.com/WFCD/warframe-items",
+    "rights": "Warframe artwork belongs to Digital Extremes; fan reference catalog."
+  },
+  {
+    "file": "assets/weapons/kuva-brakk.png",
+    "url": "https://raw.githubusercontent.com/WFCD/warframe-items/master/data/img/KuvaLichBrakkSkin.png",
+    "source": "https://github.com/WFCD/warframe-items",
+    "rights": "Warframe artwork belongs to Digital Extremes; fan reference catalog."
+  },
+  {
+    "file": "assets/weapons/kuva-kraken.png",
+    "url": "https://raw.githubusercontent.com/WFCD/warframe-items/master/data/img/KuvaLichKrakenSkin.png",
+    "source": "https://github.com/WFCD/warframe-items",
+    "rights": "Warframe artwork belongs to Digital Extremes; fan reference catalog."
+  },
+  {
+    "file": "assets/weapons/kuva-seer.png",
+    "url": "https://raw.githubusercontent.com/WFCD/warframe-items/master/data/img/KuvaLichSeerSkin.png",
+    "source": "https://github.com/WFCD/warframe-items",
+    "rights": "Warframe artwork belongs to Digital Extremes; fan reference catalog."
+  },
+  {
+    "file": "assets/weapons/kuva-twin-stubbas.png",
+    "url": "https://raw.githubusercontent.com/WFCD/warframe-items/master/data/img/KuvaLichStubbaSkin.png",
+    "source": "https://github.com/WFCD/warframe-items",
+    "rights": "Warframe artwork belongs to Digital Extremes; fan reference catalog."
+  },
+  {
+    "file": "assets/weapons/kuva-shildeg.png",
+    "url": "https://raw.githubusercontent.com/WFCD/warframe-items/master/data/img/GrnKuvaLichScytheWeapon.png",
+    "source": "https://github.com/WFCD/warframe-items",
+    "rights": "Warframe artwork belongs to Digital Extremes; fan reference catalog."
+  },
+  {
+    "file": "assets/weapons/kuva-ghoulsaw.png",
+    "url": "https://raw.githubusercontent.com/WFCD/warframe-items/master/data/img/KuvaGhoulSaw.png",
+    "source": "https://github.com/WFCD/warframe-items",
+    "rights": "Warframe artwork belongs to Digital Extremes; fan reference catalog."
+  },
+  {
+    "file": "assets/weapons/kuva-ayanga.png",
+    "url": "https://raw.githubusercontent.com/WFCD/warframe-items/master/data/img/GrnHeavyGrenadeLauncher.png",
+    "source": "https://github.com/WFCD/warframe-items",
+    "rights": "Warframe artwork belongs to Digital Extremes; fan reference catalog."
+  },
+  {
+    "file": "assets/weapons/tenet-arca-plasmor.png",
+    "url": "https://raw.githubusercontent.com/WFCD/warframe-items/master/data/img/CrpBEArcaPlasmor.png",
+    "source": "https://github.com/WFCD/warframe-items",
+    "rights": "Warframe artwork belongs to Digital Extremes; fan reference catalog."
+  },
+  {
+    "file": "assets/weapons/kuva-grattler.png",
+    "url": "https://raw.githubusercontent.com/WFCD/warframe-items/master/data/img/KuvaGrattler.png",
+    "source": "https://github.com/WFCD/warframe-items",
+    "rights": "Warframe artwork belongs to Digital Extremes; fan reference catalog."
+  },
+  {
+    "file": "assets/weapons/tenet-envoy.png",
+    "url": "https://raw.githubusercontent.com/WFCD/warframe-items/master/data/img/CrpBriefcaseLauncher.png",
+    "source": "https://github.com/WFCD/warframe-items",
+    "rights": "Warframe artwork belongs to Digital Extremes; fan reference catalog."
+  },
+  {
+    "file": "assets/weapons/tenet-flux-rifle.png",
+    "url": "https://raw.githubusercontent.com/WFCD/warframe-items/master/data/img/CrpBEFluxRifle.png",
+    "source": "https://github.com/WFCD/warframe-items",
+    "rights": "Warframe artwork belongs to Digital Extremes; fan reference catalog."
+  },
+  {
+    "file": "assets/weapons/tenet-glaxion.png",
+    "url": "https://raw.githubusercontent.com/WFCD/warframe-items/master/data/img/CrpBEGlaxion.png",
+    "source": "https://github.com/WFCD/warframe-items",
+    "rights": "Warframe artwork belongs to Digital Extremes; fan reference catalog."
+  },
+  {
+    "file": "assets/weapons/tenet-tetra.png",
+    "url": "https://raw.githubusercontent.com/WFCD/warframe-items/master/data/img/CrpBETetra.png",
+    "source": "https://github.com/WFCD/warframe-items",
+    "rights": "Warframe artwork belongs to Digital Extremes; fan reference catalog."
+  },
+  {
+    "file": "assets/weapons/tenet-quanta.png",
+    "url": "https://raw.githubusercontent.com/WFCD/warframe-items/master/data/img/TenetQuanta.png",
+    "source": "https://github.com/WFCD/warframe-items",
+    "rights": "Warframe artwork belongs to Digital Extremes; fan reference catalog."
+  },
+  {
+    "file": "assets/weapons/tenet-ferrox.png",
+    "url": "https://raw.githubusercontent.com/WFCD/warframe-items/master/data/img/TenetFerrox.png",
+    "source": "https://github.com/WFCD/warframe-items",
+    "rights": "Warframe artwork belongs to Digital Extremes; fan reference catalog."
+  },
+  {
+    "file": "assets/weapons/tenet-detron.png",
+    "url": "https://raw.githubusercontent.com/WFCD/warframe-items/master/data/img/CrpBEDetron.png",
+    "source": "https://github.com/WFCD/warframe-items",
+    "rights": "Warframe artwork belongs to Digital Extremes; fan reference catalog."
+  },
+  {
+    "file": "assets/weapons/tenet-cycron.png",
+    "url": "https://raw.githubusercontent.com/WFCD/warframe-items/master/data/img/CrpBECycron.png",
+    "source": "https://github.com/WFCD/warframe-items",
+    "rights": "Warframe artwork belongs to Digital Extremes; fan reference catalog."
+  },
+  {
+    "file": "assets/weapons/tenet-plinx.png",
+    "url": "https://raw.githubusercontent.com/WFCD/warframe-items/master/data/img/TenetPlinx.png",
+    "source": "https://github.com/WFCD/warframe-items",
+    "rights": "Warframe artwork belongs to Digital Extremes; fan reference catalog."
+  },
+  {
+    "file": "assets/weapons/tenet-spirex.png",
+    "url": "https://raw.githubusercontent.com/WFCD/warframe-items/master/data/img/CrpIgniterPistol.png",
+    "source": "https://github.com/WFCD/warframe-items",
+    "rights": "Warframe artwork belongs to Digital Extremes; fan reference catalog."
+  },
+  {
+    "file": "assets/weapons/tenet-livia.png",
+    "url": "https://raw.githubusercontent.com/WFCD/warframe-items/master/data/img/CrpBriefcase2HKatana.png",
+    "source": "https://github.com/WFCD/warframe-items",
+    "rights": "Warframe artwork belongs to Digital Extremes; fan reference catalog."
+  },
+  {
+    "file": "assets/weapons/tenet-exec.png",
+    "url": "https://raw.githubusercontent.com/WFCD/warframe-items/master/data/img/CrpBigSlash.png",
+    "source": "https://github.com/WFCD/warframe-items",
+    "rights": "Warframe artwork belongs to Digital Extremes; fan reference catalog."
+  },
+  {
+    "file": "assets/weapons/tenet-grigori.png",
+    "url": "https://raw.githubusercontent.com/WFCD/warframe-items/master/data/img/CrpBriefcaseScythe.png",
+    "source": "https://github.com/WFCD/warframe-items",
+    "rights": "Warframe artwork belongs to Digital Extremes; fan reference catalog."
+  },
+  {
+    "file": "assets/weapons/tenet-diplos.png",
+    "url": "https://raw.githubusercontent.com/WFCD/warframe-items/master/data/img/CrpBriefcaseAkimboGun.png",
+    "source": "https://github.com/WFCD/warframe-items",
+    "rights": "Warframe artwork belongs to Digital Extremes; fan reference catalog."
+  },
+  {
+    "file": "assets/weapons/tenet-agendus.png",
+    "url": "https://raw.githubusercontent.com/WFCD/warframe-items/master/data/img/CrpHammerShield.png",
+    "source": "https://github.com/WFCD/warframe-items",
+    "rights": "Warframe artwork belongs to Digital Extremes; fan reference catalog."
+  },
+  {
+    "file": "assets/weapons/coda-hema.png",
+    "url": "https://raw.githubusercontent.com/WFCD/warframe-items/master/data/img/CodaHema.png",
+    "source": "https://github.com/WFCD/warframe-items",
+    "rights": "Warframe artwork belongs to Digital Extremes; fan reference catalog."
+  },
+  {
+    "file": "assets/weapons/coda-sporothrix.png",
+    "url": "https://raw.githubusercontent.com/WFCD/warframe-items/master/data/img/CodaSporothrix.png",
+    "source": "https://github.com/WFCD/warframe-items",
+    "rights": "Warframe artwork belongs to Digital Extremes; fan reference catalog."
+  },
+  {
+    "file": "assets/weapons/coda-bubonico.png",
+    "url": "https://raw.githubusercontent.com/WFCD/warframe-items/master/data/img/CodaBubonico.png",
+    "source": "https://github.com/WFCD/warframe-items",
+    "rights": "Warframe artwork belongs to Digital Extremes; fan reference catalog."
+  },
+  {
+    "file": "assets/weapons/coda-synapse.png",
+    "url": "https://raw.githubusercontent.com/WFCD/warframe-items/master/data/img/CodaSynapse.png",
+    "source": "https://github.com/WFCD/warframe-items",
+    "rights": "Warframe artwork belongs to Digital Extremes; fan reference catalog."
+  },
+  {
+    "file": "assets/weapons/coda-bassocyst.png",
+    "url": "https://raw.githubusercontent.com/WFCD/warframe-items/master/data/img/1999InfShotgunWeapon.png",
+    "source": "https://github.com/WFCD/warframe-items",
+    "rights": "Warframe artwork belongs to Digital Extremes; fan reference catalog."
+  },
+  {
+    "file": "assets/weapons/coda-catabolyst.png",
+    "url": "https://raw.githubusercontent.com/WFCD/warframe-items/master/data/img/CodaCatabolyst.png",
+    "source": "https://github.com/WFCD/warframe-items",
+    "rights": "Warframe artwork belongs to Digital Extremes; fan reference catalog."
+  },
+  {
+    "file": "assets/weapons/coda-pox.png",
+    "url": "https://raw.githubusercontent.com/WFCD/warframe-items/master/data/img/CodaPox.png",
+    "source": "https://github.com/WFCD/warframe-items",
+    "rights": "Warframe artwork belongs to Digital Extremes; fan reference catalog."
+  },
+  {
+    "file": "assets/weapons/dual-coda-torxica.png",
+    "url": "https://raw.githubusercontent.com/WFCD/warframe-items/master/data/img/1999InfSporePistolWeapon.png",
+    "source": "https://github.com/WFCD/warframe-items",
+    "rights": "Warframe artwork belongs to Digital Extremes; fan reference catalog."
+  },
+  {
+    "file": "assets/weapons/coda-tysis.png",
+    "url": "https://raw.githubusercontent.com/WFCD/warframe-items/master/data/img/CodaTysis.png",
+    "source": "https://github.com/WFCD/warframe-items",
+    "rights": "Warframe artwork belongs to Digital Extremes; fan reference catalog."
+  },
+  {
+    "file": "assets/weapons/coda-caustacyst.png",
+    "url": "https://raw.githubusercontent.com/WFCD/warframe-items/master/data/img/CodaCaustacyst.png",
+    "source": "https://github.com/WFCD/warframe-items",
+    "rights": "Warframe artwork belongs to Digital Extremes; fan reference catalog."
+  },
+  {
+    "file": "assets/weapons/coda-mire.png",
+    "url": "https://raw.githubusercontent.com/WFCD/warframe-items/master/data/img/CodaMire.png",
+    "source": "https://github.com/WFCD/warframe-items",
+    "rights": "Warframe artwork belongs to Digital Extremes; fan reference catalog."
+  },
+  {
+    "file": "assets/weapons/coda-motovore.png",
+    "url": "https://raw.githubusercontent.com/WFCD/warframe-items/master/data/img/InfLichHammerWeapon.png",
+    "source": "https://github.com/WFCD/warframe-items",
+    "rights": "Warframe artwork belongs to Digital Extremes; fan reference catalog."
+  },
+  {
+    "file": "assets/weapons/coda-hirudo.png",
+    "url": "https://raw.githubusercontent.com/WFCD/warframe-items/master/data/img/CodaHirudo.png",
+    "source": "https://github.com/WFCD/warframe-items",
+    "rights": "Warframe artwork belongs to Digital Extremes; fan reference catalog."
+  },
+  {
+    "file": "assets/weapons/coda-pathocyst.png",
+    "url": "https://raw.githubusercontent.com/WFCD/warframe-items/master/data/img/CodaPathocyst.png",
+    "source": "https://github.com/WFCD/warframe-items",
+    "rights": "Warframe artwork belongs to Digital Extremes; fan reference catalog."
+  },
+  {
+    "file": "assets/weapons/progenitor-mag.png",
+    "url": "https://raw.githubusercontent.com/WFCD/warframe-items/master/data/img/Mag.png",
+    "source": "https://github.com/WFCD/warframe-items",
+    "rights": "Warframe artwork belongs to Digital Extremes; fan reference catalog."
+  },
+  {
+    "file": "assets/weapons/progenitor-yareli.png",
+    "url": "https://raw.githubusercontent.com/WFCD/warframe-items/master/data/img/Yareli.png",
+    "source": "https://github.com/WFCD/warframe-items",
+    "rights": "Warframe artwork belongs to Digital Extremes; fan reference catalog."
+  },
+  {
+    "file": "assets/weapons/progenitor-mesa.png",
+    "url": "https://raw.githubusercontent.com/WFCD/warframe-items/master/data/img/Mesa.png",
+    "source": "https://github.com/WFCD/warframe-items",
+    "rights": "Warframe artwork belongs to Digital Extremes; fan reference catalog."
+  },
+  {
+    "file": "assets/weapons/progenitor-harrow.png",
+    "url": "https://raw.githubusercontent.com/WFCD/warframe-items/master/data/img/Harrow.png",
+    "source": "https://github.com/WFCD/warframe-items",
+    "rights": "Warframe artwork belongs to Digital Extremes; fan reference catalog."
+  },
+  {
+    "file": "assets/weapons/progenitor-xaku.png",
+    "url": "https://raw.githubusercontent.com/WFCD/warframe-items/master/data/img/BrokenFrame.png",
+    "source": "https://github.com/WFCD/warframe-items",
+    "rights": "Warframe artwork belongs to Digital Extremes; fan reference catalog."
+  },
+  {
+    "file": "assets/weapons/progenitor-citrine.png",
+    "url": "https://raw.githubusercontent.com/WFCD/warframe-items/master/data/img/Citrine.png",
+    "source": "https://github.com/WFCD/warframe-items",
+    "rights": "Warframe artwork belongs to Digital Extremes; fan reference catalog."
+  },
+  {
+    "file": "assets/weapons/progenitor-lavos.png",
+    "url": "https://raw.githubusercontent.com/WFCD/warframe-items/master/data/img/Lavos.png",
+    "source": "https://github.com/WFCD/warframe-items",
+    "rights": "Warframe artwork belongs to Digital Extremes; fan reference catalog."
+  },
+  {
+    "file": "assets/weapons/progenitor-hydroid.png",
+    "url": "https://raw.githubusercontent.com/WFCD/warframe-items/master/data/img/Hydroid.png",
+    "source": "https://github.com/WFCD/warframe-items",
+    "rights": "Warframe artwork belongs to Digital Extremes; fan reference catalog."
+  },
+  {
+    "file": "assets/weapons/progenitor-saryn.png",
+    "url": "https://raw.githubusercontent.com/WFCD/warframe-items/master/data/img/Saryn.png",
+    "source": "https://github.com/WFCD/warframe-items",
+    "rights": "Warframe artwork belongs to Digital Extremes; fan reference catalog."
+  },
+  {
+    "file": "assets/weapons/progenitor-cyte-09.png",
+    "url": "https://raw.githubusercontent.com/WFCD/warframe-items/master/data/img/Frumentarius.png",
+    "source": "https://github.com/WFCD/warframe-items",
+    "rights": "Warframe artwork belongs to Digital Extremes; fan reference catalog."
+  },
+  {
+    "file": "assets/weapons/progenitor-nekros.png",
+    "url": "https://raw.githubusercontent.com/WFCD/warframe-items/master/data/img/Nekros.png",
+    "source": "https://github.com/WFCD/warframe-items",
+    "rights": "Warframe artwork belongs to Digital Extremes; fan reference catalog."
+  },
+  {
+    "file": "assets/weapons/progenitor-khora.png",
+    "url": "https://raw.githubusercontent.com/WFCD/warframe-items/master/data/img/Khora.png",
+    "source": "https://github.com/WFCD/warframe-items",
+    "rights": "Warframe artwork belongs to Digital Extremes; fan reference catalog."
+  },
+  {
+    "file": "assets/weapons/progenitor-oberon.png",
+    "url": "https://raw.githubusercontent.com/WFCD/warframe-items/master/data/img/Oberon.png",
+    "source": "https://github.com/WFCD/warframe-items",
+    "rights": "Warframe artwork belongs to Digital Extremes; fan reference catalog."
+  },
+  {
+    "file": "assets/weapons/progenitor-oraxia.png",
+    "url": "https://raw.githubusercontent.com/WFCD/warframe-items/master/data/img/Oraxia.png",
+    "source": "https://github.com/WFCD/warframe-items",
+    "rights": "Warframe artwork belongs to Digital Extremes; fan reference catalog."
+  },
+  {
+    "file": "assets/weapons/progenitor-atlas.png",
+    "url": "https://raw.githubusercontent.com/WFCD/warframe-items/master/data/img/Atlas.png",
+    "source": "https://github.com/WFCD/warframe-items",
+    "rights": "Warframe artwork belongs to Digital Extremes; fan reference catalog."
+  },
+  {
+    "file": "assets/weapons/progenitor-ivara.png",
+    "url": "https://raw.githubusercontent.com/WFCD/warframe-items/master/data/img/Ivara.png",
+    "source": "https://github.com/WFCD/warframe-items",
+    "rights": "Warframe artwork belongs to Digital Extremes; fan reference catalog."
+  },
+  {
+    "file": "assets/weapons/progenitor-dagath.png",
+    "url": "https://raw.githubusercontent.com/WFCD/warframe-items/master/data/img/Dagath.png",
+    "source": "https://github.com/WFCD/warframe-items",
+    "rights": "Warframe artwork belongs to Digital Extremes; fan reference catalog."
+  },
+  {
+    "file": "assets/weapons/progenitor-volt.png",
+    "url": "https://raw.githubusercontent.com/WFCD/warframe-items/master/data/img/Volt.png",
+    "source": "https://github.com/WFCD/warframe-items",
+    "rights": "Warframe artwork belongs to Digital Extremes; fan reference catalog."
+  },
+  {
+    "file": "assets/weapons/progenitor-excalibur.png",
+    "url": "https://raw.githubusercontent.com/WFCD/warframe-items/master/data/img/Excalibur.png",
+    "source": "https://github.com/WFCD/warframe-items",
+    "rights": "Warframe artwork belongs to Digital Extremes; fan reference catalog."
+  },
+  {
+    "file": "assets/weapons/progenitor-banshee.png",
+    "url": "https://raw.githubusercontent.com/WFCD/warframe-items/master/data/img/Banshee.png",
+    "source": "https://github.com/WFCD/warframe-items",
+    "rights": "Warframe artwork belongs to Digital Extremes; fan reference catalog."
+  },
+  {
+    "file": "assets/weapons/progenitor-gyre.png",
+    "url": "https://raw.githubusercontent.com/WFCD/warframe-items/master/data/img/Gyre.png",
+    "source": "https://github.com/WFCD/warframe-items",
+    "rights": "Warframe artwork belongs to Digital Extremes; fan reference catalog."
+  },
+  {
+    "file": "assets/weapons/progenitor-nova.png",
+    "url": "https://raw.githubusercontent.com/WFCD/warframe-items/master/data/img/Nova.png",
+    "source": "https://github.com/WFCD/warframe-items",
+    "rights": "Warframe artwork belongs to Digital Extremes; fan reference catalog."
+  },
+  {
+    "file": "assets/weapons/progenitor-caliban.png",
+    "url": "https://raw.githubusercontent.com/WFCD/warframe-items/master/data/img/Caliban.png",
+    "source": "https://github.com/WFCD/warframe-items",
+    "rights": "Warframe artwork belongs to Digital Extremes; fan reference catalog."
+  },
+  {
+    "file": "assets/weapons/progenitor-nidus.png",
+    "url": "https://raw.githubusercontent.com/WFCD/warframe-items/master/data/img/Nidus.png",
+    "source": "https://github.com/WFCD/warframe-items",
+    "rights": "Warframe artwork belongs to Digital Extremes; fan reference catalog."
+  },
+  {
+    "file": "assets/weapons/progenitor-valkyr.png",
+    "url": "https://raw.githubusercontent.com/WFCD/warframe-items/master/data/img/Valkyr.png",
+    "source": "https://github.com/WFCD/warframe-items",
+    "rights": "Warframe artwork belongs to Digital Extremes; fan reference catalog."
+  },
+  {
+    "file": "assets/weapons/progenitor-limbo.png",
+    "url": "https://raw.githubusercontent.com/WFCD/warframe-items/master/data/img/Limbo.png",
+    "source": "https://github.com/WFCD/warframe-items",
+    "rights": "Warframe artwork belongs to Digital Extremes; fan reference catalog."
+  },
+  {
+    "file": "assets/weapons/progenitor-follie.png",
+    "url": "https://raw.githubusercontent.com/WFCD/warframe-items/master/data/img/Inkblot.png",
+    "source": "https://github.com/WFCD/warframe-items",
+    "rights": "Warframe artwork belongs to Digital Extremes; fan reference catalog."
+  },
+  {
+    "file": "assets/weapons/progenitor-frost.png",
+    "url": "https://raw.githubusercontent.com/WFCD/warframe-items/master/data/img/Frost.png",
+    "source": "https://github.com/WFCD/warframe-items",
+    "rights": "Warframe artwork belongs to Digital Extremes; fan reference catalog."
+  },
+  {
+    "file": "assets/weapons/progenitor-revenant.png",
+    "url": "https://raw.githubusercontent.com/WFCD/warframe-items/master/data/img/Revenant.png",
+    "source": "https://github.com/WFCD/warframe-items",
+    "rights": "Warframe artwork belongs to Digital Extremes; fan reference catalog."
+  },
+  {
+    "file": "assets/weapons/progenitor-gara.png",
+    "url": "https://raw.githubusercontent.com/WFCD/warframe-items/master/data/img/Gara.png",
+    "source": "https://github.com/WFCD/warframe-items",
+    "rights": "Warframe artwork belongs to Digital Extremes; fan reference catalog."
+  },
+  {
+    "file": "assets/weapons/progenitor-hildryn.png",
+    "url": "https://raw.githubusercontent.com/WFCD/warframe-items/master/data/img/IronFrame.png",
+    "source": "https://github.com/WFCD/warframe-items",
+    "rights": "Warframe artwork belongs to Digital Extremes; fan reference catalog."
+  },
+  {
+    "file": "assets/weapons/progenitor-nokko.png",
+    "url": "https://raw.githubusercontent.com/WFCD/warframe-items/master/data/img/Nokko.png",
+    "source": "https://github.com/WFCD/warframe-items",
+    "rights": "Warframe artwork belongs to Digital Extremes; fan reference catalog."
+  },
+  {
+    "file": "assets/weapons/progenitor-styanax.png",
+    "url": "https://raw.githubusercontent.com/WFCD/warframe-items/master/data/img/Styanax.png",
+    "source": "https://github.com/WFCD/warframe-items",
+    "rights": "Warframe artwork belongs to Digital Extremes; fan reference catalog."
+  },
+  {
+    "file": "assets/weapons/progenitor-titania.png",
+    "url": "https://raw.githubusercontent.com/WFCD/warframe-items/master/data/img/Titania.png",
+    "source": "https://github.com/WFCD/warframe-items",
+    "rights": "Warframe artwork belongs to Digital Extremes; fan reference catalog."
+  },
+  {
+    "file": "assets/weapons/progenitor-narin.png",
+    "url": "https://raw.githubusercontent.com/WFCD/warframe-items/master/data/img/Narin.png",
+    "source": "https://github.com/WFCD/warframe-items",
+    "rights": "Warframe artwork belongs to Digital Extremes; fan reference catalog."
+  },
+  {
+    "file": "assets/weapons/progenitor-koumei.png",
+    "url": "https://raw.githubusercontent.com/WFCD/warframe-items/master/data/img/Koumei.png",
+    "source": "https://github.com/WFCD/warframe-items",
+    "rights": "Warframe artwork belongs to Digital Extremes; fan reference catalog."
+  },
+  {
+    "file": "assets/weapons/progenitor-nezha.png",
+    "url": "https://raw.githubusercontent.com/WFCD/warframe-items/master/data/img/Nezha.png",
+    "source": "https://github.com/WFCD/warframe-items",
+    "rights": "Warframe artwork belongs to Digital Extremes; fan reference catalog."
+  },
+  {
+    "file": "assets/weapons/progenitor-ember.png",
+    "url": "https://raw.githubusercontent.com/WFCD/warframe-items/master/data/img/Ember.png",
+    "source": "https://github.com/WFCD/warframe-items",
+    "rights": "Warframe artwork belongs to Digital Extremes; fan reference catalog."
+  },
+  {
+    "file": "assets/weapons/progenitor-protea.png",
+    "url": "https://raw.githubusercontent.com/WFCD/warframe-items/master/data/img/Odalisk.png",
+    "source": "https://github.com/WFCD/warframe-items",
+    "rights": "Warframe artwork belongs to Digital Extremes; fan reference catalog."
+  },
+  {
+    "file": "assets/weapons/progenitor-jade.png",
+    "url": "https://raw.githubusercontent.com/WFCD/warframe-items/master/data/img/Jade.png",
+    "source": "https://github.com/WFCD/warframe-items",
+    "rights": "Warframe artwork belongs to Digital Extremes; fan reference catalog."
+  },
+  {
+    "file": "assets/weapons/progenitor-wisp.png",
+    "url": "https://raw.githubusercontent.com/WFCD/warframe-items/master/data/img/Wisp.png",
+    "source": "https://github.com/WFCD/warframe-items",
+    "rights": "Warframe artwork belongs to Digital Extremes; fan reference catalog."
+  },
+  {
+    "file": "assets/weapons/progenitor-inaros.png",
+    "url": "https://raw.githubusercontent.com/WFCD/warframe-items/master/data/img/Inaros.png",
+    "source": "https://github.com/WFCD/warframe-items",
+    "rights": "Warframe artwork belongs to Digital Extremes; fan reference catalog."
+  },
+  {
+    "file": "assets/weapons/progenitor-kullervo.png",
+    "url": "https://raw.githubusercontent.com/WFCD/warframe-items/master/data/img/PaxDuviricus.png",
+    "source": "https://github.com/WFCD/warframe-items",
+    "rights": "Warframe artwork belongs to Digital Extremes; fan reference catalog."
+  },
+  {
+    "file": "assets/weapons/progenitor-chroma.png",
+    "url": "https://raw.githubusercontent.com/WFCD/warframe-items/master/data/img/Chroma.png",
+    "source": "https://github.com/WFCD/warframe-items",
+    "rights": "Warframe artwork belongs to Digital Extremes; fan reference catalog."
+  },
+  {
+    "file": "assets/weapons/progenitor-trinity.png",
+    "url": "https://raw.githubusercontent.com/WFCD/warframe-items/master/data/img/Trinity.png",
+    "source": "https://github.com/WFCD/warframe-items",
+    "rights": "Warframe artwork belongs to Digital Extremes; fan reference catalog."
+  },
+  {
+    "file": "assets/weapons/progenitor-uriel.png",
+    "url": "https://raw.githubusercontent.com/WFCD/warframe-items/master/data/img/Demonframe.png",
+    "source": "https://github.com/WFCD/warframe-items",
+    "rights": "Warframe artwork belongs to Digital Extremes; fan reference catalog."
+  },
+  {
+    "file": "assets/weapons/progenitor-vauban.png",
+    "url": "https://raw.githubusercontent.com/WFCD/warframe-items/master/data/img/Vauban.png",
+    "source": "https://github.com/WFCD/warframe-items",
+    "rights": "Warframe artwork belongs to Digital Extremes; fan reference catalog."
+  },
+  {
+    "file": "assets/weapons/progenitor-gauss.png",
+    "url": "https://raw.githubusercontent.com/WFCD/warframe-items/master/data/img/Gauss.png",
+    "source": "https://github.com/WFCD/warframe-items",
+    "rights": "Warframe artwork belongs to Digital Extremes; fan reference catalog."
+  },
+  {
+    "file": "assets/weapons/progenitor-dante.png",
+    "url": "https://raw.githubusercontent.com/WFCD/warframe-items/master/data/img/Pagemaster.png",
+    "source": "https://github.com/WFCD/warframe-items",
+    "rights": "Warframe artwork belongs to Digital Extremes; fan reference catalog."
+  },
+  {
+    "file": "assets/weapons/progenitor-temple.png",
+    "url": "https://raw.githubusercontent.com/WFCD/warframe-items/master/data/img/Temple.png",
+    "source": "https://github.com/WFCD/warframe-items",
+    "rights": "Warframe artwork belongs to Digital Extremes; fan reference catalog."
+  },
+  {
+    "file": "assets/weapons/progenitor-grendel.png",
+    "url": "https://raw.githubusercontent.com/WFCD/warframe-items/master/data/img/Grendel.png",
+    "source": "https://github.com/WFCD/warframe-items",
+    "rights": "Warframe artwork belongs to Digital Extremes; fan reference catalog."
+  },
+  {
+    "file": "assets/weapons/progenitor-zephyr.png",
+    "url": "https://raw.githubusercontent.com/WFCD/warframe-items/master/data/img/Zephyr.png",
+    "source": "https://github.com/WFCD/warframe-items",
+    "rights": "Warframe artwork belongs to Digital Extremes; fan reference catalog."
+  },
+  {
+    "file": "assets/weapons/progenitor-rhino.png",
+    "url": "https://raw.githubusercontent.com/WFCD/warframe-items/master/data/img/Rhino.png",
+    "source": "https://github.com/WFCD/warframe-items",
+    "rights": "Warframe artwork belongs to Digital Extremes; fan reference catalog."
+  },
+  {
+    "file": "assets/weapons/progenitor-sevagoth.png",
+    "url": "https://raw.githubusercontent.com/WFCD/warframe-items/master/data/img/Wraith.png",
+    "source": "https://github.com/WFCD/warframe-items",
+    "rights": "Warframe artwork belongs to Digital Extremes; fan reference catalog."
+  },
+  {
+    "file": "assets/weapons/progenitor-garuda.png",
+    "url": "https://raw.githubusercontent.com/WFCD/warframe-items/master/data/img/Garuda.png",
+    "source": "https://github.com/WFCD/warframe-items",
+    "rights": "Warframe artwork belongs to Digital Extremes; fan reference catalog."
+  },
+  {
+    "file": "assets/weapons/progenitor-mirage.png",
+    "url": "https://raw.githubusercontent.com/WFCD/warframe-items/master/data/img/Mirage.png",
+    "source": "https://github.com/WFCD/warframe-items",
+    "rights": "Warframe artwork belongs to Digital Extremes; fan reference catalog."
+  },
+  {
+    "file": "assets/weapons/progenitor-voruna.png",
+    "url": "https://raw.githubusercontent.com/WFCD/warframe-items/master/data/img/Voruna.png",
+    "source": "https://github.com/WFCD/warframe-items",
+    "rights": "Warframe artwork belongs to Digital Extremes; fan reference catalog."
+  },
+  {
+    "file": "assets/weapons/progenitor-equinox.png",
+    "url": "https://raw.githubusercontent.com/WFCD/warframe-items/master/data/img/Equinox.png",
+    "source": "https://github.com/WFCD/warframe-items",
+    "rights": "Warframe artwork belongs to Digital Extremes; fan reference catalog."
+  },
+  {
+    "file": "assets/weapons/progenitor-sirius-orion.png",
+    "url": "https://raw.githubusercontent.com/WFCD/warframe-items/master/data/img/SiriusOrion.png",
+    "source": "https://github.com/WFCD/warframe-items",
+    "rights": "Warframe artwork belongs to Digital Extremes; fan reference catalog."
+  },
+  {
+    "file": "assets/weapons/progenitor-wukong.png",
+    "url": "https://raw.githubusercontent.com/WFCD/warframe-items/master/data/img/Wukong.png",
+    "source": "https://github.com/WFCD/warframe-items",
+    "rights": "Warframe artwork belongs to Digital Extremes; fan reference catalog."
+  },
+  {
+    "file": "assets/weapons/progenitor-ash.png",
+    "url": "https://raw.githubusercontent.com/WFCD/warframe-items/master/data/img/Ash.png",
+    "source": "https://github.com/WFCD/warframe-items",
+    "rights": "Warframe artwork belongs to Digital Extremes; fan reference catalog."
+  },
+  {
+    "file": "assets/weapons/progenitor-baruuk.png",
+    "url": "https://raw.githubusercontent.com/WFCD/warframe-items/master/data/img/Pacifist.png",
+    "source": "https://github.com/WFCD/warframe-items",
+    "rights": "Warframe artwork belongs to Digital Extremes; fan reference catalog."
+  },
+  {
+    "file": "assets/weapons/progenitor-octavia.png",
+    "url": "https://raw.githubusercontent.com/WFCD/warframe-items/master/data/img/Octavia.png",
+    "source": "https://github.com/WFCD/warframe-items",
+    "rights": "Warframe artwork belongs to Digital Extremes; fan reference catalog."
+  },
+  {
+    "file": "assets/weapons/progenitor-qorvex.png",
+    "url": "https://raw.githubusercontent.com/WFCD/warframe-items/master/data/img/Qorvex.png",
+    "source": "https://github.com/WFCD/warframe-items",
+    "rights": "Warframe artwork belongs to Digital Extremes; fan reference catalog."
+  },
+  {
+    "file": "assets/weapons/progenitor-nyx.png",
+    "url": "https://raw.githubusercontent.com/WFCD/warframe-items/master/data/img/Nyx.png",
+    "source": "https://github.com/WFCD/warframe-items",
+    "rights": "Warframe artwork belongs to Digital Extremes; fan reference catalog."
+  },
+  {
+    "file": "assets/weapons/progenitor-loki.png",
+    "url": "https://raw.githubusercontent.com/WFCD/warframe-items/master/data/img/Loki.png",
+    "source": "https://github.com/WFCD/warframe-items",
+    "rights": "Warframe artwork belongs to Digital Extremes; fan reference catalog."
+  }
+]
