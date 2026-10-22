@@ -1,7 +1,9 @@
-import {messages,elementKeys} from './i18n.js?v=20261022.6';
-import {filterRecords,validateCatalog,safeUrl,slug,families,types,bonusSource} from './catalog-core.js?v=20261022.6';
-import {config} from './config.js?v=20261022.6';
-import {readCatalogLocation,catalogLocationUrl} from './catalog-location.js?v=20261022.6';
+import {messages,elementKeys} from './i18n.js?v=20261022.7';
+import {filterRecords,validateCatalog,safeUrl,slug,families,types,bonusSource} from './catalog-core.js?v=20261022.7';
+import {config} from './config.js?v=20261022.7';
+import {readCatalogLocation,catalogLocationUrl} from './catalog-location.js?v=20261022.7';
+
+import {arsenalFlags,arsenalStoragePrefix,readArsenal,writeArsenalFlag} from './arsenal-local.js?v=20261022.7';
 
 const $=s=>document.querySelector(s);
 const escape=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -12,8 +14,7 @@ let lang=(()=>{try{const saved=localStorage.getItem('warframe-language');return 
 let catalog,version=0,owner=false,connected=false,preview=false,token=readStorage('warframe-session'),section='all',selected='',view='list',detailTab='overview',editing=false,dirty=false,saving=false;
 let toastTimer,inspectorCollapsed=false;
 let auditRunning=false,auditResults=[];
-let arsenal={},arsenalReady=false,arsenalLoading=false,arsenalLoadError=false,arsenalSaving='',arsenalFilter='',arsenalMessage={};
-const arsenalFlags=['owned','wanted','mastered'];
+let arsenal={},arsenalReady=false,arsenalLoadError='',arsenalFilter='',arsenalMessage={};
 const arsenalIcons={owned:'check',wanted:'star',mastered:'badge-check'};
 let explicitSelection=false,historyIndex=0,pendingHistoryIndex=0,lastLocation='',restoringHistory=false,ignoreHistory=false,searchEditing=false;
 const state={search:'',type:'',element:'',sort:'original'};
@@ -36,7 +37,7 @@ function saveLocation(mode='push'){
   if(section==='tools')return;
   const route=locationState(),destination=catalogLocationUrl(location.href,route).href;
   try{localStorage.setItem('warframe-catalog-view',JSON.stringify(route));localStorage.setItem('warframe-language',lang);}catch{}
-  const personalFilter=owner?arsenalFilter:'';
+  const personalFilter=arsenalFilter;
   if(mode==='replace'||destination!==lastLocation||history.state?.personalFilter!==personalFilter){
     if(mode==='push')historyIndex++;
     history[mode==='push'?'pushState':'replaceState']({arsenalIndex:historyIndex,personalFilter},'',destination);
@@ -44,7 +45,7 @@ function saveLocation(mode='push'){
   lastLocation=destination;
 }
 function applyLocation(route){
-  arsenalFilter=owner&&arsenalFlags.includes(history.state?.personalFilter)?history.state.personalFilter:'';
+  arsenalFilter=arsenalFlags.includes(history.state?.personalFilter)?history.state.personalFilter:'';
   ({section,view,lang}=route);selected=route.selected;explicitSelection=Boolean(selected);detailTab=route.tab;
   for(const key of ['search','type','element','sort'])state[key]=route[key];
   const record=selected&&findRecord(selected);
@@ -95,42 +96,40 @@ function renderNavigation(){
 }
 function image(r,large=false){return r.image?`<img src="${escape(r.image)}" alt="" ${large?'':'loading="lazy"'} decoding="async" width="256" height="256">`:`<span class="fallback-image" aria-label="${escape(t('noImage'))}">${icon(r.kind==='progenitor'?'user-round':'crosshair')}</span>`;}
 function card(r){
-  const marks=owner&&arsenalReady&&r.kind==='weapon'?arsenalFlags.filter(k=>arsenal[r.id]?.[k]):[];
+  const marks=arsenalReady&&r.kind==='weapon'?arsenalFlags.filter(k=>arsenal[r.id]?.[k]):[];
   const badge=marks.length?`<span class="personal-mark" title="${escape(marks.map(k=>t(k)).join(' · '))}"><span class="sr-only">${escape(marks.map(k=>t(k)).join(' · '))}</span>${marks.filter(k=>k!=='owned'||!marks.includes('mastered')).map(k=>icon(arsenalIcons[k])).join('')}</span>`:'';
   const meta=`<span class="card-meta">${r.type?`<span class="card-class">${t(r.type)}</span>`:''}<span class="card-bonus"><span class="sr-only">${t('bonus')}</span>${chip(r.recommended||r.element)}</span></span>`;
   return `<button type="button" class="weapon-card" data-id="${r.id}" aria-pressed="${selected===r.id}"><span class="weapon-art">${image(r)}${r.family?`<span class="family-tag">${escape(t(r.family))}</span>`:''}${view==='grid'?meta:''}${badge}</span><span class="card-text"><span class="card-name">${escape(title(r))}</span><span class="card-subtitle">${escape(lang!=='en'?r.name_en:r.name_uk)}</span></span>${view==='list'?meta:''}</button>`;
 }
 function renderArsenal(){
-  const visible=owner&&(section==='all'||families.includes(section));
+  const visible=section==='all'||families.includes(section);
   $('#personal-arsenal').hidden=!visible;$('#arsenal-filter-label').hidden=!visible;
   if(!visible){$('#personal-arsenal').innerHTML='';return;}
   $('#arsenal-filter').innerHTML=[['','allPersonal'],...arsenalFlags.map(k=>[k,k])].map(([value,key])=>`<option value="${value}" ${arsenalFilter===value?'selected':''}>${t(key)}</option>`).join('');
-  $('#arsenal-filter').disabled=!arsenalReady||arsenalLoading;
+  $('#arsenal-filter').disabled=!arsenalReady;
   $('#arsenal-filter-label').classList.toggle('active',Boolean(arsenalFilter));
   const progress=arsenalReady?`<ul class="arsenal-progress">${families.map(f=>{const weapons=catalog.weapons.filter(r=>!r.archived&&r.family===f),count=weapons.filter(r=>arsenal[r.id]?.owned).length;return `<li><span>${t(f)}</span><strong>${t('collected',{count:new Intl.NumberFormat(lang).format(count),total:new Intl.NumberFormat(lang).format(weapons.length)})}</strong><progress max="${weapons.length||1}" value="${count}" aria-label="${t('collectionProgress',{family:t(f)})}"></progress></li>`;}).join('')}</ul>`:'';
-  $('#personal-arsenal').innerHTML=`<div class="arsenal-heading"><h2>${icon('backpack')}${t('myArsenal')}</h2><button type="button" id="arsenal-refresh" class="secondary-button" ${arsenalLoading||arsenalSaving?'disabled':''}>${icon('refresh-cw')}${t('refreshArsenal')}</button></div><p class="detail-note">${t('arsenalPrivate')}</p>${progress}${!arsenalReady&&!arsenalLoadError?`<p role="status">${t('loadingArsenal')}</p>`:''}${arsenalLoadError?`<p class="arsenal-error" role="alert">${t(arsenalLoadError)}</p>`:''}`;
+  $('#personal-arsenal').innerHTML=`<div class="arsenal-heading"><h2>${icon('backpack')}${t('myArsenal')}</h2></div><p class="detail-note">${t('arsenalLocal')}</p>${progress}${arsenalLoadError?`<p class="arsenal-error" role="alert">${t(arsenalLoadError)}</p>`:''}`;
 }
 function personalControls(r){
-  if(!owner||r.kind!=='weapon')return '';
+  if(r.kind!=='weapon')return '';
   if(!arsenalReady)return `<p class="detail-note">${t('arsenalUnavailable')}</p>`;
-  return `<fieldset class="personal-controls" ${arsenalSaving||arsenalLoading?'disabled':''}><legend>${t('myArsenal')}</legend><div class="personal-toggles">${arsenalFlags.map(k=>`<label><input type="checkbox" data-arsenal-flag="${k}" data-weapon="${r.id}" ${arsenal[r.id]?.[k]?'checked':''} ${k==='mastered'?'aria-describedby="arsenal-help"':''}>${icon(arsenalIcons[k])}<span>${t(k)}</span></label>`).join('')}</div><p id="arsenal-help" class="detail-note">${t('masteredHelp')}</p><p class="arsenal-save-status" role="status">${arsenalMessage.id===r.id?t(arsenalMessage.key):''}</p></fieldset>`;
+  return `<fieldset class="personal-controls"><legend>${t('myArsenal')}</legend><div class="personal-toggles">${arsenalFlags.map(k=>`<label><input type="checkbox" data-arsenal-flag="${k}" data-weapon="${r.id}" ${arsenal[r.id]?.[k]?'checked':''} ${k==='mastered'?'aria-describedby="arsenal-help"':''}>${icon(arsenalIcons[k])}<span>${t(k)}</span></label>`).join('')}</div><p id="arsenal-help" class="detail-note">${t('masteredHelp')}</p><p class="arsenal-save-status" role="status">${arsenalMessage.id===r.id?t(arsenalMessage.key):''}</p></fieldset>`;
 }
-async function loadArsenal(){
-  if(!owner)return;const sessionToken=token;arsenalLoading=true;
-  try{const rows=await (await request('/api/admin/arsenal',{signal:AbortSignal.timeout(15000)})).json();if(token!==sessionToken||!owner)return;arsenal=Object.fromEntries(rows.map(r=>[r.id,r]));arsenalReady=true;arsenalLoadError=false;}
-  catch(e){if(token===sessionToken)arsenalLoadError=[401,403].includes(e.status)?'arsenalSessionExpired':'arsenalLoadFailed';}
-  finally{if(token===sessionToken)arsenalLoading=false;}
+function loadArsenal(){
+  try{arsenal=readArsenal(localStorage);arsenalReady=true;arsenalLoadError='';}
+  catch(e){arsenalReady=false;arsenalLoadError=e.message==='arsenalStorageInvalid'?'arsenalStorageInvalid':'arsenalStorageUnavailable';}
 }
-async function saveArsenal(input){
-  if(!owner||!arsenalReady||arsenalSaving||arsenalLoading)return;
-  const id=input.dataset.weapon,flag=input.dataset.arsenalFlag,previous=arsenal[id]||{id,owned:false,wanted:false,mastered:false,revision:0};
-  if(!arsenalFlags.includes(flag))return;
-  const next={id,owned:previous.owned,wanted:previous.wanted,mastered:previous.mastered,[flag]:input.checked};
-  const sessionToken=token;arsenalSaving=id;arsenalMessage={id,key:'saving'};
-  document.querySelectorAll('.personal-controls').forEach(f=>f.disabled=true);document.querySelectorAll('.arsenal-save-status').forEach(p=>p.textContent=t('saving'));$('#arsenal-refresh')?.setAttribute('disabled','');
-  try{const row=await (await request('/api/admin/arsenal',{method:'PUT',signal:AbortSignal.timeout(15000),headers:{'Content-Type':'application/json','If-Match':String(previous.revision)},body:JSON.stringify(next)})).json();if(token!==sessionToken||!owner)return;arsenal[id]=row;arsenalMessage={id,key:'saved'};}
-  catch(e){if(token!==sessionToken||!owner)return;if(e.status===409)await loadArsenal();arsenalMessage={id,key:e.status===409?(arsenalLoadError||'arsenalConflict'):e.status===429?'arsenalLimit':[401,403].includes(e.status)?'arsenalSessionExpired':'arsenalSaveFailed'};}
-  finally{if(token===sessionToken&&owner){arsenalSaving='';if(arsenalFilter&&!arsenal[selected]?.[arsenalFilter]&&$('#detail-dialog').open)$('#detail-dialog').close();render();saveLocation('replace');const panel=$('#detail-dialog').open?$('#mobile-inspector'):$('#inspector'),control=panel.querySelector(`[data-weapon="${id}"][data-arsenal-flag="${flag}"]`);if(control)control.focus({preventScroll:true});else $('#catalog-heading').focus();toast(arsenalMessage.key);}}
+function saveArsenal(input){
+  const id=input.dataset.weapon,flag=input.dataset.arsenalFlag,record=findRecord(id);
+  if(!arsenalReady||!arsenalFlags.includes(flag)||!record||record.kind!=='weapon'||record.archived)return;
+  try{writeArsenalFlag(localStorage,id,flag,input.checked);arsenal[id]??={owned:false,wanted:false,mastered:false};arsenal[id][flag]=input.checked;arsenalMessage={id,key:'arsenalSavedLocally'};}
+  catch{arsenalMessage={id,key:'arsenalSaveFailed'};}
+  if(arsenalFilter&&!arsenal[selected]?.[arsenalFilter]&&$('#detail-dialog').open)$('#detail-dialog').close();
+  render();saveLocation('replace');
+  const panel=$('#detail-dialog').open?$('#mobile-inspector'):$('#inspector'),control=panel.querySelector(`[data-weapon="${id}"][data-arsenal-flag="${flag}"]`);
+  if(control)control.focus({preventScroll:true});else $('#catalog-heading').focus();
+  toast(arsenalMessage.key);
 }
 function updateInspectorToggle(){
   const button=$('#inspector-toggle'),label=t(inspectorCollapsed?'showDetails':'hideDetails');
@@ -144,7 +143,7 @@ function render(){
   const name=t(section==='all'?'allWeapons':section);$('#catalog-heading').textContent=name;
   $('#add-record').hidden=!owner||section==='tools';$('#filters').hidden=section==='guides'||section==='tools';$('#type-filter').closest('label').hidden=section==='progenitors';$('.view-controls').hidden=section==='guides'||section==='tools';
   $('#inspector-toggle').hidden=section==='guides'||section==='tools';updateInspectorToggle();
-  const personal=owner&&arsenalReady&&(section==='all'||families.includes(section))?arsenalFilter:'';
+  const personal=arsenalReady&&(section==='all'||families.includes(section))?arsenalFilter:'';
   const list=filterRecords(catalog,{section,...state,lang}).filter(r=>!personal||arsenal[r.id]?.[personal]);
   const activeCount=[state.search.trim(),state.type,state.element,state.sort!=='original',personal].filter(Boolean).length;
   $('#reset-filters').hidden=activeCount===0;$('#active-filters').hidden=activeCount===0;
@@ -246,11 +245,10 @@ async function loadSession(){
   if(!token)return;
   try{const r=await request('/api/admin/session');const s=await r.json();owner=s.owner===true;preview=s.preview===true;if(!owner)throw Error('not_owner');}
   catch(e){owner=false;if([401,403].includes(e.status)){token='';writeStorage('warframe-session','');}}
-  if(owner)await loadArsenal();
   localize();
 }
 async function bootstrap(){
-  localize();
+  loadArsenal();localize();
   try{
     let response;try{response=await fetch(url('/api/catalog'),{cache:'no-store'});}catch{}
     if(response?.ok){const result=await response.json();catalog=validateCatalog(result.catalog);version=result.version;connected=true;preview=result.preview===true;}
@@ -276,7 +274,6 @@ document.addEventListener('click',async event=>{
     $('.catalog-pane').scrollTop=0;$('#catalog-heading').focus();return;
   }
   if(b.dataset.section){if(!await leaveEditor())return;section=b.dataset.section;state.type='';state.element='';state.search='';$('#search').value='';selected='';explicitSelection=false;detailTab='overview';closeNavigation();localize();render();saveLocation();}
-  if(b.id==='arsenal-refresh'&&owner){if(arsenalSaving||arsenalLoading)return;const loading=loadArsenal();document.querySelectorAll('.personal-controls').forEach(f=>f.disabled=true);renderArsenal();refreshIcons();await loading;render();$('#arsenal-refresh')?.focus({preventScroll:true});return;}
   if(b.dataset.id){if(!await leaveEditor())return;selected=b.dataset.id;explicitSelection=true;detailTab='overview';inspectorCollapsed=false;updateInspectorToggle();document.querySelectorAll('.weapon-card').forEach(card=>card.setAttribute('aria-pressed',String(card.dataset.id===selected)));renderInspector();$('#inspector').scrollTop=0;refreshIcons();openMobileDetail();saveLocation();}
   if(b.id==='inspector-toggle'){if(!await leaveEditor())return;inspectorCollapsed=!inspectorCollapsed;updateInspectorToggle();renderInspector();refreshIcons();}
   if(b.dataset.tab){detailTab=b.dataset.tab;renderInspector();refreshIcons();const panel=$('#detail-dialog').open?$('#mobile-inspector'):$('#inspector');panel.querySelector(`[data-tab="${detailTab}"]`)?.focus({preventScroll:true});saveLocation();}
@@ -296,7 +293,7 @@ document.addEventListener('click',async event=>{
   if(b.dataset.action==='audit-stop'){auditRunning=false;b.disabled=true;}
   if(b.dataset.restoreVersion&&owner){if(await confirmAction('restoreTitle','restoreHelp')){try{const r=await request('/api/admin/history/'+b.dataset.restoreVersion);await commit(await r.json());render();toast('restored');}catch(e){toast(e.message==='conflict'?'conflict':'saveFailed');}}}
   if(b.dataset.check&&owner){b.disabled=true;const result=b.parentElement.querySelector('#check-result');result.textContent=t('checking');try{const r=await request('/api/admin/check-build',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:b.dataset.check})});const x=await r.json();result.textContent=(httpStatus(x.status)+' · '+dateTime(x.checkedAt))+' '+t('checkDisclaimer');}catch{result.textContent=t('checkUnknown');}finally{b.disabled=false;}}
-  if(b.dataset.action==='logout'){try{await request('/api/admin/logout',{method:'POST'});}catch{}token='';owner=false;arsenal={};arsenalReady=false;arsenalSaving='';arsenalFilter='';arsenalMessage={};writeStorage('warframe-session','');section='all';render();localize();}
+  if(b.dataset.action==='logout'){try{await request('/api/admin/logout',{method:'POST'});}catch{}token='';owner=false;arsenalMessage={};writeStorage('warframe-session','');section='all';render();localize();}
 });
 $('#language').addEventListener('change',async()=>{const next=$('#language').value;if(!await leaveEditor()){$('#language').value=lang;return;}lang=next;localize();render();saveLocation();});
 $('#search').addEventListener('input',()=>{state.search=$('#search').value.slice(0,200);render();saveLocation(searchEditing?'replace':'push');searchEditing=true;});
@@ -316,6 +313,13 @@ window.addEventListener('popstate',async event=>{
 });
 document.addEventListener('submit',e=>{if(e.target.id==='editor-form'){e.preventDefault();submitEditor(e.target);}});
 document.addEventListener('input',e=>{if(e.target.closest('#editor-form'))dirty=true;});
+window.addEventListener('storage',event=>{
+  if(event.key!==null&&!event.key.startsWith(arsenalStoragePrefix))return;
+  loadArsenal();arsenalMessage={};
+  if(!catalog)return;
+  if(arsenalFilter&&!arsenal[selected]?.[arsenalFilter]&&$('#detail-dialog').open)$('#detail-dialog').close();
+  render();saveLocation('replace');
+});
 document.addEventListener('change',e=>{if(e.target.closest('#editor-form'))dirty=true;if(e.target.matches('[data-arsenal-flag]'))saveArsenal(e.target);});
 $('#arsenal-filter').addEventListener('change',()=>{arsenalFilter=$('#arsenal-filter').value;render();saveLocation();});
 document.addEventListener('keydown',e=>{
