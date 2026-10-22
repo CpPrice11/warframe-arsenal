@@ -1,4 +1,4 @@
-import {ru} from './i18n-ru.js?v=20261022.3';
+import {ru} from './i18n-ru.js?v=20261022.4';
 export const messages = {
   uk: {
     whoGivesBonus:'Хто дає бонус',progenitorsFor:'Хто дає бонус: {element}',ergoBonus:'Бонус у крамниці Ерґо Ґласта залежить від ротації, а не від ворфрейма.',eleanorBonus:'Бонус у крамниці Елеонори залежить від ротації, а не від ворфрейма.',

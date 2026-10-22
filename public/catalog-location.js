@@ -1,6 +1,6 @@
-import {families,types,elements} from './catalog-core.js?v=20261022.3';
+import {families,types,elements} from './catalog-core.js?v=20261022.4';
 
-const defaults={section:'all',selected:'',search:'',type:'',element:'',sort:'original',view:'grid',tab:'overview',lang:'uk'};
+const defaults={section:'all',selected:'',search:'',type:'',element:'',sort:'original',view:'list',tab:'overview',lang:'uk'};
 const params={section:'section',selected:'item',search:'q',type:'type',element:'element',sort:'sort',view:'view',tab:'tab',lang:'lang'};
 function normalize(value,language='uk'){
   const source=value&&typeof value==='object'?value:{};

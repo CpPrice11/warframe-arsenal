@@ -14,12 +14,16 @@ test('catalog links restore every public view setting and override saved prefere
   assert.deepEqual(readCatalogLocation('',route),route);
   assert.equal(readCatalogLocation('?item=kuva-nukor',{search:'incompatible',element:'toxin'}).search,'');
   assert.equal(readCatalogLocation('?item=kuva-nukor',{search:'incompatible',element:'toxin'}).element,'');
+  assert.equal(readCatalogLocation('?item=kuva-nukor').view,'list');
+  assert.equal(readCatalogLocation('',{view:'grid'}).view,'grid');
+  const cards=catalogLocationUrl('https://example.com/arsenal/',{view:'grid'});
+  assert.equal(cards.searchParams.get('view'),'grid');assert.equal(readCatalogLocation(cards.search).view,'grid');
 });
 
 test('URL and stored view inputs are bounded, allowlisted and never restore owner data',()=>{
   const result=readCatalogLocation('?section=tools&item=%3Cscript%3E&type=invalid&element=bad&view=table&sort=sql&tab=editor&lang=evil&q='+ 'a'.repeat(500));
   assert.equal(result.section,'all');assert.equal(result.selected,'');assert.equal(result.type,'');assert.equal(result.element,'');
-  assert.equal(result.view,'grid');assert.equal(result.sort,'original');assert.equal(result.tab,'overview');assert.equal(result.lang,'uk');assert.equal(result.search.length,200);
+  assert.equal(result.view,'list');assert.equal(result.sort,'original');assert.equal(result.tab,'overview');assert.equal(result.lang,'uk');assert.equal(result.search.length,200);
   assert.equal(readCatalogLocation('',null,'ru').lang,'ru');
   const link=catalogLocationUrl('https://example.com/arsenal/?token=secret#login=secret',{selected:'kuva-nukor',owner:true,token:'secret',lang:'uk'});
   assert.equal(link.search,'?item=kuva-nukor&lang=uk');assert.equal(link.hash,'');

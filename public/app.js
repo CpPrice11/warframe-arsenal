@@ -1,7 +1,7 @@
-import {messages,elementKeys} from './i18n.js?v=20261022.3';
-import {filterRecords,validateCatalog,safeUrl,slug,families,types,bonusSource} from './catalog-core.js?v=20261022.3';
-import {config} from './config.js?v=20261022.3';
-import {readCatalogLocation,catalogLocationUrl} from './catalog-location.js?v=20261022.3';
+import {messages,elementKeys} from './i18n.js?v=20261022.4';
+import {filterRecords,validateCatalog,safeUrl,slug,families,types,bonusSource} from './catalog-core.js?v=20261022.4';
+import {config} from './config.js?v=20261022.4';
+import {readCatalogLocation,catalogLocationUrl} from './catalog-location.js?v=20261022.4';
 
 const $=s=>document.querySelector(s);
 const escape=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -9,7 +9,7 @@ const icon=name=>`<i data-lucide="${name}" aria-hidden="true"></i>`;
 function readStorage(key,fallback=''){try{return sessionStorage.getItem(key)||fallback;}catch{return fallback;}}
 function writeStorage(key,value){try{if(value)sessionStorage.setItem(key,value);else sessionStorage.removeItem(key);}catch{}}
 let lang=(()=>{try{const saved=localStorage.getItem('warframe-language');return Object.hasOwn(messages,saved)?saved:'uk';}catch{return 'uk';}})();
-let catalog,version=0,owner=false,connected=false,preview=false,token=readStorage('warframe-session'),section='all',selected='',view='grid',detailTab='overview',editing=false,dirty=false,saving=false;
+let catalog,version=0,owner=false,connected=false,preview=false,token=readStorage('warframe-session'),section='all',selected='',view='list',detailTab='overview',editing=false,dirty=false,saving=false;
 let toastTimer,inspectorCollapsed=false;
 let auditRunning=false,auditResults=[];
 let explicitSelection=false,historyIndex=0,pendingHistoryIndex=0,lastLocation='',restoringHistory=false,ignoreHistory=false,searchEditing=false;
