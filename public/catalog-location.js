@@ -1,4 +1,4 @@
-import {families,types,elements} from './catalog-core.js?v=20261022.2';
+import {families,types,elements} from './catalog-core.js?v=20261022.3';
 
 const defaults={section:'all',selected:'',search:'',type:'',element:'',sort:'original',view:'grid',tab:'overview',lang:'uk'};
 const params={section:'section',selected:'item',search:'q',type:'type',element:'element',sort:'sort',view:'view',tab:'tab',lang:'lang'};

@@ -1,4 +1,5 @@
 export const ru = {
+  whoGivesBonus:'Кто даёт бонус',progenitorsFor:'Кто даёт бонус: {element}',ergoBonus:'Бонус в магазине Эрго Гласта зависит от ротации, а не от варфрейма.',eleanorBonus:'Бонус в магазине Элеоноры зависит от ротации, а не от варфрейма.',
   copyLink:'Скопировать ссылку',linkCopied:'Ссылка скопирована',copyLinkManually:'Скопируй ссылку из этого поля:',recordUnavailable:'Эта запись недоступна. Показан каталог.',
     showDetails:'Показать сведения',hideDetails:'Свернуть сведения',
   recommendedBonus:'Рекомендуемый бонус',activeFilters:'Фильтры: {count}',

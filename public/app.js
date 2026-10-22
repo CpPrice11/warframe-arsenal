@@ -1,7 +1,7 @@
-import {messages,elementKeys} from './i18n.js?v=20261022.2';
-import {filterRecords,validateCatalog,safeUrl,slug,families,types} from './catalog-core.js?v=20261022.2';
-import {config} from './config.js?v=20261022.2';
-import {readCatalogLocation,catalogLocationUrl} from './catalog-location.js?v=20261022.2';
+import {messages,elementKeys} from './i18n.js?v=20261022.3';
+import {filterRecords,validateCatalog,safeUrl,slug,families,types,bonusSource} from './catalog-core.js?v=20261022.3';
+import {config} from './config.js?v=20261022.3';
+import {readCatalogLocation,catalogLocationUrl} from './catalog-location.js?v=20261022.3';
 
 const $=s=>document.querySelector(s);
 const escape=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -125,7 +125,9 @@ function detail(r){
   const header=`<div class="inspector-head detail-head"><span>${t('details')}</span><button type="button" class="icon-button mobile-close" data-action="close-detail" aria-label="${t('close')}">${icon('x')}</button></div>`;
   if(!r||section==='guides'||section==='tools')return header+`<div class="empty-state">${icon('panel-right')}<h2>${t('selectRecord')}</h2><p>${t('selectRecordHelp')}</p></div>`;
   const sectionNote=(key,label)=>note(r,key)?`<section class="detail-section"><h3>${t(label)}</h3><p ${lang!=='uk'&&!r[key+'_'+lang]?'lang="uk"':''}>${escape(note(r,key))}</p></section>`:'';
-  const bonuses=r.kind==='weapon'?`<div class="bonus-pair"><div><span class="field-label">${t('recommendedBonus')}</span>${chip(r.recommended)}</div><div><span class="field-label">${t('alternative')}</span>${chip(r.alternative)}</div></div>`:`<div class="detail-section"><span class="field-label">${t('bonus')}</span>${chip(r.element)}</div>`;
+  const source=bonusSource(r);
+  const bonus=(element,label)=>`<div><span class="field-label">${t(label)}</span>${chip(element)}${source==='progenitor'?`<a class="progenitor-link" data-progenitors href="${escape(catalogLocationUrl(location.href,{section:'progenitors',element,lang,view}).href)}" aria-label="${escape(t('progenitorsFor',{element:t(element)}))}">${icon('users-round')}<span>${t('whoGivesBonus')}</span></a>`:''}</div>`;
+  const bonuses=r.kind==='weapon'?`<div class="bonus-pair">${bonus(r.recommended,'recommendedBonus')}${bonus(r.alternative,'alternative')}</div>${source==='ergo'||source==='eleanor'?`<p class="detail-note bonus-source">${t(source==='ergo'?'ergoBonus':'eleanorBonus')}</p>`:''}`:`<div class="detail-section"><span class="field-label">${t('bonus')}</span>${chip(r.element)}</div>`;
   const actions=r.kind==='weapon'?`<div class="detail-actions">${r.build_url?`<a class="primary-button" href="${escape(r.build_url)}" target="_blank" rel="noopener noreferrer">${icon('external-link')}${t('build')}</a>`:`<span class="detail-note">${t('noBuild')}</span>`}${r.source_url?`<a class="secondary-button" href="${escape(r.source_url)}" target="_blank" rel="noopener noreferrer">${icon('arrow-up-right')}${t('source')}</a>`:''}<button type="button" class="secondary-button share-action" data-share="${r.id}">${icon('link')}${t('copyLink')}</button></div><div class="share-fallback" hidden><label>${t('copyLinkManually')}<input type="url" readonly value="${escape(shareLocation(r))}"></label></div>`:'';
   const content=r.kind==='weapon'?(detailTab==='matrix'?`<table class="matrix"><caption class="sr-only">${t('elementMatrix')}</caption><tbody>${elementKeys.map(e=>{const value=(lang==='ru'?r.matrix_ru?.[e]:undefined)||r.matrix?.[e]||'';const [grade,...rest]=value.split(' • ');return `<tr><th scope="row">${chip(e)}</th><td>${grade?`<span class="grade">${escape(grade)}</span><br><span lang="${lang==='ru'&&r.matrix_ru?.[e]?'ru':'uk'}">${escape(rest.join(' • '))}</span>`:'—'}</td></tr>`;}).join('')}</tbody></table><p class="detail-note">${t('ratingHelp')}</p>`:`${lang!=='uk'&&!r['reason_'+lang]?`<div class="source-language">${t('notesLanguage')}</div>`:''}${sectionNote('reason','reason')}${sectionNote('mechanic','mechanic')}${sectionNote('obtain','obtain')}`):sectionNote('reason','reason');
   return header+`<div class="inspector-content"><div class="detail-summary"><div><div class="inspector-family">${r.family?`<span class="family-icon ${r.family}">${r.family[0]}</span>${t(r.family)}<span> / </span>${t(r.type)}`:t('progenitors')}</div><h2>${escape(title(r))}</h2><p class="english-name">${escape(lang!=='en'?r.name_en:r.name_uk)}</p></div><div class="inspector-hero">${image(r,true)}</div></div>${bonuses}${actions}${r.kind==='weapon'?`<div class="detail-tabs"><button type="button" data-tab="overview" aria-pressed="${detailTab==='overview'}">${icon('file-text')}${t('overview')}</button><button type="button" data-tab="matrix" aria-pressed="${detailTab==='matrix'}">${icon('table-2')}${t('elementMatrix')}</button></div>`:''}${content}</div>${owner?`<div class="inspector-bottom"><button type="button" class="secondary-button" data-edit="${r.id}">${icon('pencil')}${t('edit')}</button>${r.build_url?`<button type="button" class="secondary-button" data-check="${r.id}">${icon('link')}${t('checkBuild')}</button>`:''}<p class="detail-note" id="check-result" role="status"></p></div>`:''}`;
@@ -223,6 +225,13 @@ document.addEventListener('click',async event=>{
   searchEditing=false;
   if(b.id==='owner-link'){event.preventDefault();if(owner){if(!await leaveEditor())return;section='tools';render();}else await startLogin();closeNavigation();return;}
   if(!catalog)return;
+  if(b.hasAttribute('data-progenitors')){
+    if(event.button!==0||event.ctrlKey||event.metaKey||event.shiftKey||event.altKey)return;
+    event.preventDefault();if(!await leaveEditor())return;
+    if($('#detail-dialog').open)$('#detail-dialog').addEventListener('close',()=>$('#catalog-heading').focus(),{once:true});
+    applyLocation(readCatalogLocation(new URL(b.href).search,{},lang));saveLocation();
+    $('.catalog-pane').scrollTop=0;$('#catalog-heading').focus();return;
+  }
   if(b.dataset.section){if(!await leaveEditor())return;section=b.dataset.section;state.type='';state.element='';state.search='';$('#search').value='';selected='';explicitSelection=false;detailTab='overview';closeNavigation();localize();render();saveLocation();}
   if(b.dataset.id){if(!await leaveEditor())return;selected=b.dataset.id;explicitSelection=true;detailTab='overview';inspectorCollapsed=false;updateInspectorToggle();document.querySelectorAll('.weapon-card').forEach(card=>card.setAttribute('aria-pressed',String(card.dataset.id===selected)));renderInspector();$('#inspector').scrollTop=0;refreshIcons();openMobileDetail();saveLocation();}
   if(b.id==='inspector-toggle'){if(!await leaveEditor())return;inspectorCollapsed=!inspectorCollapsed;updateInspectorToggle();renderInspector();refreshIcons();}

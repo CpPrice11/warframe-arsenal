@@ -1,6 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readCatalogLocation,catalogLocationUrl} from './public/catalog-location.js';
+import {readFile} from 'node:fs/promises';
+import {bonusSource,filterRecords} from './public/catalog-core.js';
 
 test('catalog links restore every public view setting and override saved preferences',()=>{
   const route={section:'Kuva',selected:'kuva-nukor',search:'Нюкор & Nukor',type:'secondary',element:'magnetic',sort:'name',view:'list',tab:'matrix',lang:'ru'};
@@ -24,4 +26,25 @@ test('URL and stored view inputs are bounded, allowlisted and never restore owne
   assert.equal(readCatalogLocation('?section=progenitors&type=primary').type,'');
   const guides=readCatalogLocation('?section=guides&type=primary&element=toxin&item=kuva-nukor');
   assert.equal(guides.selected,'');assert.equal(guides.type,'');assert.equal(guides.element,'');
+});
+
+test('weapon bonuses link to matching progenitors except for vendor acquisitions',async()=>{
+  const catalog=JSON.parse(await readFile(new URL('./public/catalog.json',import.meta.url),'utf8'));
+  const vendors=catalog.weapons.filter(r=>bonusSource(r)!=='progenitor');
+  assert.equal(vendors.length,19);
+  assert.equal(vendors.filter(r=>bonusSource(r)==='eleanor').length,14);
+  assert.deepEqual(vendors.filter(r=>bonusSource(r)==='ergo').map(r=>r.id).sort(),['tenet-agendus','tenet-exec','tenet-ferrox','tenet-grigori','tenet-livia']);
+  for(const weapon of catalog.weapons){
+    assert.equal(bonusSource(weapon)==='progenitor',['Кувовий ліч','Сестра Парва'].includes(weapon.obtain_uk),weapon.id);
+    if(bonusSource(weapon)!=='progenitor')continue;
+    for(const element of [weapon.recommended,weapon.alternative])for(const lang of ['uk','en','ru']){
+      const link=catalogLocationUrl('https://example.com/arsenal/?q=old&type=primary&item=kuva-bramma#login=secret',{section:'progenitors',element,lang,view:'list'});
+      const route=readCatalogLocation(link.search);
+      assert.equal(route.selected,'');assert.equal(route.search,'');assert.equal(route.type,'');assert.equal(route.tab,'overview');assert.equal(route.lang,lang);assert.equal(link.hash,'');
+      const matches=filterRecords(catalog,route);
+      assert.ok(matches.length>0,weapon.id+':'+element);
+      assert.ok(matches.every(r=>r.kind==='progenitor'&&r.element===element));
+    }
+  }
+  assert.equal(bonusSource(catalog.progenitors[0]),'');
 });

@@ -9,9 +9,9 @@
   <meta name="description" content="Каталог зброї Кува, Догмат і Кода: бонусні стихії, родоначальники та білди Warframe.">
   <title>Warframe — Арсенал недругів</title>
   <link rel="icon" href="./favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="./styles.css?v=20261022.2">
+  <link rel="stylesheet" href="./styles.css?v=20261022.3">
   <script src="./assets/lucide.min.js" defer></script>
-  <script type="module" src="./app.js?v=20261022.2"></script>
+  <script type="module" src="./app.js?v=20261022.3"></script>
 </head>
 <body>
 <!-- THESIS: A working Warframe reference library, using the Eagle layout explicitly selected by the owner.
@@ -42,7 +42,7 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
     <div id="connection-status" class="connection-status" role="status" hidden></div>
     <div class="workspace-body">
       <section class="catalog-pane" aria-labelledby="catalog-heading">
-        <div class="catalog-heading"><div><h1 id="catalog-heading"></h1><p id="result-count" aria-live="polite"></p></div><div class="catalog-controls"><div class="view-controls"><button id="grid-view" class="icon-button" type="button" aria-pressed="true"><i data-lucide="grid-2x2" aria-hidden="true"></i><span class="sr-only" data-i18n="grid"></span></button><button id="list-view" class="icon-button" type="button" aria-pressed="false"><i data-lucide="list" aria-hidden="true"></i><span class="sr-only" data-i18n="list"></span></button></div><button id="inspector-toggle" class="icon-button inspector-toggle" type="button" aria-controls="inspector" aria-expanded="true"></button></div></div>
+        <div class="catalog-heading"><div><h1 id="catalog-heading" tabindex="-1"></h1><p id="result-count" aria-live="polite"></p></div><div class="catalog-controls"><div class="view-controls"><button id="grid-view" class="icon-button" type="button" aria-pressed="true"><i data-lucide="grid-2x2" aria-hidden="true"></i><span class="sr-only" data-i18n="grid"></span></button><button id="list-view" class="icon-button" type="button" aria-pressed="false"><i data-lucide="list" aria-hidden="true"></i><span class="sr-only" data-i18n="list"></span></button></div><button id="inspector-toggle" class="icon-button inspector-toggle" aria-controls="inspector" aria-expanded="true" type="button"></button></div></div>
         <div class="filters" id="filters"><label><i data-lucide="sliders-horizontal" aria-hidden="true"></i><span class="sr-only" data-i18n="weaponType"></span><select id="type-filter"></select></label><label><i data-lucide="sparkles" aria-hidden="true"></i><span class="sr-only" data-i18n="element"></span><select id="element-filter"></select></label><label class="sort-control"><i data-lucide="arrow-down-wide-narrow" aria-hidden="true"></i><span class="sr-only" data-i18n="sort"></span><select id="sort"></select></label><span id="active-filters" class="filter-status" role="status" hidden></span><button type="button" id="reset-filters" class="secondary-button" data-action="clear" hidden><i data-lucide="rotate-ccw" aria-hidden="true"></i><span data-i18n="clearFilters"></span></button></div>
         <div id="catalog" class="weapon-grid" aria-busy="true"><p class="loading" data-i18n="loading"></p></div>
         <footer class="catalog-footer"><span id="snapshot-date"></span><a href="https://www.warframe.com/" target="_blank" rel="noopener noreferrer" data-i18n="fanProject"></a></footer>

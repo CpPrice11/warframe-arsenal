@@ -1,6 +1,12 @@
 export const families=['Kuva','Tenet','Coda'];
 export const types=['primary','secondary','melee','archgun'];
 export const elements=['impact','heat','cold','electric','toxin','magnetic','radiation'];
+export function bonusSource(record){
+  if(record.kind!=='weapon')return '';
+  if(record.family==='Coda')return 'eleanor';
+  if(record.family==='Tenet'&&(record.type==='melee'||record.id==='tenet-ferrox'))return 'ergo';
+  return ['Kuva','Tenet'].includes(record.family)?'progenitor':'';
+}
 export const textFields=['name_uk','name_en','name_ru','reason_uk','reason_en','reason_ru','mechanic_uk','mechanic_en','mechanic_ru','obtain_uk','obtain_en','obtain_ru','title_uk','title_en','title_ru','body_uk','body_en','body_ru','image_note'];
 export function safeUrl(value,{image=false,build=false}={}) {
   if(!value) return true;

@@ -67,3 +67,8 @@ Google-таблиця й Apps Script v7.1 збережені окремо; са�
 - Значки та кольори семи типів шкоди взято з [WARFRAME Wiki](https://wiki.warframe.com/w/Damage) за прямим вибором користувача; оригінальні PNG64px збережені локально. Точні URL, кольори й атрибуція: `public/ELEMENT-SOURCES.json`. Ігрові значки належать Digital Extremes; їхні кольори мають пріоритет над кольорами стихій із загальної теми.
 - Палітра: офіційна [Catppuccin Mocha](https://github.com/catppuccin/catppuccin#-palette), значення з [catppuccin/palette 1.8.0](https://github.com/catppuccin/palette). Кольори задано через токени CSS; фони стихій використовують суміші цих кольорів.
 - [Документація GitHub Pages](https://docs.github.com/en/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages), [Cloudflare D1](https://developers.cloudflare.com/d1/), [GitHub OAuth](https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/authorizing-oauth-apps).
+# Зброя → родоначальники
+
+Посилання «Хто дає бонус» під обома стихіями відкривають наявний розділ із фільтром стихії. Діють для Кува та Догмат від Сестер. Для Кода й Догмат із крамниці Ерґо Ґласта бонус визначає ротація: усі холодні Догмат і `tenet-ferrox` мають окреме пояснення. При додаванні нової магазинної стрілецької зброї оновити `bonusSource` у `public/catalog-core.js` та перевірку винятків у `location.test.mjs`.
+
+Джерела механіки: [Adversary System](https://wiki.warframe.com/w/Adversary_System), [Tenet Weapons](https://wiki.warframe.com/w/Tenet_Weapons), [Coda Weapons](https://wiki.warframe.com/w/Coda_Weapons); [Devstream 166](https://www.warframe.com/en/news/devstream-166-overview) підтверджує Ferrox у крамниці Ерґо Ґласта. Нових ігрових зображень немає; іконка дії — наявна Lucide 0.468.0.
