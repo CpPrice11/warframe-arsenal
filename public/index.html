@@ -9,9 +9,9 @@
   <meta name="description" content="Каталог зброї Кува, Догмат і Кода: бонусні стихії, родоначальники та білди Warframe.">
   <title>Warframe — Арсенал недругів</title>
   <link rel="icon" href="./favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="./styles.css?v=20261022.7">
+  <link rel="stylesheet" href="./styles.css?v=20261022.8">
   <script src="./assets/lucide.min.js" defer></script>
-  <script type="module" src="./app.js?v=20261022.7"></script>
+  <script type="module" src="./app.js?v=20261022.8"></script>
 </head>
 <body>
 <!-- THESIS: A working Warframe reference library, using the Eagle layout explicitly selected by the owner.
@@ -54,6 +54,16 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
 </div>
 <dialog id="detail-dialog" class="detail-dialog" aria-label="Деталі запису"><div id="mobile-inspector"></div></dialog>
 <dialog id="confirm-dialog" class="confirm-dialog" aria-labelledby="confirm-title" aria-describedby="confirm-text"><form method="dialog"><h2 id="confirm-title"></h2><p id="confirm-text"></p><div class="dialog-actions"><button value="cancel" class="secondary-button"><i data-lucide="x" aria-hidden="true"></i><span data-i18n="cancel"></span></button><button id="confirm-action" value="confirm" class="primary-button"><i data-lucide="check" aria-hidden="true"></i><span data-i18n="continue"></span></button></div></form></dialog>
+<dialog id="arsenal-import-dialog" class="confirm-dialog arsenal-import-dialog" aria-labelledby="arsenal-import-title" aria-describedby="arsenal-import-help">
+  <h2 id="arsenal-import-title" data-i18n="arsenalImport"></h2>
+  <p id="arsenal-import-help" data-i18n="arsenalImportHelp"></p>
+  <label for="arsenal-import-file" data-i18n="arsenalImportFile"></label>
+  <input type="file" id="arsenal-import-file" accept=".json,application/json" aria-describedby="arsenal-file-help arsenal-import-error">
+  <p id="arsenal-file-help" class="detail-note" data-i18n="arsenalFileHelp"></p>
+  <p id="arsenal-import-error" class="arsenal-error" role="alert" hidden></p>
+  <section id="arsenal-import-preview" aria-live="polite"></section>
+  <div class="dialog-actions"><button type="button" id="arsenal-import-cancel" class="secondary-button"><i data-lucide="x" aria-hidden="true"></i><span data-i18n="cancel"></span></button><button type="button" id="arsenal-import-confirm" class="primary-button" hidden><i data-lucide="check" aria-hidden="true"></i><span data-i18n="arsenalImportConfirm"></span></button></div>
+</dialog>
 <div id="toast" class="toast" role="status" hidden></div>
 <noscript>Для пошуку й перегляду каталогу потрібен JavaScript. JavaScript is required to browse this catalog.</noscript>
 </body>

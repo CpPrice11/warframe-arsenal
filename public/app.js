@@ -1,9 +1,9 @@
-import {messages,elementKeys} from './i18n.js?v=20261022.7';
-import {filterRecords,validateCatalog,safeUrl,slug,families,types,bonusSource} from './catalog-core.js?v=20261022.7';
-import {config} from './config.js?v=20261022.7';
-import {readCatalogLocation,catalogLocationUrl} from './catalog-location.js?v=20261022.7';
+import {messages,elementKeys} from './i18n.js?v=20261022.8';
+import {filterRecords,validateCatalog,safeUrl,slug,families,types,bonusSource} from './catalog-core.js?v=20261022.8';
+import {config} from './config.js?v=20261022.8';
+import {readCatalogLocation,catalogLocationUrl} from './catalog-location.js?v=20261022.8';
 
-import {arsenalFlags,arsenalStoragePrefix,readArsenal,writeArsenalFlag} from './arsenal-local.js?v=20261022.7';
+import {arsenalFlags,arsenalStoragePrefix,readArsenal,writeArsenalFlag,createArsenalBackup,parseArsenalBackup,planArsenalImport,importArsenalBackup,arsenalBackupLimit} from './arsenal-local.js?v=20261022.8';
 
 const $=s=>document.querySelector(s);
 const escape=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -16,6 +16,7 @@ let toastTimer,inspectorCollapsed=false;
 let auditRunning=false,auditResults=[];
 let arsenal={},arsenalReady=false,arsenalLoadError='',arsenalFilter='',arsenalMessage={};
 const arsenalIcons={owned:'check',wanted:'star',mastered:'badge-check'};
+let arsenalImport=null,arsenalFileVersion=0;
 let explicitSelection=false,historyIndex=0,pendingHistoryIndex=0,lastLocation='',restoringHistory=false,ignoreHistory=false,searchEditing=false;
 const state={search:'',type:'',element:'',sort:'original'};
 const t=(key,vars={})=>Object.entries(vars).reduce((s,[k,v])=>s.replaceAll('{'+k+'}',v),messages[lang][key]||key);
@@ -109,7 +110,7 @@ function renderArsenal(){
   $('#arsenal-filter').disabled=!arsenalReady;
   $('#arsenal-filter-label').classList.toggle('active',Boolean(arsenalFilter));
   const progress=arsenalReady?`<ul class="arsenal-progress">${families.map(f=>{const weapons=catalog.weapons.filter(r=>!r.archived&&r.family===f),count=weapons.filter(r=>arsenal[r.id]?.owned).length;return `<li><span>${t(f)}</span><strong>${t('collected',{count:new Intl.NumberFormat(lang).format(count),total:new Intl.NumberFormat(lang).format(weapons.length)})}</strong><progress max="${weapons.length||1}" value="${count}" aria-label="${t('collectionProgress',{family:t(f)})}"></progress></li>`;}).join('')}</ul>`:'';
-  $('#personal-arsenal').innerHTML=`<div class="arsenal-heading"><h2>${icon('backpack')}${t('myArsenal')}</h2></div><p class="detail-note">${t('arsenalLocal')}</p>${progress}${arsenalLoadError?`<p class="arsenal-error" role="alert">${t(arsenalLoadError)}</p>`:''}`;
+  $('#personal-arsenal').innerHTML=`<div class="arsenal-heading"><h2>${icon('backpack')}${t('myArsenal')}</h2><div class="arsenal-transfer-actions"><button type="button" id="arsenal-export" class="secondary-button" ${!arsenalReady?'disabled':''}>${icon('download')}${t('arsenalExport')}</button><button type="button" id="arsenal-import" class="secondary-button" ${!arsenalReady?'disabled':''}>${icon('upload')}${t('arsenalImport')}</button></div></div><p class="detail-note">${t('arsenalLocal')}</p><p id="arsenal-transfer-status" class="arsenal-save-status" role="status" hidden></p>${progress}${arsenalLoadError?`<p class="arsenal-error" role="alert">${t(arsenalLoadError)}</p>`:''}`;
 }
 function personalControls(r){
   if(r.kind!=='weapon')return '';
@@ -130,6 +131,51 @@ function saveArsenal(input){
   const panel=$('#detail-dialog').open?$('#mobile-inspector'):$('#inspector'),control=panel.querySelector(`[data-weapon="${id}"][data-arsenal-flag="${flag}"]`);
   if(control)control.focus({preventScroll:true});else $('#catalog-heading').focus();
   toast(arsenalMessage.key);
+}
+function downloadJson(data,name){
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'}),a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);
+}
+function exportArsenal(){
+  const status=$('#arsenal-transfer-status');status.hidden=false;
+  try{downloadJson(createArsenalBackup(readArsenal(localStorage)),'warframe-arsenal-'+new Date().toISOString().slice(0,10)+'.json');status.textContent=t('arsenalExported');}
+  catch{status.textContent=t('arsenalExportFailed');}
+}
+const activeWeaponIds=()=>new Set(catalog.weapons.filter(r=>!r.archived).map(r=>r.id));
+function renderArsenalImport(){
+  const preview=$('#arsenal-import-preview'),button=$('#arsenal-import-confirm');
+  preview.innerHTML='';button.hidden=true;
+  if(!arsenalImport||!arsenalReady)return;
+  const plan=planArsenalImport(arsenalImport,arsenal,activeWeaponIds()),marks=plan.changes.reduce((sum,row)=>sum+row.flags.length,0),number=n=>new Intl.NumberFormat(lang).format(n);
+  preview.innerHTML=`<p>${t('arsenalImportCounts',{weapons:number(plan.changes.length),marks:number(marks)})}</p>${plan.skipped.length?`<p class="arsenal-import-warning">${t('arsenalImportSkipped',{count:number(plan.skipped.length)})}</p>`:''}${marks?`<h3>${t('arsenalImportChanges')}</h3><ul>${plan.changes.map(row=>`<li><strong>${escape(title(findRecord(row.id)))}</strong><span>${escape(row.flags.map(flag=>t(flag)).join(' · '))}</span></li>`).join('')}</ul>`: `<p>${t('arsenalImportNoChanges')}</p>`}`;
+  button.hidden=!marks;
+}
+async function readArsenalFile(){
+  const input=$('#arsenal-import-file'),file=input.files[0],generation=++arsenalFileVersion;
+  arsenalImport=null;renderArsenalImport();input.removeAttribute('aria-invalid');$('#arsenal-import-error').hidden=true;
+  if(!file)return;
+  input.setAttribute('aria-busy','true');
+  try{
+    if(file.size>arsenalBackupLimit)throw Error('arsenalFileTooLarge');
+    const text=await file.text();if(generation!==arsenalFileVersion)return;
+    arsenalImport=parseArsenalBackup(text);loadArsenal();render();
+    if(!arsenalReady)throw Error(arsenalLoadError);
+    renderArsenalImport();
+  }catch(error){if(generation!==arsenalFileVersion)return;arsenalImport=null;if(!['arsenalStorageInvalid','arsenalStorageUnavailable'].includes(error.message))input.setAttribute('aria-invalid','true');showError($('#arsenal-import-error'),['arsenalFileTooLarge','arsenalFileInvalid','arsenalStorageInvalid','arsenalStorageUnavailable'].includes(error.message)?error.message:'arsenalFileReadFailed');}
+  finally{if(generation===arsenalFileVersion)input.removeAttribute('aria-busy');}
+}
+function openArsenalImport(){
+  arsenalImport=null;arsenalFileVersion++;$('#arsenal-import-file').value='';$('#arsenal-import-file').removeAttribute('aria-invalid');$('#arsenal-import-file').removeAttribute('aria-busy');$('#arsenal-import-error').hidden=true;
+  renderArsenalImport();$('#arsenal-import-dialog').showModal();$('#arsenal-import-file').focus();
+}
+function confirmArsenalImport(){
+  if(!arsenalImport)return;
+  try{
+    const result=importArsenalBackup(localStorage,arsenalImport,activeWeaponIds());loadArsenal();render();saveLocation('replace');
+    if(!arsenalReady)throw Error(arsenalLoadError);
+    if(result.remaining){renderArsenalImport();showError($('#arsenal-import-error'),'arsenalImportPartial');return;}
+    $('#arsenal-import-dialog').close();const status=$('#arsenal-transfer-status');status.hidden=false;status.textContent=t('arsenalImported');toast('arsenalImported');
+  }catch{loadArsenal();render();renderArsenalImport();showError($('#arsenal-import-error'),'arsenalImportFailed');}
 }
 function updateInspectorToggle(){
   const button=$('#inspector-toggle'),label=t(inspectorCollapsed?'showDetails':'hideDetails');
@@ -275,6 +321,10 @@ document.addEventListener('click',async event=>{
   }
   if(b.dataset.section){if(!await leaveEditor())return;section=b.dataset.section;state.type='';state.element='';state.search='';$('#search').value='';selected='';explicitSelection=false;detailTab='overview';closeNavigation();localize();render();saveLocation();}
   if(b.dataset.id){if(!await leaveEditor())return;selected=b.dataset.id;explicitSelection=true;detailTab='overview';inspectorCollapsed=false;updateInspectorToggle();document.querySelectorAll('.weapon-card').forEach(card=>card.setAttribute('aria-pressed',String(card.dataset.id===selected)));renderInspector();$('#inspector').scrollTop=0;refreshIcons();openMobileDetail();saveLocation();}
+  if(b.id==='arsenal-export')exportArsenal();
+  if(b.id==='arsenal-import')openArsenalImport();
+  if(b.id==='arsenal-import-confirm')confirmArsenalImport();
+  if(b.id==='arsenal-import-cancel')$('#arsenal-import-dialog').close();
   if(b.id==='inspector-toggle'){if(!await leaveEditor())return;inspectorCollapsed=!inspectorCollapsed;updateInspectorToggle();renderInspector();refreshIcons();}
   if(b.dataset.tab){detailTab=b.dataset.tab;renderInspector();refreshIcons();const panel=$('#detail-dialog').open?$('#mobile-inspector'):$('#inspector');panel.querySelector(`[data-tab="${detailTab}"]`)?.focus({preventScroll:true});saveLocation();}
   if(b.dataset.share){try{await navigator.clipboard.writeText(shareLocation(findRecord(b.dataset.share)));toast('linkCopied');}catch{const box=b.closest('.inspector-content').querySelector('.share-fallback');box.hidden=false;const input=box.querySelector('input');input.focus();input.select();}}
@@ -287,7 +337,7 @@ document.addEventListener('click',async event=>{
   if(b.dataset.action==='cancel-edit'){if(!await leaveEditor())return;if($('#detail-dialog').open)$('#detail-dialog').close();renderInspector();refreshIcons();}
   if(b.dataset.archive&&owner){if(await confirmAction('archiveTitle','archiveHelp')){const next=structuredClone(catalog);const r=[...next.weapons,...next.progenitors,...next.tips].find(x=>x.id===b.dataset.archive);r.archived=true;try{await commit(next);editing=false;dirty=false;$('#detail-dialog').close();render();toast('archived');}catch(e){toast(e.message==='conflict'?'conflict':'saveFailed');}}}
   if(b.dataset.restoreItem&&owner){const next=structuredClone(catalog);[...next.weapons,...next.progenitors,...next.tips].find(x=>x.id===b.dataset.restoreItem).archived=false;try{await commit(next);render();toast('restored');}catch{toast('saveFailed');}}
-  if(b.dataset.action==='backup'&&owner){const blob=new Blob([JSON.stringify(catalog,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='warframe-backup-'+new Date().toISOString().slice(0,10)+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);toast('exportDone');}
+  if(b.dataset.action==='backup'&&owner){downloadJson(catalog,'warframe-backup-'+new Date().toISOString().slice(0,10)+'.json');toast('exportDone');}
   if(b.dataset.action==='history'&&owner){try{const r=await request('/api/admin/history');const items=await r.json();$('#history').innerHTML=items.length?items.map(x=>`<div class="history-item"><span>${t('revision',{version:x.version})} · ${dateTime(x.created_at)}</span><button type="button" class="secondary-button" data-restore-version="${x.version}">${icon('history')}${t('restoreVersion')}</button></div>`).join(''):`<p class="detail-note">${t('noHistory')}</p>`;refreshIcons();}catch{toast('saveFailed');}}
   if(b.dataset.action==='audit-all'&&owner)await checkAllBuilds();
   if(b.dataset.action==='audit-stop'){auditRunning=false;b.disabled=true;}
@@ -318,8 +368,10 @@ window.addEventListener('storage',event=>{
   loadArsenal();arsenalMessage={};
   if(!catalog)return;
   if(arsenalFilter&&!arsenal[selected]?.[arsenalFilter]&&$('#detail-dialog').open)$('#detail-dialog').close();
-  render();saveLocation('replace');
+  render();saveLocation('replace');if($('#arsenal-import-dialog').open)renderArsenalImport();
 });
+$('#arsenal-import-file').addEventListener('change',readArsenalFile);
+$('#arsenal-import-dialog').addEventListener('close',()=>{arsenalFileVersion++;arsenalImport=null;$('#arsenal-import')?.focus({preventScroll:true});});
 document.addEventListener('change',e=>{if(e.target.closest('#editor-form'))dirty=true;if(e.target.matches('[data-arsenal-flag]'))saveArsenal(e.target);});
 $('#arsenal-filter').addEventListener('change',()=>{arsenalFilter=$('#arsenal-filter').value;render();saveLocation();});
 document.addEventListener('keydown',e=>{
@@ -327,7 +379,7 @@ document.addEventListener('keydown',e=>{
     if(e.key==='Escape'){e.preventDefault();closeNavigation();return;}
     if(e.key==='Tab'){const items=[...$('#sidebar').querySelectorAll('a,button,select')].filter(x=>!x.disabled&&x.getClientRects().length);const first=items[0],last=items.at(-1);if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus();}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();}}return;
   }
-  if(e.key==='/'&&!/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)&&!$('#detail-dialog').open){e.preventDefault();$('#search').focus();}
+  if(e.key==='/'&&!/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)&&!$('#detail-dialog').open&&!$('#arsenal-import-dialog').open){e.preventDefault();$('#search').focus();}
 });
 $('#detail-dialog').addEventListener('cancel',async e=>{if(editing&&dirty){e.preventDefault();if(await leaveEditor()){$('#detail-dialog').close();renderInspector();}}else if(!editing){explicitSelection=false;saveLocation();}});
 $('#detail-dialog').addEventListener('close',()=>{if(!editing){$('#mobile-inspector').innerHTML='';renderInspector();refreshIcons();document.querySelector(`[data-id="${selected}"]`)?.focus({preventScroll:true});}});
