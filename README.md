@@ -67,7 +67,15 @@ Google-таблиця й Apps Script v7.1 збережені окремо; са�
 - Значки та кольори семи типів шкоди взято з [WARFRAME Wiki](https://wiki.warframe.com/w/Damage) за прямим вибором користувача; оригінальні PNG64px збережені локально. Точні URL, кольори й атрибуція: `public/ELEMENT-SOURCES.json`. Ігрові значки належать Digital Extremes; їхні кольори мають пріоритет над кольорами стихій із загальної теми.
 - Палітра: офіційна [Catppuccin Mocha](https://github.com/catppuccin/catppuccin#-palette), значення з [catppuccin/palette 1.8.0](https://github.com/catppuccin/palette). Кольори задано через токени CSS; фони стихій використовують суміші цих кольорів.
 - [Документація GitHub Pages](https://docs.github.com/en/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages), [Cloudflare D1](https://developers.cloudflare.com/d1/), [GitHub OAuth](https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/authorizing-oauth-apps).
-# Зброя → родоначальники
+## Мій арсенал
+
+Незалежні приватні позначки `owned`, `wanted`, `mastered` доступні лише чинному власнику. Окрема таблиця `personal_arsenal` у `schema.sql` зберігає ID зброї та ревізію; загальний каталог, імпорт, відновлення каталогу й його JSON-копія не містять цих позначок. Нові користувачі та права доступу не додаються.
+
+`GET /api/admin/arsenal` повертає список позначок, `PUT` приймає `{id,owned,wanted,mastered}` та `If-Match` із ревізією запису (`0` для першого збереження). Відсутня/чужа сесія відхиляється; запис перевіряє Origin, активний ID зброї, типи, розмір тіла та ліміти. CAS застосовується до кожної зброї окремо; скидання всіх прапорців зберігає ревізію. Власник може оновити позначки з іншого пристрою; конфлікт завантажує свіжий стан і потребує повторення зміни. Дані позначок не записуються в браузерне сховище чи URL, приватний фільтр зберігається лише в history.state поточної вкладки.
+
+Перед новим Worker потрібно застосувати доданий `CREATE TABLE IF NOT EXISTS personal_arsenal` з `schema.sql` до тієї ж D1. Початкові позначки порожні; дані Google Sheets не переносяться в особистий прогрес. [Cloudflare D1: підготовлені запити](https://developers.cloudflare.com/d1/worker-api/prepared-statements/).
+
+## Каталог і родоначальники
 
 Початковий вигляд каталогу — список із деталями; перемикач карток, збережений вибір і явний `view=grid` зберігаються. URL без `view` використовує список.
 

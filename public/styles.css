@@ -133,6 +133,31 @@ h1{font-size:24px;line-height:1.3;font-weight:600;letter-spacing:-.025em;margin:
 .detail-actions .share-action{flex:1 1 100%;min-height:42px}
 .share-fallback{margin:12px 0}.share-fallback label{display:grid;gap:6px;font-size:12px}.share-fallback input{width:100%;min-width:0;padding:9px 10px;background:var(--ctp-crust);border:1px solid var(--ctp-surface1);border-radius:5px;font-size:16px}
 .weapon-grid.list-view{display:flex;flex-direction:column;gap:0}
+.personal-arsenal{margin:0 0 18px;padding:14px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.arsenal-heading{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.arsenal-heading h2{display:flex;align-items:center;gap:7px;font-size:15px;margin:0}
+.personal-arsenal .detail-note{margin:8px 0 0;font-size:12px}
+.arsenal-progress{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;list-style:none;padding:0;margin:15px 0 0}
+.arsenal-progress li{display:flex;flex-wrap:wrap;gap:4px 8px;font-size:12px;min-width:0}
+.arsenal-progress strong{color:var(--ctp-subtext1);font-size:11px;font-weight:400;font-variant-numeric:tabular-nums}
+.arsenal-progress progress{display:block;flex:1 1 100%;width:100%;height:5px;margin-top:4px;accent-color:var(--ctp-blue);border:0;border-radius:3px;overflow:hidden;background:var(--ctp-surface1)}
+.arsenal-progress progress::-webkit-progress-bar{background:var(--ctp-surface1)}
+.arsenal-progress progress::-webkit-progress-value{background:var(--ctp-blue)}
+.arsenal-progress progress::-moz-progress-bar{background:var(--ctp-blue)}
+.personal-controls{margin:18px 0 10px;padding:12px 0 0;border:0;border-top:1px solid var(--line);min-width:0}
+.personal-controls legend{font-size:13px;font-weight:600;padding-right:8px}
+.personal-toggles{display:flex;gap:7px;flex-wrap:wrap}
+.personal-toggles label{display:flex;align-items:center;gap:5px;min-height:36px;padding:6px 8px;border:1px solid var(--ctp-surface1);border-radius:5px;font-size:12px;cursor:pointer}
+.personal-toggles label:has(:checked){background:var(--blue-soft);border-color:var(--blue)}
+.personal-toggles input{margin:0;accent-color:var(--ctp-blue);width:14px;height:14px}
+.personal-toggles svg{width:14px;height:14px;flex-shrink:0}
+.personal-controls .detail-note{margin-top:8px;font-size:11px}
+.arsenal-save-status{min-height:18px;margin:7px 0 0;font-size:12px;line-height:1.5;color:var(--ctp-subtext1);overflow-wrap:anywhere}
+.arsenal-error{font-size:12px;line-height:1.5;color:var(--ctp-red)}
+.personal-mark{position:absolute;left:6px;top:29px;display:flex;gap:3px;padding:3px;background:var(--ctp-crust);color:var(--ctp-blue);border-radius:3px}
+.personal-mark svg{width:12px;height:12px}
+.list-view .personal-mark{top:3px;left:3px}
+@media(max-width:359px){.arsenal-progress{gap:8px}.arsenal-progress strong{font-size:10px}}
 .list-view .weapon-card{display:grid;grid-template-columns:60px minmax(0,1fr) 155px;gap:13px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line);border-radius:0}
 .list-view .weapon-card:hover{background:var(--raised)}
 .list-view .weapon-card[aria-pressed=true]{background:var(--blue-soft)}

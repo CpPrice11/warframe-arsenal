@@ -9,6 +9,52 @@ import {handleRequest,digest,randomToken,scheduledBackup} from './worker.js';
 const source=JSON.parse(await readFile(new URL('./public/catalog.json',import.meta.url),'utf8'));
 const base='https://api.example.test';
 function fixture(){const DB=localDatabase();return {DB,FRONTEND_URL:'https://owner.github.io/arsenal/',OWNER_GITHUB_ID:'117557975'};}
+
+test('personal arsenal is private and isolated from public catalog and revisions',async()=>{
+  const env=fixture(),token=await authenticate(env),foreign=await authenticate(env,'999'),expired=await authenticate(env,env.OWNER_GITHUB_ID,1);
+  const marks={id:source.weapons[0].id,owned:true,wanted:true,mastered:false};
+  for(const credential of [undefined,foreign,expired,randomToken()])for(const method of ['GET','PUT']){
+    const response=await call(env,'/api/admin/arsenal',{method,token:credential,...(method==='PUT'?{body:marks,headers:{'If-Match':'0'}}:{})});
+    assert.ok([401,403].includes(response.status));
+  }
+  const before=await (await call(env,'/api/catalog')).json();
+  const saved=await call(env,'/api/admin/arsenal',{method:'PUT',token,body:marks,headers:{'If-Match':'0'}});assert.equal(saved.status,200);
+  assert.equal(saved.headers.get('Cache-Control'),'no-store');assert.deepEqual(await saved.json(),{...marks,revision:1});
+  const otherDevice=await authenticate(env);
+  assert.deepEqual(await (await call(env,'/api/admin/arsenal',{token:otherDevice})).json(),[{...marks,revision:1}]);
+  assert.deepEqual(await (await call(env,'/api/catalog')).json(),before);
+  assert.equal(env.DB.sqlite.prepare('SELECT COUNT(*) AS n FROM revisions').get().n,0);
+  assert.equal((await call(env,'/api/admin/arsenal',{method:'PUT',token,body:marks,headers:{'If-Match':'1'},origin:'https://evil.test'})).status,403);
+  env.DB.close();
+});
+
+test('personal marks reject stale writes and keep per-weapon revisions after clearing',async()=>{
+  const env=fixture(),token=await authenticate(env),id=source.weapons[0].id;
+  const put=(body,revision)=>call(env,'/api/admin/arsenal',{method:'PUT',token,body,headers:{'If-Match':String(revision)}});
+  assert.equal((await put({id,owned:false,wanted:true,mastered:true},0)).status,200);
+  const independent=await (await call(env,'/api/admin/arsenal',{token})).json();assert.equal(independent[0].mastered,true);assert.equal(independent[0].owned,false);assert.equal(independent[0].wanted,true);
+  assert.equal((await put({id,owned:false,wanted:true,mastered:false},0)).status,409);
+  const cleared=await put({id,owned:false,wanted:false,mastered:false},1);assert.equal(cleared.status,200);assert.equal((await cleared.json()).revision,2);
+  assert.equal((await put({id,owned:true,wanted:false,mastered:false},1)).status,409);
+  assert.equal((await put({id:source.weapons[1].id,owned:true,wanted:false,mastered:false},0)).status,200);
+  assert.equal((await put({id,owned:true,wanted:false,mastered:false},2)).status,200);
+  env.DB.close();
+});
+
+test('personal arsenal validates bounded input, active weapon IDs and rate limits',async()=>{
+  const env=fixture(),token=await authenticate(env),good={id:source.weapons[0].id,owned:true,wanted:false,mastered:false};
+  const put=(body,revision='0')=>call(env,'/api/admin/arsenal',{method:'PUT',token,body,headers:{'If-Match':revision}});
+  for(const body of [null,[],true,{...good,owned:1},{...good,mastered:'true'},{...good,id:'../bad'},{...good,user_id:'999'}])assert.equal((await put(body)).status,400);
+  assert.equal((await put({...good,id:source.progenitors[0].id})).status,404);
+  assert.equal((await put({...good,id:'nonexistent-weapon'})).status,404);
+  env.DB.prepare("UPDATE catalog_store SET document=json_set(document,'$.weapons[0].archived',json('true')) WHERE id='main'").run();
+  assert.equal((await put(good)).status,404);
+  assert.equal((await put(good,'-1')).status,428);assert.equal((await put(good,'0'.repeat(10))).status,428);
+  assert.equal((await put({...good,extra:'a'.repeat(1100)})).status,413);
+  env.DB.prepare('INSERT INTO rate_limits(key,window_start,count) VALUES(?,?,60) ON CONFLICT(key) DO UPDATE SET count=60,window_start=excluded.window_start').bind('arsenal-write:'+env.OWNER_GITHUB_ID,Math.floor(Date.now()/60000)).run();
+  const limited=await put(good);assert.equal(limited.status,429);assert.equal(limited.headers.get('Retry-After'),'60');
+  env.DB.close();
+});
 const call=(env,path,{method='GET',token,body,version,origin='https://owner.github.io',headers={}}={})=>handleRequest(new Request(base+path,{method,headers:{Origin:origin,...(token?{Authorization:'Bearer '+token}:{}),...(body!==undefined?{'Content-Type':'application/json'}:{}),...(version?{'If-Match':String(version)}:{}),...headers},...(body!==undefined?{body:JSON.stringify(body)}:{})}),env);
 async function authenticate(env,user=env.OWNER_GITHUB_ID,expires=Math.floor(Date.now()/1000)+3600){const token=randomToken();env.DB.prepare('INSERT INTO sessions(token_hash,user_id,expires_at) VALUES(?,?,?)').bind(await digest(token),user,expires).run();return token;}
 

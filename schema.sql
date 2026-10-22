@@ -20,3 +20,10 @@ CREATE TABLE IF NOT EXISTS auth_codes (code_hash TEXT PRIMARY KEY,client_challen
 CREATE TABLE IF NOT EXISTS rate_limits (key TEXT PRIMARY KEY,window_start INTEGER NOT NULL,count INTEGER NOT NULL);
 CREATE TABLE IF NOT EXISTS link_checks (id TEXT PRIMARY KEY,url TEXT NOT NULL,status INTEGER,checked_at TEXT NOT NULL);
 CREATE TABLE IF NOT EXISTS snapshots (created_at TEXT PRIMARY KEY,version INTEGER NOT NULL,document TEXT NOT NULL);
+CREATE TABLE IF NOT EXISTS personal_arsenal (
+  weapon_id TEXT PRIMARY KEY,
+  owned INTEGER NOT NULL CHECK(owned IN (0,1)),
+  wanted INTEGER NOT NULL CHECK(wanted IN (0,1)),
+  mastered INTEGER NOT NULL CHECK(mastered IN (0,1)),
+  revision INTEGER NOT NULL CHECK(revision>0)
+);

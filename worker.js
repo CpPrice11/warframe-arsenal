@@ -28,6 +28,7 @@ async function ownerSession(request,env){
 }
 async function boundedRemoteJson(response,max=64000){if(!response.ok)throw new HttpError(502,'identity_service_error');const reader=response.body.getReader();let text='';let size=0;const decoder=new TextDecoder();for(;;){const {done,value}=await reader.read();if(done)break;size+=value.length;if(size>max){await reader.cancel();throw new HttpError(502,'identity_service_error');}text+=decoder.decode(value,{stream:true});}try{return JSON.parse(text+decoder.decode());}catch{throw new HttpError(502,'identity_service_error');}}
 async function current(env){const value=await env.DB.prepare("SELECT document,version FROM catalog_store WHERE id='main'").first();if(!value)throw new HttpError(503,'catalog_not_imported');return {catalog:JSON.parse(value.document),version:value.version};}
+const arsenalRecord=row=>({id:row.weapon_id,owned:Boolean(row.owned),wanted:Boolean(row.wanted),mastered:Boolean(row.mastered),revision:row.revision});
 async function route(request,env){
   if(!env.DB)throw new HttpError(503,'not_configured');
   const u=new URL(request.url),path=u.pathname;
@@ -69,6 +70,22 @@ async function route(request,env){
   if(!path.startsWith('/api/admin/'))throw new HttpError(404,'not_found');
   const session=await ownerSession(request,env);
   if(path==='/api/admin/session'&&request.method==='GET')return Response.json({owner:true});
+  if(path==='/api/admin/arsenal'&&request.method==='GET'){
+    await limited(env,'arsenal-read:'+session.userId,120);
+    const rows=await env.DB.prepare('SELECT weapon_id,owned,wanted,mastered,revision FROM personal_arsenal').all();
+    return Response.json(rows.results.map(arsenalRecord));
+  }
+  if(path==='/api/admin/arsenal'&&request.method==='PUT'){
+    await limited(env,'arsenal-write:'+session.userId,60);
+    const expected=request.headers.get('If-Match');if(!/^(0|[1-9][0-9]{0,8})$/.test(expected||''))throw new HttpError(428,'version_required');
+    const data=await readJson(request,1000);
+    if(!data||typeof data!=='object'||Array.isArray(data)||Object.keys(data).some(k=>!['id','owned','wanted','mastered'].includes(k))||typeof data.id!=='string'||!/^[a-z0-9-]{1,100}$/.test(data.id)||!['owned','wanted','mastered'].every(k=>typeof data[k]==='boolean'))throw new HttpError(400,'invalid_arsenal');
+    const {catalog}=await current(env);if(!catalog.weapons.some(r=>r.id===data.id&&!r.archived))throw new HttpError(404,'weapon_not_found');
+    const row=Number(expected)===0
+      ?await env.DB.prepare('INSERT INTO personal_arsenal(weapon_id,owned,wanted,mastered,revision) VALUES(?,?,?,?,1) ON CONFLICT(weapon_id) DO NOTHING RETURNING weapon_id,owned,wanted,mastered,revision').bind(data.id,+data.owned,+data.wanted,+data.mastered).first()
+      :await env.DB.prepare('UPDATE personal_arsenal SET owned=?,wanted=?,mastered=?,revision=revision+1 WHERE weapon_id=? AND revision=? RETURNING weapon_id,owned,wanted,mastered,revision').bind(+data.owned,+data.wanted,+data.mastered,data.id,Number(expected)).first();
+    if(!row)throw new HttpError(409,'version_conflict');return Response.json(arsenalRecord(row));
+  }
   if(path==='/api/admin/logout'&&request.method==='POST'){await env.DB.prepare('DELETE FROM sessions WHERE token_hash=?').bind(session.hash).run();return Response.json({ok:true});}
   if(path==='/api/admin/catalog'&&request.method==='PUT'){
     await limited(env,'write:'+session.userId,60);
