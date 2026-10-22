@@ -130,6 +130,8 @@ h1{font-size:24px;line-height:1.3;font-weight:600;letter-spacing:-.025em;margin:
 .element-chip.heat{background:var(--ctp-crust);color:var(--element-heat)}
 .element-chip.impact{background:var(--ctp-crust);color:var(--element-impact)}
 .element-chip.radiation{background:var(--ctp-crust);color:var(--element-radiation)}
+.detail-actions .share-action{flex:1 1 100%;min-height:42px}
+.share-fallback{margin:12px 0}.share-fallback label{display:grid;gap:6px;font-size:12px}.share-fallback input{width:100%;min-width:0;padding:9px 10px;background:var(--ctp-crust);border:1px solid var(--ctp-surface1);border-radius:5px;font-size:16px}
 .weapon-grid.list-view{display:flex;flex-direction:column;gap:0}
 .list-view .weapon-card{display:grid;grid-template-columns:60px minmax(0,1fr) 155px;gap:13px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line);border-radius:0}
 .list-view .weapon-art{height:50px;border-radius:5px}

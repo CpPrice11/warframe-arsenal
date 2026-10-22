@@ -1,4 +1,5 @@
 export const ru = {
+  copyLink:'Скопировать ссылку',linkCopied:'Ссылка скопирована',copyLinkManually:'Скопируй ссылку из этого поля:',recordUnavailable:'Эта запись недоступна. Показан каталог.',
     showDetails:'Показать сведения',hideDetails:'Свернуть сведения',
   recommendedBonus:'Рекомендуемый бонус',activeFilters:'Фильтры: {count}',
   languageName:'Русский',checkBlocked:'сайт ограничил автоматический запрос',records_one:'{count} запись',records_few:'{count} записи',records_many:'{count} записей',records_other:'{count} записи',matrixEditHelp:'Формат: S • пояснение. Можно оставить пустым.',auditAll:'Проверить все билды',auditProgress:'Проверено {count} из {total}',stop:'Остановить',auditLimit:'Достигнут лимит запросов. Повтори через минуту.',

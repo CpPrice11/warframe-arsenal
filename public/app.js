@@ -1,6 +1,7 @@
-import {messages,elementKeys} from './i18n.js?v=20261021.4';
-import {filterRecords,validateCatalog,safeUrl,slug,families,types} from './catalog-core.js?v=20261021.4';
-import {config} from './config.js?v=20261021.4';
+import {messages,elementKeys} from './i18n.js?v=20261022.1';
+import {filterRecords,validateCatalog,safeUrl,slug,families,types} from './catalog-core.js?v=20261022.1';
+import {config} from './config.js?v=20261022.1';
+import {readCatalogLocation,catalogLocationUrl} from './catalog-location.js?v=20261022.1';
 
 const $=s=>document.querySelector(s);
 const escape=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -11,6 +12,7 @@ let lang=(()=>{try{const saved=localStorage.getItem('warframe-language');return 
 let catalog,version=0,owner=false,connected=false,preview=false,token=readStorage('warframe-session'),section='all',selected='',view='grid',detailTab='overview',editing=false,dirty=false,saving=false;
 let toastTimer,inspectorCollapsed=false;
 let auditRunning=false,auditResults=[];
+let explicitSelection=false,historyIndex=0,pendingHistoryIndex=0,lastLocation='',restoringHistory=false,ignoreHistory=false,searchEditing=false;
 const state={search:'',type:'',element:'',sort:'original'};
 const t=(key,vars={})=>Object.entries(vars).reduce((s,[k,v])=>s.replaceAll('{'+k+'}',v),messages[lang][key]||key);
 const title=r=>r['name_'+lang]||r['title_'+lang]||r.name_en||r.title_uk;
@@ -26,6 +28,29 @@ function refreshIcons(){window.lucide?.createIcons({attrs:{'aria-hidden':'true'}
 function toast(key){clearTimeout(toastTimer);$('#toast').textContent=t(key);$('#toast').hidden=false;toastTimer=setTimeout(()=>$('#toast').hidden=true,4500);}
 function showError(element,key){element.textContent=t(key);element.hidden=false;}
 function status(key){$('#connection-status').hidden=!key;$('#connection-status').textContent=key?t(key):'';}
+function locationState(){return {section,selected:explicitSelection?selected:'',...state,view,tab:detailTab,lang};}
+function saveLocation(mode='push'){
+  if(section==='tools')return;
+  const route=locationState(),destination=catalogLocationUrl(location.href,route).href;
+  try{localStorage.setItem('warframe-catalog-view',JSON.stringify(route));localStorage.setItem('warframe-language',lang);}catch{}
+  if(mode==='replace'||destination!==lastLocation){
+    if(mode==='push')historyIndex++;
+    history[mode==='push'?'pushState':'replaceState']({arsenalIndex:historyIndex},'',destination);
+  }
+  lastLocation=destination;
+}
+function applyLocation(route){
+  ({section,view,lang}=route);selected=route.selected;explicitSelection=Boolean(selected);detailTab=route.tab;
+  for(const key of ['search','type','element','sort'])state[key]=route[key];
+  const record=selected&&findRecord(selected);
+  if(selected&&(!record||record.archived)){selected='';explicitSelection=false;toast('recordUnavailable');}
+  $('#search').value=state.search;searchEditing=false;
+  if($('#detail-dialog').open)$('#detail-dialog').close();
+  if(explicitSelection)inspectorCollapsed=false;
+  localize();render();
+  if(explicitSelection)openMobileDetail();
+}
+function shareLocation(record){return catalogLocationUrl(location.href,{selected:record.id,lang,tab:detailTab}).href;}
 function closeNavigation(){
   $('#sidebar').classList.remove('open');$('#sidebar').removeAttribute('role');$('#sidebar').removeAttribute('aria-modal');$('#sidebar').removeAttribute('aria-label');$('#workspace').inert=false;$('#nav-toggle').setAttribute('aria-expanded','false');document.querySelector('.nav-shade')?.remove();if(matchMedia('(max-width:600px)').matches)$('#nav-toggle').focus();
 }
@@ -89,7 +114,7 @@ function render(){
   if(section==='guides'){
     panel.className='guide-list';panel.innerHTML=list.map(r=>`<article class="guide-item">${owner?`<button class="secondary-button edit-guide" type="button" data-edit="${r.id}">${icon('pencil')}${t('edit')}</button>`:''}<h2>${escape(title(r))}</h2><p ${lang!=='uk'&&!r['body_'+lang]?'lang="uk"':''}>${escape(note(r,'body'))}</p>${r.url?`<a href="${escape(r.url)}" target="_blank" rel="noopener noreferrer">${icon('arrow-up-right')}${t('source')}</a>`:''}</article>`).join('');
   }else{
-    if(!list.some(r=>r.id===selected))selected=list[0]?.id||'';
+    if(!list.some(r=>r.id===selected)){selected=list[0]?.id||'';explicitSelection=false;}
     panel.className='weapon-grid'+(view==='list'?' list-view':'');panel.innerHTML=list.map(card).join('');
   }
   if(!list.length)panel.innerHTML=`<div class="empty-state">${icon('search-x')}<h2>${t('noResults')}</h2><p>${t('noResultsHelp')}</p><button type="button" class="secondary-button" data-action="clear">${icon('rotate-ccw')}${t('clearFilters')}</button></div>`;
@@ -101,7 +126,7 @@ function detail(r){
   if(!r||section==='guides'||section==='tools')return header+`<div class="empty-state">${icon('panel-right')}<h2>${t('selectRecord')}</h2><p>${t('selectRecordHelp')}</p></div>`;
   const sectionNote=(key,label)=>note(r,key)?`<section class="detail-section"><h3>${t(label)}</h3><p ${lang!=='uk'&&!r[key+'_'+lang]?'lang="uk"':''}>${escape(note(r,key))}</p></section>`:'';
   const bonuses=r.kind==='weapon'?`<div class="bonus-pair"><div><span class="field-label">${t('recommendedBonus')}</span>${chip(r.recommended)}</div><div><span class="field-label">${t('alternative')}</span>${chip(r.alternative)}</div></div>`:`<div class="detail-section"><span class="field-label">${t('bonus')}</span>${chip(r.element)}</div>`;
-  const actions=r.kind==='weapon'?`<div class="detail-actions">${r.build_url?`<a class="primary-button" href="${escape(r.build_url)}" target="_blank" rel="noopener noreferrer">${icon('external-link')}${t('build')}</a>`:`<span class="detail-note">${t('noBuild')}</span>`}${r.source_url?`<a class="secondary-button" href="${escape(r.source_url)}" target="_blank" rel="noopener noreferrer">${icon('arrow-up-right')}${t('source')}</a>`:''}</div>`:'';
+  const actions=r.kind==='weapon'?`<div class="detail-actions">${r.build_url?`<a class="primary-button" href="${escape(r.build_url)}" target="_blank" rel="noopener noreferrer">${icon('external-link')}${t('build')}</a>`:`<span class="detail-note">${t('noBuild')}</span>`}${r.source_url?`<a class="secondary-button" href="${escape(r.source_url)}" target="_blank" rel="noopener noreferrer">${icon('arrow-up-right')}${t('source')}</a>`:''}<button type="button" class="secondary-button share-action" data-share="${r.id}">${icon('link')}${t('copyLink')}</button></div><div class="share-fallback" hidden><label>${t('copyLinkManually')}<input type="url" readonly value="${escape(shareLocation(r))}"></label></div>`:'';
   const content=r.kind==='weapon'?(detailTab==='matrix'?`<table class="matrix"><caption class="sr-only">${t('elementMatrix')}</caption><tbody>${elementKeys.map(e=>{const value=(lang==='ru'?r.matrix_ru?.[e]:undefined)||r.matrix?.[e]||'';const [grade,...rest]=value.split(' • ');return `<tr><th scope="row">${chip(e)}</th><td>${grade?`<span class="grade">${escape(grade)}</span><br><span lang="${lang==='ru'&&r.matrix_ru?.[e]?'ru':'uk'}">${escape(rest.join(' • '))}</span>`:'—'}</td></tr>`;}).join('')}</tbody></table><p class="detail-note">${t('ratingHelp')}</p>`:`${lang!=='uk'&&!r['reason_'+lang]?`<div class="source-language">${t('notesLanguage')}</div>`:''}${sectionNote('reason','reason')}${sectionNote('mechanic','mechanic')}${sectionNote('obtain','obtain')}`):sectionNote('reason','reason');
   return header+`<div class="inspector-content"><div class="detail-summary"><div><div class="inspector-family">${r.family?`<span class="family-icon ${r.family}">${r.family[0]}</span>${t(r.family)}<span> / </span>${t(r.type)}`:t('progenitors')}</div><h2>${escape(title(r))}</h2><p class="english-name">${escape(lang!=='en'?r.name_en:'Warframe')}</p></div><div class="inspector-hero">${image(r,true)}</div></div>${bonuses}${actions}${r.kind==='weapon'?`<div class="detail-tabs"><button type="button" data-tab="overview" aria-pressed="${detailTab==='overview'}">${icon('file-text')}${t('overview')}</button><button type="button" data-tab="matrix" aria-pressed="${detailTab==='matrix'}">${icon('table-2')}${t('elementMatrix')}</button></div>`:''}${content}</div>${owner?`<div class="inspector-bottom"><button type="button" class="secondary-button" data-edit="${r.id}">${icon('pencil')}${t('edit')}</button>${r.build_url?`<button type="button" class="secondary-button" data-check="${r.id}">${icon('link')}${t('checkBuild')}</button>`:''}<p class="detail-note" id="check-result" role="status"></p></div>`:''}`;
 }
@@ -138,7 +163,7 @@ async function submitEditor(form){
   if(!safeUrl(item.build_url,{build:true})){showError(error,'wrongBuildHost');return;}
   if(!safeUrl(item.source_url)||!safeUrl(item.url)||!safeUrl(item.image,{image:true})){showError(error,'validUrl');return;}
   saving=true;form.querySelectorAll('button').forEach(b=>b.disabled=true);form.querySelector('[type=submit]').textContent=t('saving');
-  try{await commit(next);selected=item.id;editing=false;dirty=false;if($('#detail-dialog').open)$('#detail-dialog').close();render();toast('saved');}
+  try{await commit(next);selected=item.id;explicitSelection=true;editing=false;dirty=false;if($('#detail-dialog').open)$('#detail-dialog').close();render();saveLocation('replace');toast('saved');}
   catch(e){showError(error,e.message==='conflict'?'conflict':'saveFailed');}
   finally{saving=false;if(form.isConnected){form.querySelectorAll('button').forEach(b=>b.disabled=false);form.querySelector('[type=submit]').textContent=t('save');}}
 }
@@ -187,23 +212,28 @@ async function bootstrap(){
     else{const fallback=await fetch(new URL('./catalog.json',import.meta.url));if(!fallback.ok)throw Error('load');catalog=validateCatalog(await fallback.json());}
     const authCode=new URLSearchParams(location.hash.slice(1)).get('login');
     if(authCode){history.replaceState(null,'',location.pathname+location.search);const verifier=readStorage('warframe-login-verifier');writeStorage('warframe-login-verifier','');if(verifier){try{response=await request('/api/auth/exchange',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({code:authCode,verifier})});token=(await response.json()).token;writeStorage('warframe-session',token);}catch{toast('authNotConfigured');}}}
-    await loadSession();localize();render();
+    await loadSession();
+    let saved;try{saved=JSON.parse(localStorage.getItem('warframe-catalog-view'));}catch{}
+    historyIndex=Number.isInteger(history.state?.arsenalIndex)?history.state.arsenalIndex:0;
+    applyLocation(readCatalogLocation(location.search,saved,lang));saveLocation('replace');
   }catch{showError($('#connection-status'),'loadError');$('#catalog').innerHTML=`<p>${t('loadError')}</p>`;$('#catalog').setAttribute('aria-busy','false');}
 }
 document.addEventListener('click',async event=>{
   const b=event.target.closest('button,a');if(!b)return;
+  searchEditing=false;
   if(b.id==='owner-link'){event.preventDefault();if(owner){if(!await leaveEditor())return;section='tools';render();}else await startLogin();closeNavigation();return;}
   if(!catalog)return;
-  if(b.dataset.section){if(!await leaveEditor())return;section=b.dataset.section;state.type='';state.element='';state.search='';$('#search').value='';selected='';detailTab='overview';closeNavigation();localize();render();}
-  if(b.dataset.id){if(!await leaveEditor())return;selected=b.dataset.id;detailTab='overview';inspectorCollapsed=false;updateInspectorToggle();document.querySelectorAll('.weapon-card').forEach(card=>card.setAttribute('aria-pressed',String(card.dataset.id===selected)));renderInspector();$('#inspector').scrollTop=0;refreshIcons();openMobileDetail();}
+  if(b.dataset.section){if(!await leaveEditor())return;section=b.dataset.section;state.type='';state.element='';state.search='';$('#search').value='';selected='';explicitSelection=false;detailTab='overview';closeNavigation();localize();render();saveLocation();}
+  if(b.dataset.id){if(!await leaveEditor())return;selected=b.dataset.id;explicitSelection=true;detailTab='overview';inspectorCollapsed=false;updateInspectorToggle();document.querySelectorAll('.weapon-card').forEach(card=>card.setAttribute('aria-pressed',String(card.dataset.id===selected)));renderInspector();$('#inspector').scrollTop=0;refreshIcons();openMobileDetail();saveLocation();}
   if(b.id==='inspector-toggle'){if(!await leaveEditor())return;inspectorCollapsed=!inspectorCollapsed;updateInspectorToggle();renderInspector();refreshIcons();}
-  if(b.dataset.tab){detailTab=b.dataset.tab;renderInspector();refreshIcons();const panel=$('#detail-dialog').open?$('#mobile-inspector'):$('#inspector');panel.querySelector(`[data-tab="${detailTab}"]`)?.focus({preventScroll:true});}
+  if(b.dataset.tab){detailTab=b.dataset.tab;renderInspector();refreshIcons();const panel=$('#detail-dialog').open?$('#mobile-inspector'):$('#inspector');panel.querySelector(`[data-tab="${detailTab}"]`)?.focus({preventScroll:true});saveLocation();}
+  if(b.dataset.share){try{await navigator.clipboard.writeText(shareLocation(findRecord(b.dataset.share)));toast('linkCopied');}catch{const box=b.closest('.inspector-content').querySelector('.share-fallback');box.hidden=false;const input=box.querySelector('input');input.focus();input.select();}}
   if(b.dataset.edit&&owner){if(!await leaveEditor())return;selected=b.dataset.edit;showEditor(findRecord(selected));}
   if(b.id==='add-record'&&owner){if(!await leaveEditor())return;showEditor(section==='guides'?{title_uk:'',body_uk:''}:section==='progenitors'?{kind:'progenitor',element:'magnetic'}:{kind:'weapon',family:families.includes(section)?section:'Kuva',type:'primary',recommended:'toxin',alternative:'magnetic',matrix:{}},true);}
-  if(b.id==='grid-view'||b.id==='list-view'){view=b.id==='list-view'?'list':'grid';render();}
+  if(b.id==='grid-view'||b.id==='list-view'){view=b.id==='list-view'?'list':'grid';render();saveLocation();}
   if(b.id==='nav-toggle')toggleNavigation();
-  if(b.dataset.action==='clear'){state.sort='original';state.search='';state.type='';state.element='';$('#search').value='';localize();render();$('#search').focus();}
-  if(b.dataset.action==='close-detail')$('#detail-dialog').close();
+  if(b.dataset.action==='clear'){state.sort='original';state.search='';state.type='';state.element='';$('#search').value='';localize();render();saveLocation();$('#search').focus();}
+  if(b.dataset.action==='close-detail'){explicitSelection=false;saveLocation();$('#detail-dialog').close();}
   if(b.dataset.action==='cancel-edit'){if(!await leaveEditor())return;if($('#detail-dialog').open)$('#detail-dialog').close();renderInspector();refreshIcons();}
   if(b.dataset.archive&&owner){if(await confirmAction('archiveTitle','archiveHelp')){const next=structuredClone(catalog);const r=[...next.weapons,...next.progenitors,...next.tips].find(x=>x.id===b.dataset.archive);r.archived=true;try{await commit(next);editing=false;dirty=false;$('#detail-dialog').close();render();toast('archived');}catch(e){toast(e.message==='conflict'?'conflict':'saveFailed');}}}
   if(b.dataset.restoreItem&&owner){const next=structuredClone(catalog);[...next.weapons,...next.progenitors,...next.tips].find(x=>x.id===b.dataset.restoreItem).archived=false;try{await commit(next);render();toast('restored');}catch{toast('saveFailed');}}
@@ -215,9 +245,22 @@ document.addEventListener('click',async event=>{
   if(b.dataset.check&&owner){b.disabled=true;const result=b.parentElement.querySelector('#check-result');result.textContent=t('checking');try{const r=await request('/api/admin/check-build',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:b.dataset.check})});const x=await r.json();result.textContent=(httpStatus(x.status)+' · '+dateTime(x.checkedAt))+' '+t('checkDisclaimer');}catch{result.textContent=t('checkUnknown');}finally{b.disabled=false;}}
   if(b.dataset.action==='logout'){try{await request('/api/admin/logout',{method:'POST'});}catch{}token='';owner=false;writeStorage('warframe-session','');section='all';render();localize();}
 });
-$('#language').addEventListener('change',async()=>{const next=$('#language').value;if(!await leaveEditor()){$('#language').value=lang;return;}lang=next;try{localStorage.setItem('warframe-language',lang);}catch{}localize();render();});
-$('#search').addEventListener('input',()=>{state.search=$('#search').value;render();});
-for(const [id,key]of [['type-filter','type'],['element-filter','element'],['sort','sort']])$('#'+id).addEventListener('change',()=>{state[key]=$('#'+id).value;render();});
+$('#language').addEventListener('change',async()=>{const next=$('#language').value;if(!await leaveEditor()){$('#language').value=lang;return;}lang=next;localize();render();saveLocation();});
+$('#search').addEventListener('input',()=>{state.search=$('#search').value.slice(0,200);render();saveLocation(searchEditing?'replace':'push');searchEditing=true;});
+$('#search').addEventListener('blur',()=>{searchEditing=false;});
+for(const [id,key]of [['type-filter','type'],['element-filter','element'],['sort','sort']])$('#'+id).addEventListener('change',()=>{state[key]=$('#'+id).value;render();saveLocation();});
+window.addEventListener('popstate',async event=>{
+  if(ignoreHistory){ignoreHistory=false;return;}
+  if(!catalog)return;
+  pendingHistoryIndex=Number.isInteger(event.state?.arsenalIndex)?event.state.arsenalIndex:historyIndex;
+  if(restoringHistory)return;
+  restoringHistory=true;
+  if(!await leaveEditor()){
+    if(pendingHistoryIndex!==historyIndex){ignoreHistory=true;history.go(historyIndex-pendingHistoryIndex);}
+    else history.replaceState({arsenalIndex:historyIndex},'',lastLocation);
+  }else{historyIndex=pendingHistoryIndex;applyLocation(readCatalogLocation(location.search,{},lang));saveLocation('replace');}
+  restoringHistory=false;
+});
 document.addEventListener('submit',e=>{if(e.target.id==='editor-form'){e.preventDefault();submitEditor(e.target);}});
 document.addEventListener('input',e=>{if(e.target.closest('#editor-form'))dirty=true;});
 document.addEventListener('change',e=>{if(e.target.closest('#editor-form'))dirty=true;});
@@ -228,7 +271,7 @@ document.addEventListener('keydown',e=>{
   }
   if(e.key==='/'&&!/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)&&!$('#detail-dialog').open){e.preventDefault();$('#search').focus();}
 });
-$('#detail-dialog').addEventListener('cancel',async e=>{if(editing&&dirty){e.preventDefault();if(await leaveEditor()){$('#detail-dialog').close();renderInspector();}}});
+$('#detail-dialog').addEventListener('cancel',async e=>{if(editing&&dirty){e.preventDefault();if(await leaveEditor()){$('#detail-dialog').close();renderInspector();}}else if(!editing){explicitSelection=false;saveLocation();}});
 $('#detail-dialog').addEventListener('close',()=>{if(!editing){$('#mobile-inspector').innerHTML='';renderInspector();refreshIcons();document.querySelector(`[data-id="${selected}"]`)?.focus({preventScroll:true});}});
 window.addEventListener('beforeunload',e=>{if(dirty){e.preventDefault();e.returnValue='';}});
 window.addEventListener('resize',()=>{
