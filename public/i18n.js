@@ -1,4 +1,4 @@
-import {ru} from './i18n-ru.js?v=20261022.1';
+import {ru} from './i18n-ru.js?v=20261022.2';
 export const messages = {
   uk: {
     copyLink:'Скопіювати посилання',linkCopied:'Посилання скопійовано',copyLinkManually:'Скопіюй посилання з цього поля:',recordUnavailable:'Цей запис недоступний. Показано каталог.',
