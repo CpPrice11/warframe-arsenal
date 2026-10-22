@@ -1,7 +1,7 @@
-import {messages,elementKeys} from './i18n.js?v=20261022.5';
-import {filterRecords,validateCatalog,safeUrl,slug,families,types,bonusSource} from './catalog-core.js?v=20261022.5';
-import {config} from './config.js?v=20261022.5';
-import {readCatalogLocation,catalogLocationUrl} from './catalog-location.js?v=20261022.5';
+import {messages,elementKeys} from './i18n.js?v=20261022.6';
+import {filterRecords,validateCatalog,safeUrl,slug,families,types,bonusSource} from './catalog-core.js?v=20261022.6';
+import {config} from './config.js?v=20261022.6';
+import {readCatalogLocation,catalogLocationUrl} from './catalog-location.js?v=20261022.6';
 
 const $=s=>document.querySelector(s);
 const escape=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -245,7 +245,7 @@ async function startLogin(){
 async function loadSession(){
   if(!token)return;
   try{const r=await request('/api/admin/session');const s=await r.json();owner=s.owner===true;preview=s.preview===true;if(!owner)throw Error('not_owner');}
-  catch{token='';owner=false;writeStorage('warframe-session','');}
+  catch(e){owner=false;if([401,403].includes(e.status)){token='';writeStorage('warframe-session','');}}
   if(owner)await loadArsenal();
   localize();
 }
